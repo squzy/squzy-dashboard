@@ -1,0 +1,12 @@
+<div *ngFor="let cpu of data$ | async">
+  <canvas
+    baseChart
+    width="400"
+    height="400"
+    [datasets]="cpu.dataset"
+    chartType="line"
+    [labels]="cpu.labels"
+    [options]="options"
+    [legend]="true"
+  ></canvas>
+</div>

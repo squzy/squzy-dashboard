@@ -1,0 +1,31 @@
+<ng-container *ngIf="currentId$ | async as id">
+  <nav mat-tab-nav-bar class="type-menu">
+    <a
+      mat-tab-link
+      *ngFor="let type of types$ | async"
+      [routerLink]="['/agents', id, type]"
+      [routerLinkActive]="['/agents', id, type]"
+      #typeLink="routerLinkActive"
+      [active]="typeLink.isActive"
+    >{{ type }}</a>
+  </nav>
+</ng-container>
+
+<div class="layout">
+  <nav mat-tab-nav-bar class="agent-menu">
+    <a
+      mat-tab-link
+      *ngFor="let agent of agents$ | async"
+      [routerLink]="['/agents', agent]"
+      routerLinkActive
+      #agentLink="routerLinkActive"
+      [active]="agentLink.isActive"
+    >{{ agent }}</a>
+  </nav>
+
+  <div class="content">
+    <div class="checkers-layput" [ngSwitch]="currentType$ | async">
+      <app-cpu-stats [agentId]="currentId$ | async" *ngSwitchCase="CPU_TYPE"></app-cpu-stats>
+    </div>
+  </div>
+</div>
