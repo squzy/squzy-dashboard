@@ -57,6 +57,7 @@ export class CpuStatsComponent implements OnChanges {
           {
             data: item,
             label: `CPU ${index}`,
+            lineTension: 0,
           },
         ],
       }));
