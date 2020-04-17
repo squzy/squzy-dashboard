@@ -1,3 +1,21 @@
-<a [routerLink]="['/agents']">link to user component</a>
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <button mat-icon-button (click)="drawer.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Squzy Dashboard</span>
+  </mat-toolbar-row>
+</mat-toolbar>
 
-<router-outlet></router-outlet>
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer mode="side" [opened]="true">
+    <mat-nav-list>
+      <a mat-list-item [routerLink]="'/agents'" routerLinkActive="active">Agents</a>
+    </mat-nav-list>
+  </mat-drawer>
+  <mat-drawer-content>
+    <div style="height: 92vh;">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

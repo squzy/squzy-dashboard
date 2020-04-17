@@ -24,5 +24,13 @@ export class AgentsComponent {
 
   currentAgent$ = this.currentId$.pipe(switchMap((id: string) => this.agentService.getById(id)));
 
+  iconByType = {
+    [AgentsService.ALL]: 'devices_other',
+    [AgentsService.MEMORY]: 'memory',
+    [AgentsService.NET]: 'signal_cellular_alt',
+    [AgentsService.DISK]: 'storage',
+    [AgentsService.CPU]: 'laptop',
+  };
+
   constructor(private agentService: AgentsService, private route: ActivatedRoute) {}
 }

@@ -5,6 +5,7 @@ import { AgentsComponent } from './components/overview/agents.component';
 import { CommonModule } from '@angular/common';
 import { AgentsService } from 'src/app/shared/services/agents.service';
 import { StatsModule } from '../stats/stats.modules';
+import { MatIconModule } from '@angular/material/icon';
 
 const routes: Routes = [
   {
@@ -28,7 +29,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes), MatTabsModule, StatsModule],
+  imports: [CommonModule, RouterModule.forChild(routes), MatTabsModule, StatsModule, MatIconModule],
   declarations: [AgentsComponent],
 })
 export class AgentsModule {}

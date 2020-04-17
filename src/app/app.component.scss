@@ -1,0 +1,9 @@
+mat-nav-list {
+  a {
+    opacity: 1;
+    color: black;
+    &.active {
+      background-color: #e8e8e8;
+    }
+  }
+}

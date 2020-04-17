@@ -1,12 +1,12 @@
-<div *ngFor="let cpu of data$ | async">
-  <canvas
-    baseChart
-    width="400"
-    height="400"
-    [datasets]="cpu.dataset"
-    chartType="line"
-    [labels]="cpu.labels"
-    [options]="options"
-    [legend]="true"
-  ></canvas>
-</div>
+<mat-grid-list cols="2" rowHeight="2:1">
+  <mat-grid-tile *ngFor="let cpu of data$ | async">
+    <canvas
+      baseChart
+      [datasets]="cpu.dataset"
+      chartType="line"
+      [labels]="cpu.labels"
+      [options]="options"
+      [legend]="true"
+    ></canvas>
+  </mat-grid-tile>
+</mat-grid-list>
