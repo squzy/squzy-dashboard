@@ -1,0 +1,12 @@
+<mat-grid-list cols="1" rowHeight="2:1">
+  <mat-grid-tile *ngFor="let disk of disksCharts$ | async">
+    <canvas
+      baseChart
+      [datasets]="disk.datasets"
+      chartType="line"
+      [labels]="disk.labels"
+      [options]="disk.options"
+      [legend]="true"
+    ></canvas>
+  </mat-grid-tile>
+</mat-grid-list>

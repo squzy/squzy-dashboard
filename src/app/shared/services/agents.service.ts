@@ -31,6 +31,11 @@ const memoryMock = () => {
   };
 };
 
+const disksMock = () => ({
+  '/': memoryMock(),
+  '/dev': memoryMock(),
+});
+
 const memoriesMock = () => ({
   [AgentsService.SWAP_MEMORY]: memoryMock(),
   [AgentsService.VIRTUAL_MEMORY]: memoryMock(),
@@ -84,6 +89,17 @@ export class AgentsService {
         .fill(0)
         .map((_, index) => ({
           memoryStats: memoriesMock(),
+          timestamp: Date.now() + index * 1000 * 30,
+        })),
+    );
+  }
+
+  getDisksStats(agentId: string) {
+    return of(
+      Array(history)
+        .fill(0)
+        .map((_, index) => ({
+          disksStats: disksMock(),
           timestamp: Date.now() + index * 1000 * 30,
         })),
     );

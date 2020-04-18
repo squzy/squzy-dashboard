@@ -1,4 +1,4 @@
-<mat-grid-list cols="2" rowHeight="2:1" *ngIf="memoryCharts$ | async as stats">
+<mat-grid-list cols="1" rowHeight="2:1" *ngIf="memoryCharts$ | async as stats">
   <ng-container *ngFor="let memoryType of memoryTypes">
     <mat-grid-tile>
       <canvas

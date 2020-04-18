@@ -25,10 +25,11 @@
     >{{ agent }}</a>
   </nav>
 
-  <div class="content">
+  <div class="content" *ngIf="currentId$ | async as id">
     <div class="checkers-layput" [ngSwitch]="currentType$ | async">
-      <sqd-cpu-stats [agentId]="currentId$ | async" *ngSwitchCase="CPU_TYPE"></sqd-cpu-stats>
-      <sqd-memory-stat [agentId]="currentId$ | async" *ngSwitchCase="MEMORY_TYPE"></sqd-memory-stat>
+      <sqd-cpu-stats [agentId]="id" *ngSwitchCase="CPU_TYPE"></sqd-cpu-stats>
+      <sqd-memory-stat [agentId]="id" *ngSwitchCase="MEMORY_TYPE"></sqd-memory-stat>
+      <sqd-disks-stat [agentId]="id" *ngSwitchCase="DISK_TYPE"></sqd-disks-stat>
     </div>
   </div>
 </div>

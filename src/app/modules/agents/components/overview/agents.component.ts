@@ -22,6 +22,7 @@ export class AgentsComponent {
 
   CPU_TYPE = AgentsService.CPU;
   MEMORY_TYPE = AgentsService.MEMORY;
+  DISK_TYPE = AgentsService.DISK;
 
   currentAgent$ = this.currentId$.pipe(switchMap((id: string) => this.agentService.getById(id)));
 
