@@ -4,7 +4,7 @@ import { map, switchMap, tap, filter } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-agents',
+  selector: 'sqd-agents',
   templateUrl: './agents.component.html',
   styleUrls: ['./agents.component.scss'],
 })
@@ -21,6 +21,7 @@ export class AgentsComponent {
   );
 
   CPU_TYPE = AgentsService.CPU;
+  MEMORY_TYPE = AgentsService.MEMORY;
 
   currentAgent$ = this.currentId$.pipe(switchMap((id: string) => this.agentService.getById(id)));
 

@@ -1,0 +1,14 @@
+<mat-grid-list cols="2" rowHeight="2:1" *ngIf="memoryCharts$ | async as stats">
+  <ng-container *ngFor="let memoryType of memoryTypes">
+    <mat-grid-tile>
+      <canvas
+        baseChart
+        [datasets]="stats[memoryType].dataset"
+        chartType="line"
+        [labels]="stats.labels"
+        [options]="optionsByType[memoryType]"
+        [legend]="true"
+      ></canvas>
+    </mat-grid-tile>
+  </ng-container>
+</mat-grid-list>

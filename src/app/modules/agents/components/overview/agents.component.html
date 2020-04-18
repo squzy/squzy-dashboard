@@ -27,7 +27,8 @@
 
   <div class="content">
     <div class="checkers-layput" [ngSwitch]="currentType$ | async">
-      <app-cpu-stats [agentId]="currentId$ | async" *ngSwitchCase="CPU_TYPE"></app-cpu-stats>
+      <sqd-cpu-stats [agentId]="currentId$ | async" *ngSwitchCase="CPU_TYPE"></sqd-cpu-stats>
+      <sqd-memory-stat [agentId]="currentId$ | async" *ngSwitchCase="MEMORY_TYPE"></sqd-memory-stat>
     </div>
   </div>
 </div>

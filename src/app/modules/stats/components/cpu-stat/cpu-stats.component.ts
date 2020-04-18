@@ -5,7 +5,7 @@ import { AgentsService } from 'src/app/shared/services/agents.service';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 
 @Component({
-  selector: 'app-cpu-stats',
+  selector: 'sqd-cpu-stats',
   templateUrl: './cpu-stats.component.html',
   styleUrls: ['./cpu-stats.component.scss'],
 })

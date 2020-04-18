@@ -15,6 +15,27 @@ const example = {
   },
 };
 
+const memoryMock = () => {
+  const total = 1000;
+  const used = Math.random() * 500;
+
+  const free = total - used;
+  const shared = Math.random() * 100;
+  const usedPercent = used / total;
+  return {
+    total,
+    used,
+    free,
+    shared,
+    usedPercent,
+  };
+};
+
+const memoriesMock = () => ({
+  [AgentsService.SWAP_MEMORY]: memoryMock(),
+  [AgentsService.VIRTUAL_MEMORY]: memoryMock(),
+});
+
 @Injectable({
   providedIn: 'root',
 })
@@ -29,6 +50,18 @@ export class AgentsService {
 
   static NET = 'net';
 
+  static VIRTUAL_MEMORY = 'virtual';
+
+  static SWAP_MEMORY = 'swap';
+
+  static FREE_MEMORY = 'free';
+
+  static USAGE_MEMORY = 'usage';
+
+  static TOTAL_MEMORY = 'total';
+
+  static SHARED_MEMORY = 'shared';
+
   constructor() {}
 
   // Should return last 20 history
@@ -40,6 +73,17 @@ export class AgentsService {
           stats: Array(numberOfCpu)
             .fill(0)
             .map((e) => Math.random()),
+          timestamp: Date.now() + index * 1000 * 30,
+        })),
+    );
+  }
+
+  getMemoryStats(agentId: string) {
+    return of(
+      Array(history)
+        .fill(0)
+        .map((_, index) => ({
+          memoryStats: memoriesMock(),
           timestamp: Date.now() + index * 1000 * 30,
         })),
     );
