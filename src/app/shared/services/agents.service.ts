@@ -15,6 +15,22 @@ const example = {
   },
 };
 
+const netInterfaceMock = () => ({
+  bytesSent: Math.round(Math.random() * 10000),
+  bytesRecv: Math.round(Math.random() * 10000),
+  packetsSent: Math.round(Math.random() * 10000),
+  packetsRecv: Math.round(Math.random() * 10000),
+  errIn: Math.round(Math.random() * 100),
+  errOut: Math.round(Math.random() * 100),
+  dropIn: Math.round(Math.random() * 1000),
+  dropOut: Math.round(Math.random() * 1000),
+});
+
+const netInterfacesMock = () => ({
+  wlan: netInterfaceMock(),
+  wlan0: netInterfaceMock(),
+});
+
 const memoryMock = () => {
   const total = 1000;
   const used = Math.random() * 500;
@@ -100,6 +116,17 @@ export class AgentsService {
         .fill(0)
         .map((_, index) => ({
           disksStats: disksMock(),
+          timestamp: Date.now() + index * 1000 * 30,
+        })),
+    );
+  }
+
+  getNetStats(agentId: string) {
+    return of(
+      Array(history)
+        .fill(0)
+        .map((_, index) => ({
+          netStats: netInterfacesMock(),
           timestamp: Date.now() + index * 1000 * 30,
         })),
     );

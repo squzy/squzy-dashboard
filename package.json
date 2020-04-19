@@ -7,7 +7,6 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
     "format:code": "prettier --write \"src/**/*.{ts,js,?css,json}\"",
     "format:html": "prettyhtml \"src/**/*.html\"",
     "format": "npm-run-all -p format:code format:html"
