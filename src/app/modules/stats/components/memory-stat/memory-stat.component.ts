@@ -79,25 +79,25 @@ export class MemoryStatComponent implements OnChanges {
       stats.forEach((item) => {
         labels.push(item.timestamp);
         _map[AgentsService.VIRTUAL_MEMORY][AgentsService.FREE_MEMORY].push(
-          item.memoryStats[AgentsService.VIRTUAL_MEMORY].free,
+          item.memoryStats[AgentsService.VIRTUAL_MEMORY][AgentsService.FREE_MEMORY],
         );
         _map[AgentsService.VIRTUAL_MEMORY][AgentsService.USAGE_MEMORY].push(
-          item.memoryStats[AgentsService.VIRTUAL_MEMORY].used,
+          item.memoryStats[AgentsService.VIRTUAL_MEMORY][AgentsService.USAGE_MEMORY],
         );
         _map[AgentsService.SWAP_MEMORY][AgentsService.FREE_MEMORY].push(
-          item.memoryStats[AgentsService.SWAP_MEMORY].free,
+          item.memoryStats[AgentsService.SWAP_MEMORY][AgentsService.FREE_MEMORY],
         );
         _map[AgentsService.SWAP_MEMORY][AgentsService.USAGE_MEMORY].push(
-          item.memoryStats[AgentsService.SWAP_MEMORY].used,
+          item.memoryStats[AgentsService.SWAP_MEMORY][AgentsService.USAGE_MEMORY],
         );
         _map[AgentsService.VIRTUAL_MEMORY][AgentsService.TOTAL_MEMORY].push(
-          item.memoryStats[AgentsService.VIRTUAL_MEMORY].total,
+          item.memoryStats[AgentsService.VIRTUAL_MEMORY][AgentsService.TOTAL_MEMORY],
         );
         _map[AgentsService.SWAP_MEMORY][AgentsService.TOTAL_MEMORY].push(
-          item.memoryStats[AgentsService.SWAP_MEMORY].total,
+          item.memoryStats[AgentsService.SWAP_MEMORY][AgentsService.TOTAL_MEMORY],
         );
         _map[AgentsService.VIRTUAL_MEMORY][AgentsService.SHARED_MEMORY].push(
-          item.memoryStats[AgentsService.VIRTUAL_MEMORY].shared,
+          item.memoryStats[AgentsService.VIRTUAL_MEMORY][AgentsService.SHARED_MEMORY],
         );
       });
 

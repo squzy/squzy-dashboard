@@ -26,7 +26,8 @@
   </nav>
 
   <div class="content" *ngIf="currentId$ | async as id">
-    <div class="checkers-layput" [ngSwitch]="currentType$ | async">
+    <div class="checkers-layout" [ngSwitch]="currentType$ | async">
+      <sqd-live-stat [agentId]="id" *ngSwitchCase="LIVE_TYPE"></sqd-live-stat>
       <sqd-cpu-stats [agentId]="id" *ngSwitchCase="CPU_TYPE"></sqd-cpu-stats>
       <sqd-memory-stat [agentId]="id" *ngSwitchCase="MEMORY_TYPE"></sqd-memory-stat>
       <sqd-disks-stat [agentId]="id" *ngSwitchCase="DISK_TYPE"></sqd-disks-stat>

@@ -1,0 +1,56 @@
+<ng-container *ngIf="liveStats$ | async as stats">
+  <h3>Live timestamp: {{ stats.timestamp | date: 'medium' }}</h3>
+  <div class="charts">
+    <div class="cpu">
+      <canvas
+        baseChart
+        [datasets]="stats.cpuChart.datasets"
+        chartType="horizontalBar"
+        [labels]="stats.cpuChart.labels"
+        [options]="options.cpuChart"
+        [legend]="true"
+      ></canvas>
+    </div>
+    <div class="memory">
+      <canvas
+        baseChart
+        [datasets]="stats.memoryChart.datasets"
+        chartType="pie"
+        [labels]="stats.memoryChart.labels"
+        [options]="options.memoryChart"
+        [legend]="true"
+      ></canvas>
+    </div>
+    <div class="swap-memory">
+      <canvas
+        baseChart
+        [datasets]="stats.swapMemoryChart.datasets"
+        chartType="pie"
+        [labels]="stats.swapMemoryChart.labels"
+        [options]="options.swapMemoryChart"
+        [legend]="true"
+      ></canvas>
+    </div>
+    <div class="disk">
+      <canvas
+        baseChart
+        [datasets]="stats.diskChart.datasets"
+        chartType="bar"
+        [labels]="stats.diskChart.labels"
+        [options]="options.diskChart"
+        [plugins]="[]"
+        [legend]="true"
+      ></canvas>
+    </div>
+    <div class="net">
+      <canvas
+        baseChart
+        [datasets]="stats.netChart.datasets"
+        chartType="horizontalBar"
+        [labels]="stats.netChart.labels"
+        [options]="options.netChart"
+        [legend]="true"
+      ></canvas>
+    </div>
+  </div>
+</ng-container>

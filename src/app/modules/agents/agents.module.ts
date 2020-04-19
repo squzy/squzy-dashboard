@@ -13,7 +13,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: AgentsService.ALL,
+        redirectTo: AgentsService.LIVE,
         pathMatch: 'full',
       },
       {

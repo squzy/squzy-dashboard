@@ -49,15 +49,21 @@ export class DisksStatComponent implements OnChanges {
         Object.keys(item.disksStats).forEach((diskStat) => {
           if (!datasets[diskStat]) {
             datasets[diskStat] = {
-              [AgentsService.FREE_MEMORY]: [item.disksStats[diskStat].free],
-              [AgentsService.USAGE_MEMORY]: [item.disksStats[diskStat].used],
-              [AgentsService.TOTAL_MEMORY]: [item.disksStats[diskStat].total],
+              [AgentsService.FREE_MEMORY]: [item.disksStats[diskStat][AgentsService.FREE_MEMORY]],
+              [AgentsService.USAGE_MEMORY]: [item.disksStats[diskStat][AgentsService.USAGE_MEMORY]],
+              [AgentsService.TOTAL_MEMORY]: [item.disksStats[diskStat][AgentsService.TOTAL_MEMORY]],
             };
             return;
           }
-          datasets[diskStat][AgentsService.FREE_MEMORY].push(item.disksStats[diskStat].free);
-          datasets[diskStat][AgentsService.USAGE_MEMORY].push(item.disksStats[diskStat].used);
-          datasets[diskStat][AgentsService.TOTAL_MEMORY].push(item.disksStats[diskStat].total);
+          datasets[diskStat][AgentsService.FREE_MEMORY].push(
+            item.disksStats[diskStat][AgentsService.FREE_MEMORY],
+          );
+          datasets[diskStat][AgentsService.USAGE_MEMORY].push(
+            item.disksStats[diskStat][AgentsService.USAGE_MEMORY],
+          );
+          datasets[diskStat][AgentsService.TOTAL_MEMORY].push(
+            item.disksStats[diskStat][AgentsService.TOTAL_MEMORY],
+          );
         });
       });
 

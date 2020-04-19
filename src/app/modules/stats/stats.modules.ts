@@ -7,10 +7,23 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MemoryStatComponent } from './components/memory-stat/memory-stat.component';
 import { DisksStatComponent } from './components/disks-stat/disks-stat.component';
 import { NetStatComponent } from './components/net-stat/net-stat.component';
+import { LiveStatComponent } from './components/live-stat/live-stat.component';
 
 @NgModule({
   imports: [CommonModule, ChartsModule, MatCardModule, MatGridListModule],
-  declarations: [CpuStatsComponent, MemoryStatComponent, DisksStatComponent, NetStatComponent],
-  exports: [CpuStatsComponent, MemoryStatComponent, DisksStatComponent, NetStatComponent],
+  declarations: [
+    CpuStatsComponent,
+    MemoryStatComponent,
+    DisksStatComponent,
+    NetStatComponent,
+    LiveStatComponent,
+  ],
+  exports: [
+    CpuStatsComponent,
+    MemoryStatComponent,
+    DisksStatComponent,
+    NetStatComponent,
+    LiveStatComponent,
+  ],
 })
 export class StatsModule {}

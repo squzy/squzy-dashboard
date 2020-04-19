@@ -20,6 +20,7 @@ export class AgentsComponent {
     filter((v) => !!v),
   );
 
+  LIVE_TYPE = AgentsService.LIVE;
   CPU_TYPE = AgentsService.CPU;
   MEMORY_TYPE = AgentsService.MEMORY;
   DISK_TYPE = AgentsService.DISK;
@@ -28,7 +29,7 @@ export class AgentsComponent {
   currentAgent$ = this.currentId$.pipe(switchMap((id: string) => this.agentService.getById(id)));
 
   iconByType = {
-    [AgentsService.ALL]: 'devices_other',
+    [AgentsService.LIVE]: 'live_tv',
     [AgentsService.MEMORY]: 'memory',
     [AgentsService.NET]: 'signal_cellular_alt',
     [AgentsService.DISK]: 'storage',

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { of, interval } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 const numberOfCpu = 6;
 const history = 20;
@@ -39,11 +40,11 @@ const memoryMock = () => {
   const shared = Math.random() * 100;
   const usedPercent = used / total;
   return {
-    total,
-    used,
-    free,
-    shared,
-    usedPercent,
+    [AgentsService.TOTAL_MEMORY]: total,
+    [AgentsService.USAGE_MEMORY]: used,
+    [AgentsService.FREE_MEMORY]: free,
+    [AgentsService.SHARED_MEMORY]: shared,
+    [AgentsService.USED_PERSENT]: usedPercent,
   };
 };
 
@@ -51,6 +52,13 @@ const disksMock = () => ({
   '/': memoryMock(),
   '/dev': memoryMock(),
 });
+
+const cpuMock = () => Math.random();
+
+const cpusMock = () =>
+  Array(numberOfCpu)
+    .fill(0)
+    .map((e) => cpuMock());
 
 const memoriesMock = () => ({
   [AgentsService.SWAP_MEMORY]: memoryMock(),
@@ -61,7 +69,7 @@ const memoriesMock = () => ({
   providedIn: 'root',
 })
 export class AgentsService {
-  static ALL = 'all';
+  static LIVE = 'live';
 
   static CPU = 'cpu';
 
@@ -83,6 +91,8 @@ export class AgentsService {
 
   static SHARED_MEMORY = 'shared';
 
+  static USED_PERSENT = 'usedPercent';
+
   constructor() {}
 
   // Should return last 20 history
@@ -91,12 +101,20 @@ export class AgentsService {
       Array(history)
         .fill(0)
         .map((_, index) => ({
-          stats: Array(numberOfCpu)
-            .fill(0)
-            .map((e) => Math.random()),
+          stats: cpusMock(),
           timestamp: Date.now() + index * 1000 * 30,
         })),
     );
+  }
+
+  getLiveStat(agentId: string) {
+    return of({
+      timestamp: Date.now(),
+      cpusStat: cpusMock(),
+      disksStats: disksMock(),
+      memoriesStats: memoriesMock(),
+      netsStats: netInterfacesMock(),
+    });
   }
 
   getMemoryStats(agentId: string) {
@@ -138,7 +156,7 @@ export class AgentsService {
 
   getTypes() {
     return of([
-      AgentsService.ALL,
+      AgentsService.LIVE,
       AgentsService.CPU,
       AgentsService.DISK,
       AgentsService.MEMORY,
