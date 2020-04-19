@@ -56,7 +56,7 @@ export class CpuStatsComponent implements OnChanges {
         dataset: [
           {
             data: item,
-            label: `CPU ${index}`,
+            label: `CPU ${index + 1}`,
             lineTension: 0,
           },
         ],

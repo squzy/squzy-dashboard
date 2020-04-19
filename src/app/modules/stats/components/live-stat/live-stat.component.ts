@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { AgentsService } from 'src/app/shared/services/agents.service';
 import { BehaviorSubject, timer } from 'rxjs';
-import { filter, switchMap, map } from 'rxjs/operators';
+import { filter, switchMap, map, tap } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
 
 @Component({
@@ -76,6 +76,9 @@ export class LiveStatComponent implements OnChanges {
             }
             return `${Math.round((tooltipData / total) * 100)} %`;
           },
+          title: (tooltipItem, data) => {
+            return data.labels[tooltipItem[0].index] as string;
+          },
         },
       },
     },
@@ -101,6 +104,9 @@ export class LiveStatComponent implements OnChanges {
               total += element as number;
             }
             return `${Math.round((tooltipData / total) * 100)} %`;
+          },
+          title: (tooltipItem, data) => {
+            return data.labels[tooltipItem[0].index] as string;
           },
         },
       },
@@ -135,7 +141,7 @@ export class LiveStatComponent implements OnChanges {
 
   liveStats$ = this._agentId$.pipe(
     filter((v) => !!v),
-    switchMap((agentId) => timer(0, 1000).pipe(map(() => agentId))),
+    switchMap((agentId) => timer(0, 10000).pipe(map(() => agentId))),
     switchMap((agentId) => this.agentsService.getLiveStat(agentId)),
     map((stats) => {
       return {

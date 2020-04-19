@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { of, interval } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { of } from 'rxjs';
 
-const numberOfCpu = 6;
+const numberOfCpu = 10;
 const history = 20;
 
 const example = {
