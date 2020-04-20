@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
-import { AgentsService } from 'src/app/shared/services/agents.service';
+import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { BehaviorSubject, timer } from 'rxjs';
 import { filter, switchMap, map, tap } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
+import { AgentsService } from 'src/app/modules/agents/services/agents.service';
 
 @Component({
   selector: 'sqd-live-stat',

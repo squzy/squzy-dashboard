@@ -1,0 +1,26 @@
+$padding: 20px;
+
+:host {
+  padding: $padding;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  table {
+    .mat-header-cell {
+      text-align: center;
+      justify-content: center;
+    }
+
+    .mat-cell {
+      text-align: center;
+      justify-content: center;
+    }
+    .mat-row {
+      &:hover {
+        cursor: pointer;
+        background: #b4b4b433;
+      }
+    }
+  }
+}

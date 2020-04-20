@@ -1,8 +1,8 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap, filter, switchMap, map } from 'rxjs/operators';
-import { AgentsService } from 'src/app/shared/services/agents.service';
-import { ChartDataSets, ChartOptions } from 'chart.js';
+import { BehaviorSubject } from 'rxjs';
+import { filter, switchMap, map } from 'rxjs/operators';
+import { ChartOptions } from 'chart.js';
+import { AgentsService } from 'src/app/modules/agents/services/agents.service';
 
 @Component({
   selector: 'sqd-cpu-stats',

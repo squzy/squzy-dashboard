@@ -6,6 +6,10 @@ const routes: Routes = [
     path: 'agents',
     loadChildren: () => import('./modules/agents/agents.module').then((m) => m.AgentsModule),
   },
+  {
+    path: 'checkers',
+    loadChildren: () => import('./modules/checkers/checkers.module').then((m) => m.ChekersModule),
+  },
 ];
 
 @NgModule({

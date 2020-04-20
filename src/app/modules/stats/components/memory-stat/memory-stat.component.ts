@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { AgentsService } from 'src/app/shared/services/agents.service';
 import { BehaviorSubject } from 'rxjs';
 import { filter, switchMap, share, map } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
+import { AgentsService } from 'src/app/modules/agents/services/agents.service';
 
 @Component({
   selector: 'sqd-memory-stat',

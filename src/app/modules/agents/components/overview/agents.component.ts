@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { AgentsService } from 'src/app/shared/services/agents.service';
 import { map, switchMap, tap, filter } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AgentsService } from '../../services/agents.service';
 
 @Component({
   selector: 'sqd-agents',

@@ -2,7 +2,7 @@ import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { filter, switchMap, map } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
-import { AgentsService } from 'src/app/shared/services/agents.service';
+import { AgentsService } from 'src/app/modules/agents/services/agents.service';
 
 @Component({
   selector: 'sqd-net-stat',

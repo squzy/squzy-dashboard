@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { AgentsService } from 'src/app/shared/services/agents.service';
 import { filter, switchMap, map } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
+import { AgentsService } from 'src/app/modules/agents/services/agents.service';
 
 @Component({
   selector: 'sqd-disks-stat',
