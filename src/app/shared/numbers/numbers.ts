@@ -3,5 +3,5 @@ export const roundTwoNumber = (value: number) => {
 };
 
 export const getRoundedPercent = (value: number) => {
-  return roundTwoNumber(value) * 100;
+  return `${roundTwoNumber(value) * 100} %`;
 };

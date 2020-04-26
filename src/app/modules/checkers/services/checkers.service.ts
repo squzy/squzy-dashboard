@@ -17,6 +17,7 @@ export enum StatusCode {
 
 const checkerMock = () => ({
   id: Math.random().toString(36).substring(2, 10),
+
   type: Types.Http,
   status: StatusCode.OK,
   startTime: Date.now() - SECOND * Math.round(Math.random() * 10),
@@ -26,6 +27,7 @@ const checkerMock = () => ({
 const checkInfoMock = (id) => ({
   id,
   type: Types.Http,
+  name: Math.random().toString(36).substring(2, 10),
 });
 
 @Injectable({
