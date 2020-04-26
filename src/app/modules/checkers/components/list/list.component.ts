@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CheckersService, Types, StatusCode } from '../../services/checkers.service';
 import { BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
   selector: 'sqd-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListComponent {
   constructor(private checkersService: CheckersService, private router: Router) {}

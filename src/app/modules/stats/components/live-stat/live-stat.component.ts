@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, SimpleChanges, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 import { BehaviorSubject, timer } from 'rxjs';
 import { filter, switchMap, map, tap } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
@@ -8,6 +8,7 @@ import { AgentsService } from 'src/app/modules/agents/services/agents.service';
   selector: 'sqd-live-stat',
   templateUrl: './live-stat.component.html',
   styleUrls: ['./live-stat.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LiveStatComponent implements OnChanges {
   @Input() agentId: string;

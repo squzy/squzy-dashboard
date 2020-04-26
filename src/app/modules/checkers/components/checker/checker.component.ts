@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, tap, switchMap, share } from 'rxjs/operators';
 import { FormBuilder, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
@@ -23,11 +23,13 @@ class CrossFieldErrorMatcher implements ErrorStateMatcher {
   selector: 'sqd-checker',
   templateUrl: './checker.component.html',
   styleUrls: ['./checker.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckerComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  private now = Date.now();
+
+  dateNow = new Date(Date.now());
 
   displayedColumns: string[] = ['status', 'startTime', 'endTime'];
 
@@ -35,8 +37,8 @@ export class CheckerComponent implements OnInit {
 
   filterForm = this.fb.group(
     {
-      dateFrom: [minusMinute(this.now, 10), Validators.required],
-      dateTo: [new Date(this.now), Validators.required],
+      dateFrom: [minusMinute(+this.dateNow, 10), Validators.required],
+      dateTo: [this.dateNow, Validators.required],
     },
     {
       validators: [dateFromToValidator],
@@ -54,6 +56,7 @@ export class CheckerComponent implements OnInit {
     switchMap(([value, currentId]) =>
       this.checkersService.getHistory(currentId, value.dateFrom, value.dateTo),
     ),
+    tap(() => (this.dateNow = new Date(Date.now()))),
     tap((items) => (this.dataSource.data = items)),
   );
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { map, switchMap, tap, filter } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AgentsService } from '../../services/agents.service';
@@ -7,6 +7,7 @@ import { AgentsService } from '../../services/agents.service';
   selector: 'sqd-agents',
   templateUrl: './agents.component.html',
   styleUrls: ['./agents.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AgentsComponent {
   agents$ = this.agentService.getList();

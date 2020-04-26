@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, SimpleChanges, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { filter, switchMap, map } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
@@ -8,6 +8,7 @@ import { AgentsService } from 'src/app/modules/agents/services/agents.service';
   selector: 'sqd-net-stat',
   templateUrl: './net-stat.component.html',
   styleUrls: ['./net-stat.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NetStatComponent implements OnChanges {
   @Input() agentId: string;

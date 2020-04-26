@@ -41,6 +41,7 @@
           formControlName="dateFrom"
           autocomplete="off"
           [errorStateMatcher]="errorMatcher"
+          [max]="dateNow"
         >
         <owl-date-time #dateFromComponent></owl-date-time>
         <mat-error *ngIf="filterForm.hasError('dateToLessThenFrom')">Date to less then date from</mat-error>
@@ -54,6 +55,7 @@
           formControlName="dateTo"
           autocomplete="off"
           [errorStateMatcher]="errorMatcher"
+          [max]="dateNow"
         >
         <owl-date-time #dateToComponent></owl-date-time>
         <mat-error *ngIf="filterForm.hasError('dateToLessThenFrom')">Date to less then date from</mat-error>

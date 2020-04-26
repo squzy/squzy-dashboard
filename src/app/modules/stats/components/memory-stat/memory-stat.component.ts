@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { filter, switchMap, share, map } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
@@ -8,6 +15,7 @@ import { AgentsService } from 'src/app/modules/agents/services/agents.service';
   selector: 'sqd-memory-stat',
   templateUrl: './memory-stat.component.html',
   styleUrls: ['./memory-stat.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MemoryStatComponent implements OnChanges {
   @Input() agentId: string;
