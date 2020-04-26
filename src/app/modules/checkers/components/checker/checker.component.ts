@@ -45,14 +45,15 @@ export class CheckerComponent implements OnInit {
     },
   );
 
-  private _formValue$ = new BehaviorSubject(this.filterForm.value);
+  formValue$ = new BehaviorSubject(this.filterForm.value);
+
   currentId$ = this.route.params.pipe(map((p) => p.id));
 
   dataSource = new MatTableDataSource();
 
   checkInfo$ = this.currentId$.pipe(switchMap((id) => this.checkersService.getCheckById(id)));
 
-  history$ = combineLatest(this._formValue$, this.currentId$).pipe(
+  history$ = combineLatest(this.formValue$, this.currentId$).pipe(
     switchMap(([value, currentId]) =>
       this.checkersService.getHistory(currentId, value.dateFrom, value.dateTo),
     ),
@@ -83,7 +84,7 @@ export class CheckerComponent implements OnInit {
   ) {}
 
   onSubmit() {
-    this._formValue$.next(this.filterForm.value);
+    this.formValue$.next(this.filterForm.value);
   }
 
   ngOnInit() {

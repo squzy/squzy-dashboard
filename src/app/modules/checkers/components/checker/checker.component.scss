@@ -35,23 +35,27 @@ $padding: 40px;
       align-items: center;
       justify-content: space-evenly;
     }
+    div {
+      &.column {
+        &:nth-child(2):before {
+          background-color: rgba(0, 0, 0, 0.12);
+          border: 0;
+          bottom: 16px;
+          content: '';
+          display: block;
+          height: 100%;
+          left: -$padding/4;
+          position: absolute;
+          top: 0;
+          width: 1px;
+        }
+      }
+    }
     .column {
       display: flex;
       justify-content: center;
       flex-direction: column;
       position: relative;
-      &:nth-child(2):before {
-        background-color: rgba(0, 0, 0, 0.12);
-        border: 0;
-        bottom: 16px;
-        content: '';
-        display: block;
-        height: 100%;
-        left: -$padding/4;
-        position: absolute;
-        top: 0;
-        width: 1px;
-      }
     }
   }
 }
