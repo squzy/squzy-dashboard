@@ -66,7 +66,7 @@
 </mat-card>
 <mat-card class="flex flex-column">
   <mat-card-header *ngIf="formValue$ | async as currentTime">
-    <mat-card-title>{{ currentTime.dateFrom | date: 'medium' }} - {{ currentTime.dateTo | date: 'medium' }}</mat-card-title>
+    <mat-card-title>{{ currentTime.dateFrom | date: 'short' }} - {{ currentTime.dateTo | date: 'short' }}</mat-card-title>
   </mat-card-header>
   <mat-card-content class="flex column">
     <table mat-table [dataSource]="dataSource" matSort>
