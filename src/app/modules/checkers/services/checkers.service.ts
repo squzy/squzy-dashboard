@@ -17,11 +17,11 @@ export enum StatusCode {
 
 const checkerMock = () => ({
   id: Math.random().toString(36).substring(2, 10),
-
   type: Types.Http,
-  status: StatusCode.OK,
+  status: Math.random() * 100 > 30 ? StatusCode.OK : StatusCode.Error,
   startTime: Date.now() - SECOND * Math.round(Math.random() * 10),
   endTime: Date.now(),
+  lastError: Math.random() * 100 > 10 ? null : Date.now(),
 });
 
 const checkInfoMock = (id) => ({

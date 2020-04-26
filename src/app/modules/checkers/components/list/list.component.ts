@@ -16,7 +16,7 @@ export class ListComponent {
   private pageNumber$ = new BehaviorSubject<number>(0);
 
   obs$ = this.pageNumber$.pipe(switchMap((number) => this.checkersService.getList(number)));
-  displayedColumns: string[] = ['ID', 'type', 'status', 'time'];
+  displayedColumns: string[] = ['ID', 'type', 'status', 'time', 'lastError'];
 
   toType(type) {
     return this.checkersService.toType(type);
