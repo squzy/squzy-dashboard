@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
+import { MINUTE, SECOND } from 'src/app/shared/date/date';
 
 export enum Types {
   Tcp = 0,
@@ -18,7 +19,13 @@ const checkerMock = () => ({
   id: Math.random().toString(36).substring(2, 10),
   type: Types.Http,
   status: StatusCode.OK,
-  lastCheck: Date.now(),
+  startTime: Date.now() - SECOND * Math.round(Math.random() * 10),
+  endTime: Date.now(),
+});
+
+const checkInfoMock = (id) => ({
+  id,
+  type: Types.Http,
 });
 
 @Injectable({
@@ -32,6 +39,30 @@ export class CheckersService {
         .map(() => checkerMock()),
       count: limit + Math.round(Math.random() * limit * 5 + 1),
     });
+  }
+
+  getHistory(id: string, dateFrom: string, dateTo: string) {
+    return of(
+      Array(20)
+        .fill(0)
+        .map(() => checkerMock()),
+    );
+  }
+
+  getCheckById(id: string) {
+    return of({
+      ...checkInfoMock(id),
+      interval: 10,
+      timeout: 10,
+    });
+  }
+
+  toStatus(status) {
+    return StatusCode[status];
+  }
+
+  toType(type) {
+    return Types[type];
   }
 
   constructor() {}

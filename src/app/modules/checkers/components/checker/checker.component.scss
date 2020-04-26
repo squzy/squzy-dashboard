@@ -1,0 +1,55 @@
+$padding: 40px;
+
+:host {
+  padding: $padding;
+  display: flex;
+  flex-direction: column;
+  .flex {
+    display: flex;
+  }
+  mat-card {
+    &.width-50 {
+      width: 50%;
+      &:nth-child(1) {
+        margin-right: $padding / 4;
+      }
+      &:nth-child(2) {
+        margin-left: $padding / 4;
+      }
+    }
+
+    margin-bottom: $padding / 2;
+    &.column {
+      flex-direction: column;
+    }
+    table {
+      width: 100%;
+    }
+
+    form {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+    }
+    .column {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      padding: $padding / 4;
+      &:nth-child(2):before {
+        background-color: rgba(0, 0, 0, 0.12);
+        border: 0;
+        bottom: 16px;
+        content: '';
+        display: block;
+        height: auto;
+        left: 50%;
+        position: absolute;
+        top: 16px;
+        width: 1px;
+      }
+    }
+  }
+}

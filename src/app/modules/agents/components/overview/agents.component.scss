@@ -56,6 +56,8 @@ $min-width: 160px;
       width: $padding * 2;
       height: $padding;
       min-width: $min-width;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      margin: 1px 0 1px 0;
     }
 
     max-width: $min-width;
@@ -67,7 +69,7 @@ $min-width: 160px;
   }
 
   .content {
-    padding: 15px 15px 0 15px;
+    margin: 15px 15px 0 15px;
     flex: 1 1;
     .checkers-layout {
       flex: 1 1;

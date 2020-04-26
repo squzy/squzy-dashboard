@@ -11,19 +11,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./list.component.scss'],
 })
 export class ListComponent {
-
   constructor(private checkersService: CheckersService, private router: Router) {}
   private pageNumber$ = new BehaviorSubject<number>(0);
 
   obs$ = this.pageNumber$.pipe(switchMap((number) => this.checkersService.getList(number)));
   displayedColumns: string[] = ['ID', 'type', 'status', 'time'];
 
-  toType = (type) => {
-    return Types[type].toUpperCase();
+  toType(type) {
+    return this.checkersService.toType(type);
   }
 
-  toStatus = (status) => {
-    return StatusCode[status];
+  toStatus(status) {
+    return this.checkersService.toStatus(status);
   }
 
   changePage(event: PageEvent) {
