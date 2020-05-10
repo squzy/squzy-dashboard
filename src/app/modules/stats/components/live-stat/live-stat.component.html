@@ -1,3 +1,41 @@
+<div class="agent-info" *ngIf="agentInfo$ | async as agentInfo">
+  <p>
+    <strong>Id</strong>
+    : {{ agentInfo.id }}
+  </p>
+  <p>
+    <strong>Status</strong>
+    : {{ statusToString(agentInfo.status) }}
+  </p>
+  <p *ngIf="agentInfo.agent_name">
+    <strong>Name</strong>
+    : {{ agentInfo.agent_name }}
+  </p>
+  <ng-container *ngIf="agentInfo.hostInfo">
+    <p>
+      <strong>Host</strong>
+      : {{ agentInfo.hostInfo.host_name }}
+    </p>
+    <p>
+      <strong>OS</strong>
+      : {{ agentInfo.hostInfo.os }}
+    </p>
+    <ng-container *ngIf="agentInfo.hostInfo.platform_info">
+      <p>
+        <strong>Platform</strong>
+        : {{ agentInfo.hostInfo.platform_info.name }}
+      </p>
+      <p>
+        <strong>Family</strong>
+        : {{ agentInfo.hostInfo.platform_info.family }}
+      </p>
+      <p>
+        <strong>Version</strong>
+        : {{ agentInfo.hostInfo.platform_info.version }}
+      </p>
+    </ng-container>
+  </ng-container>
+</div>
 <ng-container *ngIf="liveStats$ | async as stats">
   <h3>Live timestamp: {{ stats.timestamp | date: 'medium' }}</h3>
   <div class="charts">

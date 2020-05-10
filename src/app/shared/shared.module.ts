@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
+import { CommonInterceptor } from './interceptors/common.interceptor';
 
 const sharedModules = [
   CommonModule,
@@ -22,5 +23,6 @@ const sharedModules = [
 @NgModule({
   imports: sharedModules,
   exports: sharedModules,
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: CommonInterceptor, multi: true }],
 })
 export class SharedModule {}

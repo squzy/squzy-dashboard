@@ -2,7 +2,7 @@ import { Component, Input, SimpleChanges, OnChanges, ChangeDetectionStrategy } f
 import { BehaviorSubject, timer } from 'rxjs';
 import { filter, switchMap, map, tap } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
-import { AgentsService } from 'src/app/modules/agents/services/agents.service';
+import { AgentsService, AgentStatus } from 'src/app/modules/agents/services/agents.service';
 
 @Component({
   selector: 'sqd-live-stat',
@@ -140,8 +140,11 @@ export class LiveStatComponent implements OnChanges {
     },
   };
 
-  liveStats$ = this._agentId$.pipe(
-    filter((v) => !!v),
+  private agentId_ = this._agentId$.pipe(filter((v) => !!v));
+
+  agentInfo$ = this.agentId_.pipe(switchMap((id) => this.agentsService.getById(id)));
+
+  liveStats$ = this.agentId_.pipe(
     switchMap((agentId) => timer(0, 10000).pipe(map(() => agentId))),
     switchMap((agentId) => this.agentsService.getLiveStat(agentId)),
     map((stats) => {
@@ -267,5 +270,9 @@ export class LiveStatComponent implements OnChanges {
     if ('agentId' in changes) {
       this._agentId$.next(changes.agentId.currentValue);
     }
+  }
+
+  statusToString(status: AgentStatus) {
+    return this.agentsService.statusToString(status);
   }
 }

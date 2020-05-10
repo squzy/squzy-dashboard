@@ -6,3 +6,12 @@
     width: 50%;
   }
 }
+
+.agent-info {
+  display: flex;
+  flex-wrap: wrap;
+  > * {
+    width: 50%;
+    margin: 5px 0 5px 0;
+  }
+}

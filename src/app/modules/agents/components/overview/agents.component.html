@@ -18,11 +18,11 @@
     <a
       mat-tab-link
       *ngFor="let agent of agents$ | async"
-      [routerLink]="['/agents', agent ]"
+      [routerLink]="['/agents', agent.id ]"
       routerLinkActive
       #agentLink="routerLinkActive"
       [active]="agentLink.isActive"
-    >{{ agent }}</a>
+    >{{ agent.agent_name ? agent.agent_name : agent.id }}</a>
   </nav>
 
   <mat-card class="content">

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
 
 const numberOfCpu = 10;
 const history = 20;
@@ -64,6 +66,28 @@ const memoriesMock = () => ({
   [AgentsService.VIRTUAL_MEMORY]: memoryMock(),
 });
 
+export enum AgentStatus {
+  Registred = 0,
+  Runned = 1,
+  Disconnected = 2,
+  Unregister = 3,
+}
+
+interface Agent {
+  id: string;
+  agent_name?: string;
+  status: AgentStatus;
+  hostInfo?: {
+    host_name: string;
+    os: string;
+    platform_info?: {
+      name: string;
+      family: string;
+      version: string;
+    };
+  };
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -92,7 +116,7 @@ export class AgentsService {
 
   static USED_PERSENT = 'usedPercent';
 
-  constructor() {}
+  constructor(private httpClient: HttpClient) {}
 
   // Should return last 20 history
   getCpuStats(agentId: string) {
@@ -150,7 +174,7 @@ export class AgentsService {
   }
 
   getList() {
-    return of(Object.keys(example));
+    return this.httpClient.get<Array<Agent>>('/api/v1/agents');
   }
 
   getTypes() {
@@ -164,6 +188,10 @@ export class AgentsService {
   }
 
   getById(id: string) {
-    return of(example[id]);
+    return this.httpClient.get<Agent>(`/api/v1/agents/${id}`);
+  }
+
+  statusToString(status: AgentStatus) {
+    return AgentStatus[status];
   }
 }
