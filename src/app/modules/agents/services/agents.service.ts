@@ -75,7 +75,7 @@ export enum AgentStatus {
 
 interface Agent {
   id: string;
-  agent_name?: string;
+  agentName?: string;
   status: AgentStatus;
   hostInfo?: {
     host_name: string;
