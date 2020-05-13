@@ -4,8 +4,10 @@
       <mat-card-title>Configuration</mat-card-title>
     </mat-card-header>
     <mat-card-content class="flex" *ngIf="checkInfo$ | async as info">
-      <div class="column width-50">
+      <div class="column width-100">
         <p>ID: {{ info.id }}</p>
+      </div>
+      <div class="column width-50">
         <p>
           Type:
           <strong
@@ -20,7 +22,7 @@
           <strong>{{ toSchedulerStatus(info.status) }}</strong>
         </p>
       </div>
-      <div class="column width-50">
+      <div class="column width-50 before-lint">
         <p>Interval: {{ info.interval }} sec</p>
         <p>Timeout: {{ info.timeout }} sec</p>
       </div>
@@ -34,7 +36,7 @@
       <div class="column width-50">
         <p>Uptime: {{ uptime$ | async }}</p>
       </div>
-      <div class="column width-50">
+      <div class="column width-50 before-lint">
         <p>Latency: {{ latency$ | async }}</p>
       </div>
     </mat-card-content>

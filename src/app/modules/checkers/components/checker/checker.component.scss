@@ -11,9 +11,14 @@ $padding: 40px;
   .flex {
     display: flex;
     flex: 1 1;
+    flex-wrap: wrap;
   }
   .width-50 {
     width: 50%;
+  }
+  .width-100 {
+    align-items: center;
+    width: 100%;
   }
   mat-card {
     &.width-50 {
@@ -41,7 +46,7 @@ $padding: 40px;
     }
     div {
       &.column {
-        &:nth-child(2):before {
+        &.before-lint:before {
           background-color: rgba(0, 0, 0, 0.12);
           border: 0;
           bottom: 16px;
