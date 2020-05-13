@@ -13,6 +13,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSortModule } from '@angular/material/sort';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { SchedulerConfigComponent } from './components/checker/config/config.component';
 
 const routes: Routes = [
   {
@@ -44,8 +47,11 @@ const routes: Routes = [
     MatInputModule,
     MatButtonModule,
     MatSortModule,
+    MatBottomSheetModule,
+    MatTooltipModule,
   ],
   providers: [CheckersService],
-  declarations: [ListComponent, CheckerComponent],
+  declarations: [ListComponent, CheckerComponent, SchedulerConfigComponent],
+  entryComponents: [SchedulerConfigComponent],
 })
 export class ChekersModule {}

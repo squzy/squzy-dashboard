@@ -1,6 +1,10 @@
 $padding: 40px;
 
 :host {
+  .pointer {
+    cursor: pointer;
+  }
+
   padding: $padding;
   display: flex;
   flex-direction: column;

@@ -1,17 +1,23 @@
 import { Component, ViewChild, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, tap, switchMap, share } from 'rxjs/operators';
+import { map, tap, switchMap } from 'rxjs/operators';
 import { FormBuilder, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { minusMinute, dateFromToValidator, SECOND } from 'src/app/shared/date/date';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { CheckersService, StatusCode } from '../../services/checkers.service';
+import {
+  CheckersService,
+  SchedulerStatus,
+  SchedulerResponseCode,
+  Scheduler,
+} from '../../services/checkers.service';
 import { roundTwoNumber, getRoundedPercent } from 'src/app/shared/numbers/numbers';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { constructor } from 'q';
 import { MatSort } from '@angular/material/sort';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { SchedulerConfigComponent } from './config/config.component';
 
 class CrossFieldErrorMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -51,7 +57,7 @@ export class CheckerComponent implements OnInit {
 
   dataSource = new MatTableDataSource();
 
-  checkInfo$ = this.currentId$.pipe(switchMap((id) => this.checkersService.getCheckById(id)));
+  checkInfo$ = this.currentId$.pipe(switchMap((id) => this.checkersService.getById(id)));
 
   history$ = combineLatest(this.formValue$, this.currentId$).pipe(
     switchMap(([value, currentId]) =>
@@ -63,7 +69,7 @@ export class CheckerComponent implements OnInit {
 
   uptime$ = this.history$.pipe(
     map((history) => {
-      const success = history.filter((e) => e.status === StatusCode.OK);
+      const success = history.filter((e) => e.status === SchedulerResponseCode.OK);
       return getRoundedPercent(success.length / history.length);
     }),
   );
@@ -81,10 +87,17 @@ export class CheckerComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private checkersService: CheckersService,
+    private _bottomSheet: MatBottomSheet,
   ) {}
 
   onSubmit() {
     this.formValue$.next(this.filterForm.value);
+  }
+
+  showConfig(config: Scheduler) {
+    this._bottomSheet.open(SchedulerConfigComponent, {
+      data: config,
+    });
   }
 
   ngOnInit() {
@@ -92,8 +105,12 @@ export class CheckerComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  toStatus(status) {
-    return this.checkersService.toStatus(status);
+  toSchedulerStatus(status) {
+    return this.checkersService.toSchedulerStatus(status);
+  }
+
+  toResponseStatus(status) {
+    return this.checkersService.toSchedulerResponseStatus(status);
   }
 
   toType(type) {

@@ -6,7 +6,19 @@
     <mat-card-content class="flex" *ngIf="checkInfo$ | async as info">
       <div class="column width-50">
         <p>ID: {{ info.id }}</p>
-        <p>Type: {{ toType(info.type) | uppercase }}</p>
+        <p>
+          Type:
+          <strong
+            class="pointer"
+            matTooltipPosition="right"
+            matTooltip="View config"
+            (click)="showConfig(info)"
+          >{{ toType(info.type) | uppercase }}</strong>
+        </p>
+        <p>
+          Status:
+          <strong>{{ toSchedulerStatus(info.status) }}</strong>
+        </p>
       </div>
       <div class="column width-50">
         <p>Interval: {{ info.interval }} sec</p>
@@ -72,7 +84,7 @@
     <table mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-        <td mat-cell *matCellDef="let element">{{ toStatus(element.status) }}</td>
+        <td mat-cell *matCellDef="let element">{{ toResponseStatus(element.status) }}</td>
       </ng-container>
       <ng-container matColumnDef="startTime">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Time</th>

@@ -192,6 +192,6 @@ export class AgentsService {
   }
 
   statusToString(status: AgentStatus) {
-    return AgentStatus[status];
+    return AgentStatus[status || AgentStatus.Registred];
   }
 }
