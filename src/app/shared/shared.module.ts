@@ -7,9 +7,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CommonInterceptor } from './interceptors/common.interceptor';
+import { ModalsModule } from './modules/modals/modals.module';
 
 const sharedModules = [
   CommonModule,
+  ModalsModule,
   HttpClientModule,
   MatListModule,
   MatSidenavModule,

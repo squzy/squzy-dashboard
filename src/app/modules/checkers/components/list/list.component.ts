@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
+import { AddCheckerService } from 'src/app/shared/modules/modals/add-cheker/add-checker.service';
 
 @Component({
   selector: 'sqd-list',
@@ -28,7 +29,11 @@ export class ListComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['select', 'ID', 'type', 'status'];
 
-  constructor(private checkersService: CheckersService, private router: Router) {}
+  constructor(
+    private checkersService: CheckersService,
+    private router: Router,
+    private addCheckerService: AddCheckerService,
+  ) {}
 
   ngOnInit() {
     this.obs$.pipe(takeUntil(this.destroyed$)).subscribe((items) => {
@@ -87,6 +92,15 @@ export class ListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
         this.selection.clear();
+        this.refresh$.next(null);
+      });
+  }
+
+  addChecker() {
+    this.addCheckerService
+      .open()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
         this.refresh$.next(null);
       });
   }

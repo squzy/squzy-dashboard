@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-header>
-    <button mat-stroked-button>Add</button>
+    <button mat-stroked-button (click)="addChecker()">Add</button>
     <button [disabled]="!selection.selected.length" mat-stroked-button (click)="runSelected()">Run</button>
     <button [disabled]="!selection.selected.length" mat-stroked-button (click)="stopSelected()">Stop</button>
     <button
