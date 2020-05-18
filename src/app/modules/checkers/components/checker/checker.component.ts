@@ -1,11 +1,11 @@
-import { Component, ViewChild, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewChild, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, tap, switchMap } from 'rxjs/operators';
+import { map, tap, switchMap, takeUntil } from 'rxjs/operators';
 import { FormBuilder, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { minusMinute, dateFromToValidator, SECOND } from 'src/app/shared/date/date';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import {
   CheckersService,
   SchedulerStatus,
@@ -31,9 +31,13 @@ class CrossFieldErrorMatcher implements ErrorStateMatcher {
   styleUrls: ['./checker.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CheckerComponent implements OnInit {
+export class CheckerComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+
+  private destoryed$ = new Subject();
+
+  private readonly refresh$ = new BehaviorSubject(null);
 
   dateNow = new Date(Date.now());
 
@@ -51,9 +55,13 @@ export class CheckerComponent implements OnInit {
     },
   );
 
+  statuses = SchedulerStatus;
+
   formValue$ = new BehaviorSubject(this.filterForm.value);
 
-  currentId$ = this.route.params.pipe(map((p) => p.id));
+  currentId$ = combineLatest(this.refresh$, this.route.params.pipe(map((p) => p.id))).pipe(
+    map(([_, id]) => id),
+  );
 
   dataSource = new MatTableDataSource();
 
@@ -103,6 +111,31 @@ export class CheckerComponent implements OnInit {
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  ngOnDestroy() {
+    this.destoryed$.next();
+  }
+
+  run(id: string) {
+    this.checkersService
+      .runById(id)
+      .pipe(takeUntil(this.destoryed$))
+      .subscribe(() => this.refresh$.next(null));
+  }
+
+  stop(id: string) {
+    this.checkersService
+      .stopById(id)
+      .pipe(takeUntil(this.destoryed$))
+      .subscribe(() => this.refresh$.next(null));
+  }
+
+  remove(id: string) {
+    this.checkersService
+      .removeById(id)
+      .pipe(takeUntil(this.destoryed$))
+      .subscribe(() => this.refresh$.next(null));
   }
 
   toSchedulerStatus(status) {

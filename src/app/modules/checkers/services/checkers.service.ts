@@ -2,33 +2,34 @@ import { Injectable } from '@angular/core';
 import { of, Observable } from 'rxjs';
 import { MINUTE, SECOND } from 'src/app/shared/date/date';
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 export enum Types {
-  Tcp = 0,
-  Grpc = 1,
-  Http = 2,
-  SiteMap = 3,
-  HttpJsonValue = 4,
+  Tcp = 1,
+  Grpc = 2,
+  Http = 3,
+  SiteMap = 4,
+  HttpJsonValue = 5,
 }
 
 export enum SchedulerStatus {
-  Runned = 0,
-  Stopped = 1,
+  Runned = 1,
+  Stopped = 2,
   Removed = 3,
 }
 
 export enum SchedulerResponseCode {
-  OK = 0,
-  Error = 1,
+  OK = 1,
+  Error = 2,
 }
 
 export enum SelectorTypes {
-  String = 0,
-  Bool = 1,
-  Number = 2,
-  Time = 3,
-  Any = 4,
-  Raw = 5,
+  String = 1,
+  Bool = 2,
+  Number = 3,
+  Time = 4,
+  Any = 5,
+  Raw = 6,
 }
 
 const checkerMock = () => ({
@@ -81,7 +82,9 @@ export class CheckersService {
   constructor(private httpClient: HttpClient) {}
 
   getList() {
-    return this.httpClient.get<Array<Scheduler>>('/api/v1/schedulers');
+    return this.httpClient
+      .get<Array<Scheduler>>('/api/v1/schedulers')
+      .pipe(map((list) => (list || []).filter((item) => item.status !== SchedulerStatus.Removed)));
   }
 
   getHistory(id: string, dateFrom: string, dateTo: string) {
@@ -96,15 +99,27 @@ export class CheckersService {
     return this.httpClient.get<Scheduler>(`/api/v1/schedulers/${id}`);
   }
 
+  runById(id: string) {
+    return this.httpClient.put(`/api/v1/schedulers/${id}/run`, null);
+  }
+
+  stopById(id: string) {
+    return this.httpClient.put(`/api/v1/schedulers/${id}/stop`, null);
+  }
+
+  removeById(id: string) {
+    return this.httpClient.delete(`/api/v1/schedulers/${id}`);
+  }
+
   toSchedulerResponseStatus(status) {
-    return SchedulerResponseCode[status || SchedulerResponseCode.OK];
+    return SchedulerResponseCode[status];
   }
 
   toSchedulerStatus(status) {
-    return SchedulerStatus[status || SchedulerStatus.Runned];
+    return SchedulerStatus[status];
   }
 
   toType(type) {
-    return Types[type || Types.Tcp];
+    return Types[type];
   }
 }

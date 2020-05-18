@@ -1,21 +1,10 @@
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 
 const numberOfCpu = 10;
 const history = 20;
-
-const example = {
-  agentone: {
-    id: 'agentone',
-    name: 'one',
-  },
-  agenttwo: {
-    id: 'agentone',
-    name: 'two',
-  },
-};
 
 const netInterfaceMock = () => ({
   bytesSent: Math.round(Math.random() * 10000),
@@ -67,10 +56,10 @@ const memoriesMock = () => ({
 });
 
 export enum AgentStatus {
-  Registred = 0,
-  Runned = 1,
-  Disconnected = 2,
-  Unregister = 3,
+  Registred = 1,
+  Runned = 2,
+  Disconnected = 3,
+  Unregister = 4,
 }
 
 interface Agent {
@@ -174,7 +163,7 @@ export class AgentsService {
   }
 
   getList() {
-    return this.httpClient.get<Array<Agent>>('/api/v1/agents');
+    return this.httpClient.get<Array<Agent>>('/api/v1/agents').pipe(map((e) => e || []));
   }
 
   getTypes() {
@@ -192,6 +181,6 @@ export class AgentsService {
   }
 
   statusToString(status: AgentStatus) {
-    return AgentStatus[status || AgentStatus.Registred];
+    return AgentStatus[status];
   }
 }

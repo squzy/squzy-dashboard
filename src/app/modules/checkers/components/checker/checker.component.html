@@ -1,9 +1,15 @@
 <div class="flex">
-  <mat-card class="flex flex-column width-50">
+  <mat-card class="flex flex-column width-50" *ngIf="checkInfo$ | async as info">
     <mat-card-header>
-      <mat-card-title>Configuration</mat-card-title>
+      <mat-card-title>
+        <span>Configuration</span>
+        <span class="spacer"></span>
+        <mat-icon *ngIf="info.status === statuses.Stopped" (click)="run(info.id)">play_arrow</mat-icon>
+        <mat-icon *ngIf="info.status === statuses.Runned" (click)="stop(info.id)">pause</mat-icon>
+        <mat-icon *ngIf="info.status !== statuses.Removed" (click)="remove(info.id)">clear</mat-icon>
+      </mat-card-title>
     </mat-card-header>
-    <mat-card-content class="flex" *ngIf="checkInfo$ | async as info">
+    <mat-card-content class="flex">
       <div class="column width-100">
         <p>ID: {{ info.id }}</p>
       </div>

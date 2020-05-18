@@ -5,7 +5,16 @@ $padding: 40px;
   display: flex;
   justify-content: center;
   flex-direction: column;
-
+  mat-card {
+    mat-card-header::ng-deep {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      .mat-card-header-text {
+        display: none;
+      }
+    }
+  }
   table {
     width: 100%;
     .mat-header-cell {

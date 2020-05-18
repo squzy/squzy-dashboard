@@ -20,7 +20,24 @@ $padding: 40px;
     align-items: center;
     width: 100%;
   }
+  .spacer {
+    flex: 1 1 auto;
+  }
   mat-card {
+    mat-card-header::ng-deep {
+      width: 100%;
+      .mat-card-header-text {
+        width: 100%;
+      }
+    }
+    mat-card-title {
+      display: flex;
+      width: 100%;
+      mat-icon {
+        margin-left: $padding / 4;
+        cursor: pointer;
+      }
+    }
     &.width-50 {
       &:nth-child(1) {
         margin-right: $padding / 4;
