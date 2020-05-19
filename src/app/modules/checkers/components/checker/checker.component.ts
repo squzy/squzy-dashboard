@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map, tap, switchMap, takeUntil } from 'rxjs/operators';
 import { FormBuilder, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import { minusMinute, dateFromToValidator, SECOND } from 'src/app/shared/date/date';
+import { minusMinute, SECOND } from 'src/app/shared/date/date';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import {
@@ -18,6 +18,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SchedulerConfigComponent } from './config/config.component';
+import { dateFromToValidator } from 'src/app/shared/validators/date.validators';
 
 class CrossFieldErrorMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {

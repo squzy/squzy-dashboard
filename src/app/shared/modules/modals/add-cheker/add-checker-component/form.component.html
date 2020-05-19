@@ -1,1 +1,150 @@
-<p>asf</p>
+<mat-card>
+  <form [formGroup]="form">
+  <mat-card-header>
+    <mat-card-title>
+      Add checker
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+      <mat-form-field>
+        <mat-label>Select type of checker</mat-label>
+    <mat-select formControlName="type" (selectionChange)="changeType($event)">
+      <mat-option *ngFor="let type of schdedulerTypes | keyvalue" [value]="type.key">{{ type.value }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('type').hasError('required')">Required</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" placeholder="Set interval" formControlName="interval">
+      <mat-error *ngIf="form.get('interval').hasError('min')">Should be more than 0</mat-error>
+      <mat-error *ngIf="form.get('interval').hasError('required')">Required</mat-error>
+      <mat-error *ngIf="form.get('interval').hasError('notInteger')">Should be integer</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" placeholder="Set timeout" formControlName="timeout">
+      <mat-hint>Default it is 10 sec</mat-hint>
+      <mat-error *ngIf="form.get('timeout').hasError('min')">Should be more than 0</mat-error>
+      <mat-error *ngIf="form.get('timeout').hasError('notInteger')">Should be integer</mat-error>
+    </mat-form-field>
+    <ng-container [ngSwitch]="form.get('type').value">
+      <ng-container formGroupName="config">
+     <ng-container *ngSwitchCase="schdedulerTypes.Tcp" formGroupName="tcpConfig">
+      <mat-form-field>
+        <input matInput placeholder="Set host" formControlName="host">
+        <mat-error *ngIf="tcpConfig.get('host').hasError('required')">Required</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="number" placeholder="Set port" formControlName="port">
+        <mat-error *ngIf="tcpConfig.get('port').hasError('required')">Required</mat-error>
+        <mat-error *ngIf="tcpConfig.get('port').hasError('min')">Should be more than 0</mat-error>
+        <mat-error *ngIf="tcpConfig.get('port').hasError('notInteger')">Should be integer</mat-error>
+        <mat-error *ngIf="tcpConfig.get('port').hasError('max')">Should be more less 65535</mat-error>
+      </mat-form-field>
+     </ng-container>
+     <ng-container *ngSwitchCase="schdedulerTypes.Grpc" formGroupName="grpcConfig">
+      <mat-form-field>
+        <input matInput placeholder="Set service name" formControlName="service">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Set host" formControlName="host">
+        <mat-error *ngIf="grpcConfig.get('host').hasError('required')">Required</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="number" placeholder="Set port" formControlName="port">
+        <mat-error *ngIf="grpcConfig.get('port').hasError('required')">Required</mat-error>
+        <mat-error *ngIf="grpcConfig.get('port').hasError('min')">Should be more than 0</mat-error>
+        <mat-error *ngIf="grpcConfig.get('port').hasError('notInteger')">Should be integer</mat-error>
+        <mat-error *ngIf="grpcConfig.get('port').hasError('max')">Should be more less 65535</mat-error>
+      </mat-form-field>
+       </ng-container>
+       <ng-container *ngSwitchCase="schdedulerTypes.SiteMap" formGroupName="siteMapConfig">
+        <mat-form-field>
+          <input matInput placeholder="Set url" formControlName="url">
+          <mat-error *ngIf="siteMapConfig.get('url').hasError('required')">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" placeholder="Set concurrency" formControlName="concurrency">
+          <mat-error *ngIf="siteMapConfig.get('concurrency').hasError('min')">Should be more than 0</mat-error>
+          <mat-error *ngIf="siteMapConfig.get('concurrency').hasError('notInteger')">Should be integer</mat-error>
+        </mat-form-field>
+       </ng-container>
+       <ng-container *ngSwitchCase="schdedulerTypes.Http" formGroupName="httpConfig">
+        <mat-form-field>
+          <mat-label>Select method</mat-label>
+        <mat-select formControlName="method">
+          <mat-option *ngFor="let method of methods" [value]="method">{{ method }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Set url" formControlName="url">
+          <mat-error *ngIf="httpConfig.get('url').hasError('required')">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" placeholder="Set status code" formControlName="status_code">
+          <mat-error *ngIf="httpConfig.get('status_code').hasError('min')">Should be more than 0</mat-error>
+          <mat-error *ngIf="httpConfig.get('status_code').hasError('max')">Should be more less 503</mat-error>
+          <mat-error *ngIf="httpConfig.get('status_code').hasError('notInteger')">Should be integer</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-chip-list #httpHeaderList formControlName="headers">
+            <mat-chip  *ngFor="let header of httpConfig.get('headers').value | keyvalue; let i = index" [selectable]="true"
+                     [removable]="true" (removed)="removeHeader(httpConfig.get('headers'), header.key)">
+              {{ header.key }}: {{ header.value }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="New header..."
+                   [matChipInputFor]="httpHeaderList"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   (matChipInputTokenEnd)="addHeader(httpConfig.get('headers'), $event)">
+          </mat-chip-list>
+          <mat-hint>Use ':' like separator for header key and value</mat-hint>
+        </mat-form-field>
+       </ng-container>
+       <ng-container *ngSwitchCase="schdedulerTypes.HttpJsonValue" formGroupName="httpValueConfig">
+        <mat-form-field>
+        <mat-select formControlName="method">
+          <mat-option *ngFor="let method of methods" [value]="method">{{ method }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Set url" formControlName="url">
+          <mat-error *ngIf="httpValueConfig.get('url').hasError('required')">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-chip-list #httpHeaderList formControlName="headers">
+            <mat-chip  *ngFor="let header of httpValueConfig.get('headers').value | keyvalue; let i = index" [selectable]="true"
+                     [removable]="true" (removed)="removeHeader(httpValueConfig.get('headers'), header.key)">
+              {{ header.key }}: {{ header.value }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="New header..."
+                   [matChipInputFor]="httpHeaderList"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   (matChipInputTokenEnd)="addHeader(httpValueConfig.get('headers'), $event)">
+          </mat-chip-list>
+          <mat-hint>Use ':' like separator for header key and value</mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-chip-list formControlName="selectors">
+            <mat-chip  *ngFor="let selector of httpValueConfig.get('selectors').value; let i = index" [selectable]="true"
+                     [removable]="true" (removed)="removeSelector(httpValueConfig.get('selectors'), i)">
+              {{ toSelectorType(selector.type) }}: {{ selector.path }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <mat-select #selectorType>
+              <mat-option *ngFor="let selector of selectors" [value]="selector">{{ toSelectorType(selector) }}</mat-option>
+            </mat-select>
+            <mat-label>Select parse value type</mat-label>
+            <input matInput #selectorInput placeholder="Put selector">
+            <button mat-button (click)="addSelector(httpValueConfig.get('selectors'), selectorType, selectorInput)">Add selector</button>
+          </mat-chip-list>
+        </mat-form-field>
+       </ng-container>
+    </ng-container>
+  </ng-container>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-button [disabled]="!form.valid" (click)="onSubmit()">Add</button>
+  </mat-card-actions>
+</form>
+</mat-card>
+

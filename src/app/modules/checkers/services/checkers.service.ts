@@ -3,14 +3,7 @@ import { of, Observable } from 'rxjs';
 import { MINUTE, SECOND } from 'src/app/shared/date/date';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-
-export enum Types {
-  Tcp = 1,
-  Grpc = 2,
-  Http = 3,
-  SiteMap = 4,
-  HttpJsonValue = 5,
-}
+import { Types, SelectorTypes } from 'src/app/shared/enums/schedulers.type';
 
 export enum SchedulerStatus {
   Runned = 1,
@@ -21,15 +14,6 @@ export enum SchedulerStatus {
 export enum SchedulerResponseCode {
   OK = 1,
   Error = 2,
-}
-
-export enum SelectorTypes {
-  String = 1,
-  Bool = 2,
-  Number = 3,
-  Time = 4,
-  Any = 5,
-  Raw = 6,
 }
 
 const checkerMock = () => ({
