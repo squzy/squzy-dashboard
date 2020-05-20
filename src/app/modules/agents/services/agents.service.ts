@@ -64,9 +64,9 @@ export enum AgentStatus {
 
 interface Agent {
   id: string;
-  agentName?: string;
+  agent_name?: string;
   status: AgentStatus;
-  hostInfo?: {
+  host_info?: {
     host_name: string;
     os: string;
     platform_info?: {
@@ -91,7 +91,7 @@ export class AgentsService {
 
   static NET = 'net';
 
-  static VIRTUAL_MEMORY = 'virtual';
+  static VIRTUAL_MEMORY = 'mem';
 
   static SWAP_MEMORY = 'swap';
 
@@ -109,24 +109,15 @@ export class AgentsService {
 
   // Should return last 20 history
   getCpuStats(agentId: string) {
-    return of(
-      Array(history)
-        .fill(0)
-        .map((_, index) => ({
-          stats: cpusMock(),
-          timestamp: Date.now() + index * 1000 * 30,
-        })),
-    );
+    return this.httpClient
+      .get(`/api/v1/agents/${agentId}/history?type=2&page=-1&limit=20`)
+      .pipe(map((v: any) => v.stats));
   }
 
   getLiveStat(agentId: string) {
-    return of({
-      timestamp: Date.now(),
-      cpusStat: cpusMock(),
-      disksStats: disksMock(),
-      memoriesStats: memoriesMock(),
-      netsStats: netInterfacesMock(),
-    });
+    return this.httpClient
+      .get(`/api/v1/agents/${agentId}/history?type=1&page=-1&limit=1`)
+      .pipe(map((v: any) => v.stats[0]));
   }
 
   getMemoryStats(agentId: string) {

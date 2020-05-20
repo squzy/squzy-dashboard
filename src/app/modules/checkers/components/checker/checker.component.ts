@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, tap, switchMap, takeUntil } from 'rxjs/operators';
+import { map, tap, switchMap, takeUntil, take } from 'rxjs/operators';
 import { FormBuilder, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { minusMinute, SECOND } from 'src/app/shared/date/date';
@@ -11,6 +11,7 @@ import {
   SchedulerStatus,
   SchedulerResponseCode,
   Scheduler,
+  HistoryItem,
 } from '../../services/checkers.service';
 import { roundTwoNumber, getRoundedPercent } from 'src/app/shared/numbers/numbers';
 import { MatPaginator } from '@angular/material/paginator';
@@ -64,7 +65,7 @@ export class CheckerComponent implements OnInit, OnDestroy {
     map(([_, id]) => id),
   );
 
-  dataSource = new MatTableDataSource();
+  dataSource = new MatTableDataSource<HistoryItem>();
 
   checkInfo$ = this.currentId$.pipe(switchMap((id) => this.checkersService.getById(id)));
 
@@ -72,13 +73,14 @@ export class CheckerComponent implements OnInit, OnDestroy {
     switchMap(([value, currentId]) =>
       this.checkersService.getHistory(currentId, value.dateFrom, value.dateTo),
     ),
+    map((v) => v.snapshots || []),
     tap(() => (this.dateNow = new Date(Date.now()))),
     tap((items) => (this.dataSource.data = items)),
   );
 
   uptime$ = this.history$.pipe(
     map((history) => {
-      const success = history.filter((e) => e.status === SchedulerResponseCode.OK);
+      const success = history.filter((e) => e.code === SchedulerResponseCode.OK);
       return getRoundedPercent(success.length / history.length);
     }),
   );
@@ -86,7 +88,7 @@ export class CheckerComponent implements OnInit, OnDestroy {
   latency$ = this.history$.pipe(
     map((history) => {
       const latencyAccum = history.reduce((prev, current) => {
-        return prev + current.endTime - current.startTime;
+        return prev + current.meta.end_time.seconds - current.meta.start_time.seconds;
       }, 0);
       return roundTwoNumber(latencyAccum / history.length / SECOND);
     }),

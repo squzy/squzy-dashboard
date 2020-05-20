@@ -7,31 +7,31 @@
     <strong>Status</strong>
     : {{ statusToString(agentInfo.status) }}
   </p>
-  <p *ngIf="agentInfo.agentName">
+  <p *ngIf="agentInfo.agent_name">
     <strong>Name</strong>
-    : {{ agentInfo.agentName }}
+    : {{ agentInfo.agent_name }}
   </p>
-  <ng-container *ngIf="agentInfo.hostInfo">
+  <ng-container *ngIf="agentInfo.host_info">
     <p>
       <strong>Host</strong>
-      : {{ agentInfo.hostInfo.host_name }}
+      : {{ agentInfo.host_info.host_name }}
     </p>
     <p>
       <strong>OS</strong>
-      : {{ agentInfo.hostInfo.os }}
+      : {{ agentInfo.host_info.os }}
     </p>
-    <ng-container *ngIf="agentInfo.hostInfo.platform_info">
+    <ng-container *ngIf="agentInfo.host_info.platform_info">
       <p>
         <strong>Platform</strong>
-        : {{ agentInfo.hostInfo.platform_info.name }}
+        : {{ agentInfo.host_info.platform_info.name }}
       </p>
       <p>
         <strong>Family</strong>
-        : {{ agentInfo.hostInfo.platform_info.family }}
+        : {{ agentInfo.host_info.platform_info.family }}
       </p>
       <p>
         <strong>Version</strong>
-        : {{ agentInfo.hostInfo.platform_info.version }}
+        : {{ agentInfo.host_info.platform_info.version }}
       </p>
     </ng-container>
   </ng-container>

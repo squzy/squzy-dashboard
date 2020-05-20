@@ -31,6 +31,14 @@ export class CpuStatsComponent implements OnChanges {
           display: true,
         },
       ],
+      yAxes: [
+        {
+          ticks: {
+            max: 1,
+            min: 0,
+          },
+        },
+      ],
     },
   };
 
@@ -38,7 +46,7 @@ export class CpuStatsComponent implements OnChanges {
     filter((v) => !!v),
     switchMap((agentId) => this.agentsService.getCpuStats(agentId)),
     map((history) => {
-      const length = history[0].stats.length;
+      const length = history[0].cpu_info.cpus.length;
 
       const datasets = Array(length)
         .fill(0)
@@ -46,9 +54,9 @@ export class CpuStatsComponent implements OnChanges {
 
       const labels = [];
       history.forEach((item) => {
-        labels.push(item.timestamp);
-        item.stats.forEach((cpu, index) => {
-          datasets[index].push(cpu);
+        labels.push(item.time.seconds * 1000);
+        item.cpu_info.cpus.forEach((cpu, index) => {
+          datasets[index].push(cpu.load / 100);
         });
       });
 

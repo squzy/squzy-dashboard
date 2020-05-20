@@ -59,6 +59,29 @@ export interface Scheduler {
   };
 }
 
+export interface HistoryItem {
+  code: SchedulerResponseCode;
+  type: Types;
+  error?: {
+    message: string;
+  };
+  meta: {
+    start_time: {
+      seconds: number;
+      nanos: number;
+    };
+    end_time: {
+      seconds: number;
+      nanos: number;
+    };
+  };
+}
+
+export interface HistoryPaginated {
+  count: number;
+  snapshots: Array<HistoryItem>;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -69,14 +92,6 @@ export class CheckersService {
     return this.httpClient
       .get<Array<Scheduler>>('/api/v1/schedulers')
       .pipe(map((list) => (list || []).filter((item) => item.status !== SchedulerStatus.Removed)));
-  }
-
-  getHistory(id: string, dateFrom: string, dateTo: string) {
-    return of(
-      Array(20)
-        .fill(0)
-        .map(() => checkerMock()),
-    );
   }
 
   addChecker(req) {
@@ -97,6 +112,12 @@ export class CheckersService {
 
   removeById(id: string) {
     return this.httpClient.delete(`/api/v1/schedulers/${id}`);
+  }
+
+  getHistory(id: string, dateFrom: Date, dateTo: Date) {
+    return this.httpClient.get<HistoryPaginated>(
+      `/api/v1/schedulers/${id}/history?dateFrom=${dateFrom.toISOString()}&dateTo=${dateTo.toISOString()}`,
+    );
   }
 
   toSchedulerResponseStatus(status) {

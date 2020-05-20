@@ -149,14 +149,19 @@ export class LiveStatComponent implements OnChanges {
     switchMap((agentId) => this.agentsService.getLiveStat(agentId)),
     map((stats) => {
       return {
-        timestamp: stats.timestamp,
+        timestamp: stats.time.seconds * 1000,
         netChart: (() => {
-          const acc = Object.keys(stats.netsStats).reduce((prev, cur, index) => {
+          const acc = Object.keys(stats.net_info.interfaces).reduce((prev, cur, index) => {
             if (!index) {
-              return stats.netsStats[cur];
+              return stats.net_info.interfaces[cur];
             }
-            Object.keys(stats.netsStats[cur]).forEach((item) => {
-              prev[item] += stats.netsStats[cur][item];
+
+            Object.keys(stats.net_info.interfaces[cur]).forEach((item) => {
+              if (!prev[item]) {
+                prev[item] = stats.net_info.interfaces[cur][item] || 0;
+                return;
+              }
+              prev[item] += stats.net_info.interfaces[cur][item] || 0;
             });
             return prev;
           }, {});
@@ -178,17 +183,17 @@ export class LiveStatComponent implements OnChanges {
           );
         })(),
         diskChart: (() => {
-          return Object.keys(stats.disksStats).reduce(
+          return Object.keys(stats.disk_info.disks).reduce(
             (prev, cur) => {
               prev.labels.push(cur);
               prev.datasets[this.types[AgentsService.FREE_MEMORY]].data.push(
-                stats.disksStats[cur][AgentsService.FREE_MEMORY],
+                stats.disk_info.disks[cur][AgentsService.FREE_MEMORY],
               );
               prev.datasets[this.types[AgentsService.USAGE_MEMORY]].data.push(
-                stats.disksStats[cur][AgentsService.USAGE_MEMORY],
+                stats.disk_info.disks[cur][AgentsService.USAGE_MEMORY],
               );
               prev.datasets[this.types[AgentsService.TOTAL_MEMORY]].data.push(
-                stats.disksStats[cur][AgentsService.TOTAL_MEMORY],
+                stats.disk_info.disks[cur][AgentsService.TOTAL_MEMORY],
               );
               return prev;
             },
@@ -202,7 +207,7 @@ export class LiveStatComponent implements OnChanges {
           );
         })(),
         swapMemoryChart: (() => {
-          const memory = stats.memoriesStats[AgentsService.SWAP_MEMORY];
+          const memory = stats.memory_info[AgentsService.SWAP_MEMORY];
           return Object.keys(memory).reduce(
             (prev, cur) => {
               if (cur === AgentsService.TOTAL_MEMORY) {
@@ -223,7 +228,7 @@ export class LiveStatComponent implements OnChanges {
           );
         })(),
         memoryChart: (() => {
-          const memory = stats.memoriesStats[AgentsService.VIRTUAL_MEMORY];
+          const memory = stats.memory_info[AgentsService.VIRTUAL_MEMORY];
           return Object.keys(memory).reduce(
             (prev, cur) => {
               if (cur === AgentsService.TOTAL_MEMORY) {
@@ -244,10 +249,10 @@ export class LiveStatComponent implements OnChanges {
           );
         })(),
         cpuChart: (() => {
-          return stats.cpusStat.reduce(
+          return stats.cpu_info.cpus.reduce(
             (prev, cur, index) => {
               prev.labels.push(`CPU ${index + 1}`);
-              prev.datasets[0].data.push(cur);
+              prev.datasets[0].data.push(cur.load / 100);
               return prev;
             },
             {
