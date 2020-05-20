@@ -182,7 +182,7 @@ export class AddCheckerFormComponent implements OnDestroy {
       const headerKey = splited[0].trim();
       const headerValue = splited[1].trim();
       if (headerKey && headerValue) {
-        control.value[headerValue] = headerValue;
+        control.value[headerKey] = headerValue;
         event.input.value = '';
       }
     }
