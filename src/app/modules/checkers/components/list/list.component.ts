@@ -100,8 +100,10 @@ export class ListComponent implements OnInit, OnDestroy {
     this.addCheckerService
       .open()
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(() => {
-        this.refresh$.next(null);
+      .subscribe((res) => {
+        if (res && res.id) {
+          this.router.navigate(['checkers', res.id]);
+        }
       });
   }
 }

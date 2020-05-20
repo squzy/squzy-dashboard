@@ -7,6 +7,11 @@ mat-card-actions {
 }
 
 mat-card {
+  min-width: 300px;
   box-shadow: none !important;
   padding-bottom: 0;
+  .selector-form {
+    margin-top: 10px;
+    display: flex;
+  }
 }

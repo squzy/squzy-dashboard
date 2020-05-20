@@ -21,7 +21,7 @@
             matTooltipPosition="right"
             matTooltip="View config"
             (click)="showConfig(info)"
-          >{{ toType(info.type) | uppercase }}</strong>
+          >{{ toType(info.type) }}</strong>
         </p>
         <p>
           Status:
@@ -30,7 +30,7 @@
       </div>
       <div class="column width-50 before-lint">
         <p>Interval: {{ info.interval }} sec</p>
-        <p>Timeout: {{ info.timeout }} sec</p>
+        <p *ngIf="info.timeout">Timeout: {{ info.timeout }} sec</p>
       </div>
     </mat-card-content>
   </mat-card>

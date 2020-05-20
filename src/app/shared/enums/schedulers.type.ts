@@ -16,5 +16,9 @@ export enum SelectorTypes {
 }
 
 export function selectorToString(selector: SelectorTypes) {
-  return SelectorTypes[selector]
+  return SelectorTypes[selector];
+}
+
+export function typeToString(type: Types) {
+  return Types[type];
 }

@@ -79,6 +79,10 @@ export class CheckersService {
     );
   }
 
+  addChecker(req) {
+    return this.httpClient.post<{ id: string }>(`/api/v1/schedulers`, req);
+  }
+
   getById(id: string) {
     return this.httpClient.get<Scheduler>(`/api/v1/schedulers/${id}`);
   }
