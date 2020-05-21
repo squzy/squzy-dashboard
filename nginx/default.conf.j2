@@ -1,3 +1,7 @@
+upstream api_server {
+    server $api_host;
+}
+
 server {
 
     listen 80;
@@ -6,16 +10,22 @@ server {
 
     index index.html index.htm;
 
+    gzip on;
+    gzip_min_length 1000;
+    gzip_proxied expired no-cache no-store private auth;
+    gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
     location /app/version {
       default_type application/json;
       return 200 '{"data": {"version":"{{ version }}"}}';
     }
 
     location /api {
-        proxy_pass http://$api_host;
-        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_pass http://api_server;
         proxy_buffering off;
         proxy_set_header Accept-Encoding "";
+        proxy_set_header Host      $host;
+        proxy_set_header X-Real-IP $remote_addr;
     }
 
     location / {
