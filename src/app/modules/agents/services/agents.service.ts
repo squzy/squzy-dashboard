@@ -136,7 +136,7 @@ export class AgentsService {
       .get<Paginated<AllStats & Timestamp>>(
         `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.ALL}&page=-1&limit=1`,
       )
-      .pipe(map((v) => v.stats[0]));
+      .pipe(map((v) => (v.stats && v.stats.length === 1 && v.stats[0]) || null));
   }
 
   getMemoryStats(agentId: string) {

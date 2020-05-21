@@ -36,7 +36,7 @@
     </ng-container>
   </ng-container>
 </div>
-<ng-container *ngIf="liveStats$ | async as stats">
+<ng-container *ngIf="liveStats$ | async as stats; else noStats">
   <h3>Live timestamp: {{ stats.timestamp | date: 'medium' }}</h3>
   <div class="charts">
     <div class="cpu">
@@ -92,3 +92,4 @@
     </div>
   </div>
 </ng-container>
+<ng-template #noStats>Waiting recieved stat from server</ng-template>
