@@ -2,8 +2,6 @@ server {
 
     listen 80;
 
-    server_name  localhost;
-
     root /usr/share/nginx/html;
 
     index index.html index.htm;
@@ -21,7 +19,7 @@ server {
     }
 
     location / {
-        try_files $uri $uri/ /index.html;
+        try_files $uri$args $uri$args/ /index.html;
     }
 
 }
