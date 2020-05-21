@@ -50,7 +50,6 @@ jobs:
         with:
           username: squzy
           password: ${{ secrets.DOCKER_TOKEN }}
-          registry: index.docker.io
           repository: squzy/squzy_dashboard
           tags: latest
 
