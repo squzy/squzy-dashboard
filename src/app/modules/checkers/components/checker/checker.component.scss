@@ -20,23 +20,21 @@ $padding: 40px;
     align-items: center;
     width: 100%;
   }
-  .spacer {
-    flex: 1 1 auto;
-  }
   mat-card {
     mat-card-header::ng-deep {
+      mat-card-title {
+        margin-bottom: 0px;
+      }
       width: 100%;
       .mat-card-header-text {
         width: 100%;
       }
+      display: flex;
+      align-items: center;
     }
     mat-card-title {
       display: flex;
       width: 100%;
-      mat-icon {
-        margin-left: $padding / 4;
-        cursor: pointer;
-      }
     }
     &.width-50 {
       &:nth-child(1) {
@@ -53,6 +51,13 @@ $padding: 40px;
     }
     table {
       width: 100%;
+
+      .mat-row {
+        &:hover {
+          cursor: pointer;
+          background: #b4b4b433;
+        }
+      }
     }
 
     form {

@@ -1,13 +1,37 @@
 <div class="flex">
   <mat-card class="flex flex-column width-50" *ngIf="checkInfo$ | async as info">
     <mat-card-header>
-      <mat-card-title>
-        <span>Configuration</span>
-        <span class="spacer"></span>
-        <mat-icon *ngIf="info.status === statuses.Stopped" (click)="run(info.id)">play_arrow</mat-icon>
-        <mat-icon *ngIf="info.status === statuses.Runned" (click)="stop(info.id)">pause</mat-icon>
-        <mat-icon *ngIf="info.status !== statuses.Removed" (click)="remove(info.id)">clear</mat-icon>
-      </mat-card-title>
+      <mat-card-title>Configuration</mat-card-title>
+      <button
+        *ngIf="info.status === statuses.Stopped"
+        mat-icon-button
+        aria-label="Run"
+        matTooltip="Run"
+        matTooltipPosition="above"
+        (click)="run(info.id)"
+      >
+        <mat-icon>play_arrow</mat-icon>
+      </button>
+      <button
+        *ngIf="info.status === statuses.Runned"
+        mat-icon-button
+        aria-label="Pause"
+        matTooltip="Pause"
+        matTooltipPosition="above"
+        (click)="stop(info.id)"
+      >
+        <mat-icon>pause</mat-icon>
+      </button>
+      <button
+        *ngIf="info.status !== statuses.Removed"
+        mat-icon-button
+        aria-label="Remove"
+        matTooltip="Remove"
+        matTooltipPosition="above"
+        (click)="remove(info.id)"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
     </mat-card-header>
     <mat-card-content class="flex">
       <div class="column width-100">
@@ -43,7 +67,7 @@
         <p>Uptime: {{ uptime$ | async }}</p>
       </div>
       <div class="column width-50 before-lint">
-        <p>Latency: {{ latency$ | async }}</p>
+        <p>Latency: {{ latency$ | async }} sec</p>
       </div>
     </mat-card-content>
   </mat-card>
@@ -51,7 +75,7 @@
 
 <mat-card>
   <mat-card-content class="flex">
-    <form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="filterForm">
       <mat-form-field>
         <label for="dateFrom">From:</label>
         <input
@@ -80,37 +104,46 @@
         <owl-date-time #dateToComponent></owl-date-time>
         <mat-error *ngIf="filterForm.hasError('dateToLessThenFrom')">Date to less then date from</mat-error>
       </mat-form-field>
-      <button type="submit" mat-stroked-button [disabled]="!filterForm.valid">Apply</button>
+      <button mat-stroked-button [disabled]="!filterForm.valid" (click)="onSubmit()">Apply</button>
     </form>
   </mat-card-content>
 </mat-card>
 <mat-card class="flex flex-column">
   <mat-card-header *ngIf="formValue$ | async as currentTime">
     <mat-card-title>{{ currentTime.dateFrom | date: 'short' }} - {{ currentTime.dateTo | date: 'short' }}</mat-card-title>
+    <button
+      matTooltip="Auto-refresh"
+      matTooltipPosition="above"
+      mat-icon-button
+      aria-label="Pause"
+      (click)="toggleAutoRefresh()"
+    >
+      <mat-icon>{{ (autoRefresh$ | async) ? 'stop' : 'replay' }}</mat-icon>
+    </button>
   </mat-card-header>
   <mat-card-content class="flex column">
-    <table mat-table [dataSource]="dataSource" matSort>
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      matSortActive="startTime"
+      matSortDirection="desc"
+    >
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
         <td mat-cell *matCellDef="let element">{{ toResponseStatus(element.code) }}</td>
       </ng-container>
       <ng-container matColumnDef="startTime">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Time</th>
-        <td
-          mat-cell
-          *matCellDef="let element"
-        >{{element.meta.start_time.seconds * 1000 | date: 'medium'}}</td>
+        <td mat-cell *matCellDef="let element">{{ toDate(element.meta.start_time) | date: 'medium'}}</td>
       </ng-container>
       <ng-container matColumnDef="endTime">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>End Time</th>
-        <td
-          mat-cell
-          *matCellDef="let element"
-        >{{element.meta.end_time.seconds * 1000 | date: 'medium'}}</td>
+        <td mat-cell *matCellDef="let element">{{ toDate(element.meta.end_time) | date: 'medium'}}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="clickRow(row)"></tr>
     </table>
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </mat-card-content>

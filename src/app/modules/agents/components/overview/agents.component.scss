@@ -52,6 +52,9 @@ $min-width: 160px;
   }
 
   .agent-menu {
+    mat-checkbox {
+      margin-left: $padding / 4;
+    }
     ::ng-deep a.mat-tab-link {
       width: $padding * 2;
       height: $padding;

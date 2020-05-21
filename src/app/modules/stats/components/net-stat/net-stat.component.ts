@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { filter, switchMap, map } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
 import { AgentsService } from 'src/app/modules/agents/services/agents.service';
+import { timeToDate } from 'src/app/shared/date/date';
 
 @Component({
   selector: 'sqd-net-stat',
@@ -43,27 +44,23 @@ export class NetStatComponent implements OnChanges {
     map((stats) => {
       const labels = [];
       const datasets = {};
-
-      const types = [];
+      const types = new Set();
       stats.forEach((item, index) => {
-        labels.push(item.timestamp);
-        Object.keys(item.netStats).forEach((iface, subIndex) => {
+        labels.push(timeToDate(item.time));
+        Object.keys(item.net_info.interfaces).forEach((iface, subIndex) => {
           if (!index) {
-            datasets[iface] = Object.keys(item.netStats[iface]).reduce((prev, cur) => {
-              if (!subIndex) {
-                types.push(cur);
-              }
-              prev[cur] = [item.netStats[iface][cur]];
+            datasets[iface] = Object.keys(item.net_info.interfaces[iface]).reduce((prev, cur) => {
+              types.add(cur);
+              prev[cur] = [item.net_info.interfaces[iface][cur] || 0];
               return prev;
             }, {});
             return;
           }
-          Object.keys(item.netStats[iface]).forEach((key) => {
-            datasets[iface][key].push(item.netStats[iface][key]);
+          Object.keys(item.net_info.interfaces[iface]).forEach((key) => {
+            datasets[iface][key].push(item.net_info.interfaces[iface][key] || 0);
           });
         });
       });
-
       return Object.keys(datasets).map((iface) => ({
         options: {
           ...this._defaultOptions,
@@ -73,8 +70,8 @@ export class NetStatComponent implements OnChanges {
           },
         },
         labels,
-        datasets: types.map((type) => ({
-          data: datasets[iface][type],
+        datasets: Array.from(types).map((type) => ({
+          data: datasets[iface][type] || [],
           label: type,
           lineTension: 0,
         })),

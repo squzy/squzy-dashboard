@@ -3,5 +3,8 @@ export const roundTwoNumber = (value: number) => {
 };
 
 export const getRoundedPercent = (value: number) => {
+  if (isNaN(value)) {
+    return `100 %`;
+  }
   return `${roundTwoNumber(value) * 100} %`;
 };

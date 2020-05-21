@@ -2,7 +2,8 @@ import { Component, Input, SimpleChanges, OnChanges, ChangeDetectionStrategy } f
 import { BehaviorSubject, timer } from 'rxjs';
 import { filter, switchMap, map, tap } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
-import { AgentsService, AgentStatus } from 'src/app/modules/agents/services/agents.service';
+import { AgentsService } from 'src/app/modules/agents/services/agents.service';
+import { AgentStatus } from 'src/app/shared/enums/agent.type';
 
 @Component({
   selector: 'sqd-live-stat',
@@ -165,7 +166,6 @@ export class LiveStatComponent implements OnChanges {
             });
             return prev;
           }, {});
-
           return Object.keys(acc).reduce(
             (prev, cur) => {
               prev.labels.push(cur);

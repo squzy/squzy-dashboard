@@ -18,6 +18,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SchedulerConfigComponent } from './components/checker/config/config.component';
+import { SchedulerSnapshotComponent } from './components/checker/snapshot/snapshot.component';
 
 const routes: Routes = [
   {
@@ -55,7 +56,12 @@ const routes: Routes = [
     MatCheckboxModule,
   ],
   providers: [CheckersService],
-  declarations: [ListComponent, CheckerComponent, SchedulerConfigComponent],
-  entryComponents: [SchedulerConfigComponent],
+  declarations: [
+    ListComponent,
+    CheckerComponent,
+    SchedulerConfigComponent,
+    SchedulerSnapshotComponent,
+  ],
+  entryComponents: [SchedulerConfigComponent, SchedulerSnapshotComponent],
 })
 export class ChekersModule {}

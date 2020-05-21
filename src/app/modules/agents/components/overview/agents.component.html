@@ -15,6 +15,7 @@
 
 <div class="layout">
   <nav mat-tab-nav-bar class="agent-menu">
+    <mat-checkbox [checked]="showDisabled$ | async" (change)="changeVisibility($event)">Show all</mat-checkbox>
     <a
       mat-tab-link
       *ngFor="let agent of agents$ | async"
@@ -22,7 +23,7 @@
       routerLinkActive
       #agentLink="routerLinkActive"
       [active]="agentLink.isActive"
-    >{{ agent.agentName ? agent.agentName : agent.id }}</a>
+    >{{ agent.agent_name ? agent.agent_name : agent.id }}</a>
   </nav>
 
   <mat-card class="content">

@@ -10,6 +10,7 @@ import { BehaviorSubject } from 'rxjs';
 import { filter, switchMap, share, map } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
 import { AgentsService } from 'src/app/modules/agents/services/agents.service';
+import { timeToDate } from 'src/app/shared/date/date';
 
 @Component({
   selector: 'sqd-memory-stat',
@@ -54,6 +55,13 @@ export class MemoryStatComponent implements OnChanges {
           display: true,
         },
       ],
+      yAxes: [
+        {
+          ticks: {
+            min: 0,
+          },
+        },
+      ],
     },
   };
 
@@ -85,27 +93,25 @@ export class MemoryStatComponent implements OnChanges {
       }, {});
 
       stats.forEach((item) => {
-        labels.push(item.timestamp);
+        labels.push(timeToDate(item.time));
         _map[AgentsService.VIRTUAL_MEMORY][AgentsService.FREE_MEMORY].push(
-          item.memoryStats[AgentsService.VIRTUAL_MEMORY][AgentsService.FREE_MEMORY],
+          item.memory_info.mem.free,
         );
         _map[AgentsService.VIRTUAL_MEMORY][AgentsService.USAGE_MEMORY].push(
-          item.memoryStats[AgentsService.VIRTUAL_MEMORY][AgentsService.USAGE_MEMORY],
+          item.memory_info.mem.used,
         );
-        _map[AgentsService.SWAP_MEMORY][AgentsService.FREE_MEMORY].push(
-          item.memoryStats[AgentsService.SWAP_MEMORY][AgentsService.FREE_MEMORY],
-        );
+        _map[AgentsService.SWAP_MEMORY][AgentsService.FREE_MEMORY].push(item.memory_info.swap.free);
         _map[AgentsService.SWAP_MEMORY][AgentsService.USAGE_MEMORY].push(
-          item.memoryStats[AgentsService.SWAP_MEMORY][AgentsService.USAGE_MEMORY],
+          item.memory_info.swap.used,
         );
         _map[AgentsService.VIRTUAL_MEMORY][AgentsService.TOTAL_MEMORY].push(
-          item.memoryStats[AgentsService.VIRTUAL_MEMORY][AgentsService.TOTAL_MEMORY],
+          item.memory_info.mem.total,
         );
         _map[AgentsService.SWAP_MEMORY][AgentsService.TOTAL_MEMORY].push(
-          item.memoryStats[AgentsService.SWAP_MEMORY][AgentsService.TOTAL_MEMORY],
+          item.memory_info.swap.total,
         );
         _map[AgentsService.VIRTUAL_MEMORY][AgentsService.SHARED_MEMORY].push(
-          item.memoryStats[AgentsService.VIRTUAL_MEMORY][AgentsService.SHARED_MEMORY],
+          item.memory_info.mem.shared,
         );
       });
 

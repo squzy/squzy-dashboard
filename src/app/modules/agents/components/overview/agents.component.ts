@@ -2,6 +2,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { map, switchMap, tap, filter } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AgentsService } from '../../services/agents.service';
+import { MatCheckboxChange } from '@angular/material';
+import { BehaviorSubject } from 'rxjs';
+import { AgentStatus } from 'src/app/shared/enums/agent.type';
 
 @Component({
   selector: 'sqd-agents',
@@ -10,7 +13,20 @@ import { AgentsService } from '../../services/agents.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AgentsComponent {
-  agents$ = this.agentService.getList();
+  showDisabled$ = this.agentService.getMenuSettings();
+
+  agents$ = this.showDisabled$.pipe(
+    switchMap((value) =>
+      this.agentService.getList().pipe(
+        map((list) => {
+          if (value) {
+            return list;
+          }
+          return list.filter((item) => item.status !== AgentStatus.Unregister);
+        }),
+      ),
+    ),
+  );
 
   types$ = this.agentService.getTypes();
 
@@ -38,4 +54,8 @@ export class AgentsComponent {
   };
 
   constructor(private agentService: AgentsService, private route: ActivatedRoute) {}
+
+  changeVisibility(event: MatCheckboxChange) {
+    this.showDisabled$.next(event.checked);
+  }
 }

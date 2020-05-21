@@ -1,68 +1,11 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { of, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { tap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { AgentStatus, AgentStatsTypes } from 'src/app/shared/enums/agent.type';
+import { Time } from 'src/app/shared/date/date';
 
-const numberOfCpu = 10;
-const history = 20;
-
-const netInterfaceMock = () => ({
-  bytesSent: Math.round(Math.random() * 10000),
-  bytesRecv: Math.round(Math.random() * 10000),
-  packetsSent: Math.round(Math.random() * 10000),
-  packetsRecv: Math.round(Math.random() * 10000),
-  errIn: Math.round(Math.random() * 100),
-  errOut: Math.round(Math.random() * 100),
-  dropIn: Math.round(Math.random() * 1000),
-  dropOut: Math.round(Math.random() * 1000),
-});
-
-const netInterfacesMock = () => ({
-  wlan: netInterfaceMock(),
-  wlan0: netInterfaceMock(),
-});
-
-const memoryMock = () => {
-  const total = 1000;
-  const used = Math.random() * 500;
-
-  const free = total - used;
-  const shared = Math.random() * 100;
-  const usedPercent = used / total;
-  return {
-    [AgentsService.TOTAL_MEMORY]: total,
-    [AgentsService.USAGE_MEMORY]: used,
-    [AgentsService.FREE_MEMORY]: free,
-    [AgentsService.SHARED_MEMORY]: shared,
-    [AgentsService.USED_PERSENT]: usedPercent,
-  };
-};
-
-const disksMock = () => ({
-  '/': memoryMock(),
-  '/dev': memoryMock(),
-});
-
-const cpuMock = () => Math.random();
-
-const cpusMock = () =>
-  Array(numberOfCpu)
-    .fill(0)
-    .map((e) => cpuMock());
-
-const memoriesMock = () => ({
-  [AgentsService.SWAP_MEMORY]: memoryMock(),
-  [AgentsService.VIRTUAL_MEMORY]: memoryMock(),
-});
-
-export enum AgentStatus {
-  Registred = 1,
-  Runned = 2,
-  Disconnected = 3,
-  Unregister = 4,
-}
-
-interface Agent {
+export interface Agent {
   id: string;
   agent_name?: string;
   status: AgentStatus;
@@ -75,6 +18,72 @@ interface Agent {
       version: string;
     };
   };
+}
+
+export interface Cpu {
+  load: number;
+}
+
+export interface CpusInfo {
+  cpu_info: {
+    cpus: Array<Cpu>;
+  };
+}
+
+export interface MemoryWithShared extends Memory {
+  shared: number;
+}
+
+export interface Timestamp {
+  time: Time;
+}
+
+export interface Memory {
+  free: number;
+  total: number;
+  used: number;
+  used_percent: number;
+}
+
+export interface MemoryInfo {
+  memory_info: {
+    mem: MemoryWithShared;
+    swap: Memory;
+  };
+}
+
+export interface NetInterface {
+  bytes_recv: number;
+  bytes_sent: number;
+  drop_in: number;
+  drop_out: number;
+  err_out: number;
+  err_in: number;
+  packets_recv: number;
+  packets_sent: number;
+}
+
+export interface NetInfo {
+  net_info: {
+    interfaces: {
+      [key: string]: NetInterface;
+    };
+  };
+}
+
+export interface DisksInfo {
+  disk_info: {
+    disks: {
+      [key: string]: Memory;
+    };
+  };
+}
+
+type AllStats = DisksInfo & NetInfo & MemoryInfo & CpusInfo;
+
+export interface Paginated<T> {
+  count: number;
+  stats: Array<T>;
 }
 
 @Injectable({
@@ -97,60 +106,61 @@ export class AgentsService {
 
   static FREE_MEMORY = 'free';
 
-  static USAGE_MEMORY = 'usage';
+  static USAGE_MEMORY = 'used';
 
   static TOTAL_MEMORY = 'total';
 
   static SHARED_MEMORY = 'shared';
 
-  static USED_PERSENT = 'usedPercent';
+  static USED_PERSENT = 'used_percent';
+
+  private showDisabled$ = new BehaviorSubject(false);
 
   constructor(private httpClient: HttpClient) {}
+
+  getMenuSettings() {
+    return this.showDisabled$;
+  }
 
   // Should return last 20 history
   getCpuStats(agentId: string) {
     return this.httpClient
-      .get(`/api/v1/agents/${agentId}/history?type=2&page=-1&limit=20`)
-      .pipe(map((v: any) => v.stats));
+      .get<Paginated<CpusInfo & Timestamp>>(
+        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.CPU}&page=-1&limit=20`,
+      )
+      .pipe(map((v) => v.stats));
   }
 
   getLiveStat(agentId: string) {
     return this.httpClient
-      .get(`/api/v1/agents/${agentId}/history?type=1&page=-1&limit=1`)
-      .pipe(map((v: any) => v.stats[0]));
+      .get<Paginated<AllStats & Timestamp>>(
+        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.ALL}&page=-1&limit=1`,
+      )
+      .pipe(map((v) => v.stats[0]));
   }
 
   getMemoryStats(agentId: string) {
-    return of(
-      Array(history)
-        .fill(0)
-        .map((_, index) => ({
-          memoryStats: memoriesMock(),
-          timestamp: Date.now() + index * 1000 * 30,
-        })),
-    );
+    return this.httpClient
+      .get<Paginated<MemoryInfo & Timestamp>>(
+        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.MEMORY}&page=-1&limit=20`,
+      )
+      .pipe(map((v) => v.stats));
   }
 
   getDisksStats(agentId: string) {
-    return of(
-      Array(history)
-        .fill(0)
-        .map((_, index) => ({
-          disksStats: disksMock(),
-          timestamp: Date.now() + index * 1000 * 30,
-        })),
-    );
+    return this.httpClient
+      .get<Paginated<DisksInfo & Timestamp>>(
+        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.DISK}&page=-1&limit=20`,
+      )
+      .pipe(map((v) => v.stats));
   }
 
   getNetStats(agentId: string) {
-    return of(
-      Array(history)
-        .fill(0)
-        .map((_, index) => ({
-          netStats: netInterfacesMock(),
-          timestamp: Date.now() + index * 1000 * 30,
-        })),
-    );
+    return this.httpClient
+      .get<Paginated<NetInfo & Timestamp>>(
+        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.NET}&page=-1&limit=20`,
+      )
+      .pipe(map((v) => v.stats));
   }
 
   getList() {

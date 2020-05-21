@@ -1,11 +1,11 @@
 import { Component, ViewChild, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, tap, switchMap, takeUntil, take } from 'rxjs/operators';
+import { map, tap, switchMap, takeUntil, share, publish, filter, mapTo } from 'rxjs/operators';
 import { FormBuilder, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import { minusMinute, SECOND } from 'src/app/shared/date/date';
+import { minusMinute, SECOND, timeToDate, Time, diffInSec } from 'src/app/shared/date/date';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subject, timer, NEVER, of } from 'rxjs';
 import {
   CheckersService,
   SchedulerStatus,
@@ -20,12 +20,23 @@ import { MatSort } from '@angular/material/sort';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SchedulerConfigComponent } from './config/config.component';
 import { dateFromToValidator } from 'src/app/shared/validators/date.validators';
+import { SchedulerSnapshotComponent } from './snapshot/snapshot.component';
 
 class CrossFieldErrorMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     return control.dirty && form.invalid;
   }
 }
+
+function getFilterValue() {
+  const now = new Date(Date.now());
+  return {
+    dateFrom: minusMinute(+now, 10),
+    dateTo: now,
+  };
+}
+
+const initailValue = getFilterValue();
 
 @Component({
   selector: 'sqd-checker',
@@ -39,9 +50,11 @@ export class CheckerComponent implements OnInit, OnDestroy {
 
   private destoryed$ = new Subject();
 
+  private autoRefresh_$ = new BehaviorSubject(false);
+
   private readonly refresh$ = new BehaviorSubject(null);
 
-  dateNow = new Date(Date.now());
+  dateNow = initailValue.dateTo;
 
   displayedColumns: string[] = ['status', 'startTime', 'endTime'];
 
@@ -49,7 +62,7 @@ export class CheckerComponent implements OnInit, OnDestroy {
 
   filterForm = this.fb.group(
     {
-      dateFrom: [minusMinute(+this.dateNow, 10), Validators.required],
+      dateFrom: [initailValue.dateFrom, Validators.required],
       dateTo: [this.dateNow, Validators.required],
     },
     {
@@ -59,15 +72,33 @@ export class CheckerComponent implements OnInit, OnDestroy {
 
   statuses = SchedulerStatus;
 
-  formValue$ = new BehaviorSubject(this.filterForm.value);
+  private formValue$ = new BehaviorSubject(this.filterForm.value);
 
-  currentId$ = combineLatest(this.refresh$, this.route.params.pipe(map((p) => p.id))).pipe(
-    map(([_, id]) => id),
-  );
+  currentId$ = this.route.params.pipe(map((p) => p.id));
 
   dataSource = new MatTableDataSource<HistoryItem>();
 
-  checkInfo$ = this.currentId$.pipe(switchMap((id) => this.checkersService.getById(id)));
+  checkInfo$ = combineLatest(this.refresh$, this.currentId$).pipe(
+    switchMap(([_, id]) => this.checkersService.getById(id)),
+    share(),
+  );
+
+  autoRefresh$ = combineLatest(this.checkInfo$, this.autoRefresh_$).pipe(
+    switchMap(([config, value]) =>
+      value ? timer(0, config.interval * 1000).pipe(mapTo(true)) : of(false),
+    ),
+    tap((value) => {
+      if (!value) {
+        return;
+      }
+      const newValue = getFilterValue();
+      this.filterForm.setValue({
+        dateFrom: newValue.dateFrom,
+        dateTo: newValue.dateTo,
+      });
+      this.onSubmit();
+    }),
+  );
 
   history$ = combineLatest(this.formValue$, this.currentId$).pipe(
     switchMap(([value, currentId]) =>
@@ -76,6 +107,7 @@ export class CheckerComponent implements OnInit, OnDestroy {
     map((v) => v.snapshots || []),
     tap(() => (this.dateNow = new Date(Date.now()))),
     tap((items) => (this.dataSource.data = items)),
+    share(),
   );
 
   uptime$ = this.history$.pipe(
@@ -88,7 +120,7 @@ export class CheckerComponent implements OnInit, OnDestroy {
   latency$ = this.history$.pipe(
     map((history) => {
       const latencyAccum = history.reduce((prev, current) => {
-        return prev + current.meta.end_time.seconds - current.meta.start_time.seconds;
+        return prev + diffInSec(current.meta.end_time, current.meta.start_time);
       }, 0);
       return roundTwoNumber(latencyAccum / history.length / SECOND);
     }),
@@ -114,6 +146,16 @@ export class CheckerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (item, property): string | number => {
+      switch (property) {
+        case 'startTime':
+          return +timeToDate(item.meta.start_time);
+        case 'endTime':
+          return +timeToDate(item.meta.end_time);
+        default:
+          return item[property];
+      }
+    };
   }
 
   ngOnDestroy() {
@@ -151,5 +193,19 @@ export class CheckerComponent implements OnInit, OnDestroy {
 
   toType(type) {
     return this.checkersService.toType(type);
+  }
+
+  toDate(time: Time) {
+    return timeToDate(time);
+  }
+
+  clickRow(snapshot: HistoryItem) {
+    this._bottomSheet.open(SchedulerSnapshotComponent, {
+      data: snapshot,
+    });
+  }
+
+  toggleAutoRefresh() {
+    this.autoRefresh_$.next(!this.autoRefresh_$.value);
   }
 }

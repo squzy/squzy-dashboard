@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { filter, switchMap, map } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
 import { AgentsService } from 'src/app/modules/agents/services/agents.service';
+import { timeToDate } from 'src/app/shared/date/date';
 
 @Component({
   selector: 'sqd-disks-stat',
@@ -36,6 +37,13 @@ export class DisksStatComponent implements OnChanges {
           display: true,
         },
       ],
+      yAxes: [
+        {
+          ticks: {
+            min: 0,
+          },
+        },
+      ],
     },
   };
 
@@ -46,25 +54,19 @@ export class DisksStatComponent implements OnChanges {
       const labels = [];
       const datasets = {};
       stats.forEach((item) => {
-        labels.push(item.timestamp);
-        Object.keys(item.disksStats).forEach((diskStat) => {
+        labels.push(timeToDate(item.time));
+        Object.keys(item.disk_info.disks).forEach((diskStat) => {
           if (!datasets[diskStat]) {
             datasets[diskStat] = {
-              [AgentsService.FREE_MEMORY]: [item.disksStats[diskStat][AgentsService.FREE_MEMORY]],
-              [AgentsService.USAGE_MEMORY]: [item.disksStats[diskStat][AgentsService.USAGE_MEMORY]],
-              [AgentsService.TOTAL_MEMORY]: [item.disksStats[diskStat][AgentsService.TOTAL_MEMORY]],
+              [AgentsService.FREE_MEMORY]: [item.disk_info.disks[diskStat].free],
+              [AgentsService.USAGE_MEMORY]: [item.disk_info.disks[diskStat].used],
+              [AgentsService.TOTAL_MEMORY]: [item.disk_info.disks[diskStat].total],
             };
             return;
           }
-          datasets[diskStat][AgentsService.FREE_MEMORY].push(
-            item.disksStats[diskStat][AgentsService.FREE_MEMORY],
-          );
-          datasets[diskStat][AgentsService.USAGE_MEMORY].push(
-            item.disksStats[diskStat][AgentsService.USAGE_MEMORY],
-          );
-          datasets[diskStat][AgentsService.TOTAL_MEMORY].push(
-            item.disksStats[diskStat][AgentsService.TOTAL_MEMORY],
-          );
+          datasets[diskStat][AgentsService.FREE_MEMORY].push(item.disk_info.disks[diskStat].free);
+          datasets[diskStat][AgentsService.USAGE_MEMORY].push(item.disk_info.disks[diskStat].used);
+          datasets[diskStat][AgentsService.TOTAL_MEMORY].push(item.disk_info.disks[diskStat].total);
         });
       });
 
