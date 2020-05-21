@@ -126,7 +126,7 @@ export class AgentsService {
   getCpuStats(agentId: string) {
     return this.httpClient
       .get<Paginated<CpusInfo & Timestamp>>(
-        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.CPU}&page=-1&limit=20`,
+        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.CPU}&page=-1&limit=50`,
       )
       .pipe(map((v) => v.stats));
   }
@@ -142,7 +142,7 @@ export class AgentsService {
   getMemoryStats(agentId: string) {
     return this.httpClient
       .get<Paginated<MemoryInfo & Timestamp>>(
-        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.MEMORY}&page=-1&limit=20`,
+        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.MEMORY}&page=-1&limit=50`,
       )
       .pipe(map((v) => v.stats));
   }
@@ -150,7 +150,7 @@ export class AgentsService {
   getDisksStats(agentId: string) {
     return this.httpClient
       .get<Paginated<DisksInfo & Timestamp>>(
-        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.DISK}&page=-1&limit=20`,
+        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.DISK}&page=-1&limit=50`,
       )
       .pipe(map((v) => v.stats));
   }
@@ -158,7 +158,7 @@ export class AgentsService {
   getNetStats(agentId: string) {
     return this.httpClient
       .get<Paginated<NetInfo & Timestamp>>(
-        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.NET}&page=-1&limit=20`,
+        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.NET}&page=-1&limit=50`,
       )
       .pipe(map((v) => v.stats));
   }
