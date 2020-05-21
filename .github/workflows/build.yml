@@ -21,12 +21,21 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: npm install and npm run build:prod
         run: |
           npm install
           npm run build:prod
 
       - name: Setup nginx
+        if: ${{ github.ref == 'refs/heads/develop'}}
         uses: cuchi/jinja2-action@v1.1.0
         with:
           template: nginx/default.conf.j2
@@ -36,10 +45,12 @@ jobs:
             version=latest
 
       - name: Push to docker with latest tags
+        if: ${{ github.ref == 'refs/heads/develop'}}
         uses: docker/build-push-action@v1
         with:
           username: squzy
           password: ${{ secrets.DOCKER_TOKEN }}
+          registry: index.docker.io
           repository: squzy/squzy_dashboard
           tags: latest
 
