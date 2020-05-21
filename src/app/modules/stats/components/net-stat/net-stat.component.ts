@@ -19,6 +19,7 @@ export class NetStatComponent implements OnChanges {
   private getNetStream$ = this._agentId$.pipe(
     filter((v) => !!v),
     switchMap((agentId) => this.agentsService.getNetStats(agentId)),
+    filter((v) => !!v),
   );
 
   private _defaultOptions: ChartOptions = {

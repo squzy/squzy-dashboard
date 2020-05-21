@@ -148,8 +148,10 @@ export class LiveStatComponent implements OnChanges {
   liveStats$ = this.agentId_.pipe(
     switchMap((agentId) => timer(0, 10000).pipe(map(() => agentId))),
     switchMap((agentId) => this.agentsService.getLiveStat(agentId)),
-    filter((stats) => !!stats),
     map((stats) => {
+      if (!stats) {
+        return null;
+      }
       return {
         timestamp: stats.time.seconds * 1000,
         netChart: (() => {

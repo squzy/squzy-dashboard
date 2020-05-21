@@ -45,6 +45,7 @@ export class CpuStatsComponent implements OnChanges {
   data$ = this._agentId$.pipe(
     filter((v) => !!v),
     switchMap((agentId) => this.agentsService.getCpuStats(agentId)),
+    filter((v) => !!v),
     map((history) => {
       const length = history[0].cpu_info.cpus.length;
 

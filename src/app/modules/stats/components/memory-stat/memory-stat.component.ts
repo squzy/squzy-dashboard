@@ -79,6 +79,7 @@ export class MemoryStatComponent implements OnChanges {
   private getMemoryStream$ = this._agentId$.pipe(
     filter((v) => !!v),
     switchMap((agentId) => this.agentsService.getMemoryStats(agentId)),
+    filter((v) => !!v),
   );
 
   memoryCharts$ = this.getMemoryStream$.pipe(

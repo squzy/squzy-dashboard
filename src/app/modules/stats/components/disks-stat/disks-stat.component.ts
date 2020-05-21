@@ -19,6 +19,7 @@ export class DisksStatComponent implements OnChanges {
   private getDiskStream$ = this._agentId$.pipe(
     filter((v) => !!v),
     switchMap((agentId) => this.agentsService.getDisksStats(agentId)),
+    filter((v) => !!v),
   );
 
   private _defaultOptions: ChartOptions = {
