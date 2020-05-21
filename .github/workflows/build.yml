@@ -1,4 +1,4 @@
-name: Release
+name: Release develop latest
 on:
   push:
     branches:
@@ -16,10 +16,10 @@ jobs:
       - name: Checkout in to code
         uses: actions/checkout@v1
 
-      - name: Node $
+      - name: Node ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-          node-version: $
+          node-version: ${{ matrix.node-version }}
 
       - name: npm install and npm run build:prod
         run: |
@@ -34,7 +34,7 @@ jobs:
           variables: |
             version=latest
 
-      - name: Setup nginx
+      - name: Push to docker with tags
         uses: docker/build-push-action@v1
         with:
           username: squzy
