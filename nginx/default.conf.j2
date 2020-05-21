@@ -1,7 +1,3 @@
-upstream api_server {
-    server $API_HOST;
-}
-
 server {
 
     listen 80;
@@ -21,7 +17,7 @@ server {
     }
 
     location /api {
-        proxy_pass http://api_server;
+        proxy_pass http://$API_HOST;
         proxy_buffering off;
         proxy_set_header Accept-Encoding "";
         proxy_set_header Host      $host;
