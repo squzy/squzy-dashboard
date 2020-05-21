@@ -21,6 +21,7 @@ jobs:
 
       - name: npm install and npm run build:prod
         run: |
+          npm install
           npm run build:prod
 
       - name: Set env version

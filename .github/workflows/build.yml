@@ -23,6 +23,7 @@ jobs:
 
       - name: npm install and npm run build:prod
         run: |
+          npm install
           npm run build:prod
 
       - name: Setup nginx
@@ -34,7 +35,7 @@ jobs:
           variables: |
             version=latest
 
-      - name: Push to docker with tags
+      - name: Push to docker with latest tags
         uses: docker/build-push-action@v1
         with:
           username: squzy
