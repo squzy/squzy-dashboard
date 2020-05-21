@@ -13,7 +13,7 @@ import {
   Scheduler,
   HistoryItem,
 } from '../../services/checkers.service';
-import { roundTwoNumber, getRoundedPercent } from 'src/app/shared/numbers/numbers';
+import { roundNumber, getRoundedPercent } from 'src/app/shared/numbers/numbers';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -56,7 +56,7 @@ export class CheckerComponent implements OnInit, OnDestroy {
 
   dateNow = initailValue.dateTo;
 
-  displayedColumns: string[] = ['status', 'startTime', 'endTime'];
+  displayedColumns: string[] = ['status', 'startTime', 'endTime', 'latency'];
 
   errorMatcher = new CrossFieldErrorMatcher();
 
@@ -71,6 +71,8 @@ export class CheckerComponent implements OnInit, OnDestroy {
   );
 
   statuses = SchedulerStatus;
+
+  responseStatuses = SchedulerResponseCode;
 
   private formValue$ = new BehaviorSubject(this.filterForm.value);
 
@@ -120,9 +122,12 @@ export class CheckerComponent implements OnInit, OnDestroy {
   latency$ = this.history$.pipe(
     map((history) => {
       const latencyAccum = history.reduce((prev, current) => {
+        if (current.code !== SchedulerResponseCode.OK) {
+          return prev;
+        }
         return prev + diffInSec(current.meta.end_time, current.meta.start_time);
       }, 0);
-      return roundTwoNumber(latencyAccum / history.length / SECOND);
+      return roundNumber(latencyAccum / history.length / SECOND, 3);
     }),
   );
 
@@ -197,6 +202,10 @@ export class CheckerComponent implements OnInit, OnDestroy {
 
   toDate(time: Time) {
     return timeToDate(time);
+  }
+
+  getLatency(a: Time, b: Time) {
+    return roundNumber(diffInSec(a, b) / SECOND, 3);
   }
 
   clickRow(snapshot: HistoryItem) {
