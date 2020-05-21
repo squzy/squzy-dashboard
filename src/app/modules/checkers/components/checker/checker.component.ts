@@ -1,11 +1,11 @@
 import { Component, ViewChild, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, tap, switchMap, takeUntil, share, publish, filter, mapTo } from 'rxjs/operators';
+import { map, tap, switchMap, takeUntil, share, mapTo } from 'rxjs/operators';
 import { FormBuilder, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { minusMinute, SECOND, timeToDate, Time, diffInSec } from 'src/app/shared/date/date';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { BehaviorSubject, combineLatest, Subject, timer, NEVER, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subject, timer, of } from 'rxjs';
 import {
   CheckersService,
   SchedulerStatus,
@@ -74,7 +74,7 @@ export class CheckerComponent implements OnInit, OnDestroy {
 
   responseStatuses = SchedulerResponseCode;
 
-  private formValue$ = new BehaviorSubject(this.filterForm.value);
+  formValue$ = new BehaviorSubject(this.filterForm.value);
 
   currentId$ = this.route.params.pipe(map((p) => p.id));
 

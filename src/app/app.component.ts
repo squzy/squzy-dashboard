@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { AppService } from './shared/services/app.service';
 
 @Component({
   selector: 'sqd-root',
@@ -7,5 +8,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  title = 'squzy-dashboard';
+  version$ = this.appService.getVersion();
+
+  constructor(private appService: AppService) {}
 }

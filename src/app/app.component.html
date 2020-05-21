@@ -4,6 +4,8 @@
       <mat-icon>menu</mat-icon>
     </button>
     <button mat-button [routerLink]="'/'">Squzy Dashboard</button>
+    <span class="spacer"></span>
+    <span *ngIf="version$ | async as version">Version: {{ version }}</span>
   </mat-toolbar-row>
 </mat-toolbar>
 

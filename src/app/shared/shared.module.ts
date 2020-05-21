@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CommonInterceptor } from './interceptors/common.interceptor';
 import { ModalsModule } from './modules/modals/modals.module';
+import { AppService } from './services/app.service';
 
 const sharedModules = [
   CommonModule,
@@ -23,6 +24,6 @@ const sharedModules = [
 @NgModule({
   imports: sharedModules,
   exports: sharedModules,
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: CommonInterceptor, multi: true }],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: CommonInterceptor, multi: true }, AppService],
 })
 export class SharedModule {}

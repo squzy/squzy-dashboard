@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import {
   Types,
   SelectorTypes,
@@ -174,7 +174,7 @@ export class AddCheckerFormComponent implements OnDestroy {
     this.form.setControl('config', this.configMap[event.value]);
   }
 
-  addHeader(control: FormControl, event: MatChipInputEvent) {
+  addHeader(control: AbstractControl, event: MatChipInputEvent) {
     const value = event.value;
     const trimmedValue = (value || '').trim();
     if (trimmedValue && trimmedValue.split(':').length === 2) {
@@ -188,11 +188,11 @@ export class AddCheckerFormComponent implements OnDestroy {
     }
   }
 
-  removeHeader(control: FormControl, key: string) {
+  removeHeader(control: AbstractControl, key: string) {
     delete control.value[key];
   }
 
-  removeSelector(control: FormControl, index: number) {
+  removeSelector(control: AbstractControl, index: number) {
     control.value.splice(index, 1);
   }
 
@@ -204,7 +204,7 @@ export class AddCheckerFormComponent implements OnDestroy {
     return typeToString(type);
   }
 
-  addSelector(control: FormControl, select: MatSelect, input: MatInput) {
+  addSelector(control: AbstractControl, select: MatSelect, input: MatInput) {
     const pathValue = input.value.trim();
     if (input.value && pathValue) {
       control.value.push({

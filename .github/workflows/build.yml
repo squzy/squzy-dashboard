@@ -1,0 +1,45 @@
+name: Release
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - 'v*.*.*'
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+      - name: Checkout in to code
+        uses: actions/checkout@v1
+
+      - name: Node $
+        uses: actions/setup-node@v1
+        with:
+          node-version: $
+
+      - name: npm install and npm run build:prod
+        run: |
+          npm run build:prod
+
+      - name: Setup nginx
+        uses: cuchi/jinja2-action@v1.1.0
+        with:
+          template: nginx/default.conf.j2
+          output_file: nginx/default.conf
+          strict: true
+          variables: |
+            version=latest
+
+      - name: Setup nginx
+        uses: docker/build-push-action@v1
+        with:
+          username: squzy
+          password: ${{ secrets.DOCKER_TOKEN }}
+          repository: squzy/squzy_dashboard
+          tags: latest
+
+
