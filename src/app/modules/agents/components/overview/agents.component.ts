@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { map, switchMap, tap, filter } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AgentsService } from '../../services/agents.service';
-import { MatCheckboxChange } from '@angular/material';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { BehaviorSubject } from 'rxjs';
 import { AgentStatus } from 'src/app/shared/enums/agent.type';
 
