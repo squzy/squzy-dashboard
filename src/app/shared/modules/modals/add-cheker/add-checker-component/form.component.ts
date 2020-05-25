@@ -8,13 +8,10 @@ import {
 } from 'src/app/shared/enums/schedulers.type';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { integerValidator } from 'src/app/shared/validators/number.validators';
-import {
-  MatSelectChange,
-  MatChipInputEvent,
-  MatInput,
-  MatSelect,
-  MatDialogRef,
-} from '@angular/material';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatInput } from '@angular/material/input';
+import { MatSelectChange, MatSelect } from '@angular/material/select';
 import { CheckersService } from 'src/app/modules/checkers/services/checkers.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';

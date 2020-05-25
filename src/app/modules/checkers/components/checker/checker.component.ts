@@ -157,6 +157,8 @@ export class CheckerComponent implements OnInit, OnDestroy {
           return +timeToDate(item.meta.start_time);
         case 'endTime':
           return +timeToDate(item.meta.end_time);
+        case 'latency':
+          return +diffInSec(item.meta.end_time, item.meta.start_time);
         default:
           return item[property];
       }
