@@ -9,5 +9,5 @@ Dashboard for squzy system written on Angular 8
 ### Run with docker:
 
 ```shell script
-docker run -p 80:80 -e API_HOST=${SQUZY_API_HOST} squzy/squzy_dashboard:lastest
+docker run -p 80:80 -e API_HOST=${SQUZY_API_HOST} squzy/squzy_dashboard:latest
 ```
