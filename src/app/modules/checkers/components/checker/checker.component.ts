@@ -36,8 +36,6 @@ function getFilterValue() {
   };
 }
 
-const initailValue = getFilterValue();
-
 @Component({
   selector: 'sqd-checker',
   templateUrl: './checker.component.html',
@@ -54,7 +52,9 @@ export class CheckerComponent implements OnInit, OnDestroy {
 
   private readonly refresh$ = new BehaviorSubject(null);
 
-  dateNow = initailValue.dateTo;
+  initailValue = getFilterValue();
+
+  dateNow = this.initailValue.dateTo;
 
   displayedColumns: string[] = ['status', 'startTime', 'endTime', 'latency'];
 
@@ -62,7 +62,7 @@ export class CheckerComponent implements OnInit, OnDestroy {
 
   filterForm = this.fb.group(
     {
-      dateFrom: [initailValue.dateFrom, Validators.required],
+      dateFrom: [this.initailValue.dateFrom, Validators.required],
       dateTo: [this.dateNow, Validators.required],
     },
     {
