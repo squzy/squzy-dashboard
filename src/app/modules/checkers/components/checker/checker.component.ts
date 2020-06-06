@@ -56,6 +56,8 @@ export class CheckerComponent implements OnInit, OnDestroy {
 
   private destoryed$ = new Subject();
 
+  pageSizes = [5, 10, 20, 100];
+
   private autoRefresh_$ = new BehaviorSubject(false);
 
   private readonly refresh$ = new BehaviorSubject(null);
@@ -190,10 +192,9 @@ export class CheckerComponent implements OnInit, OnDestroy {
       start: 'desc',
       disableClear: true,
     });
-
     this.paginator.page.emit({
       pageIndex: 1,
-      pageSize: this.paginator.pageSize,
+      pageSize: this.pageSizes[0],
       length: 0,
     });
   }

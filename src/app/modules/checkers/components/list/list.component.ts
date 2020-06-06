@@ -54,7 +54,9 @@ export class ListComponent implements OnInit, OnDestroy {
     this.dataSource.filterPredicate = (data: Scheduler, filter: string) => {
       return `${data.name ? data.name : ''}_${data.id}_${this.toStatus(data.status)}_${this.toType(
         data.type,
-      )}`.includes(filter);
+      )}`
+        .toLocaleLowerCase()
+        .includes(filter);
     };
     this.obs$.pipe(takeUntil(this.destroyed$)).subscribe((items) => {
       this.dataSource.data = items;

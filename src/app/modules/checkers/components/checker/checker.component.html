@@ -173,9 +173,6 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="clickRow(row)"></tr>
     </table>
-    <div class="spinner-container" *ngIf="dataSource.loading$ | async">
-      <mat-spinner></mat-spinner>
-    </div>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [pageSizeOptions]="pageSizes" showFirstLastButtons></mat-paginator>
   </mat-card-content>
 </mat-card>
