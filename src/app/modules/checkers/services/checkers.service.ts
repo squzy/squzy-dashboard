@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { of, Observable } from 'rxjs';
 import { MINUTE, SECOND, Time } from 'src/app/shared/date/date';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { map, retry } from 'rxjs/operators';
 import { Types, SelectorTypes } from 'src/app/shared/enums/schedulers.type';
+import { SortSchedulerList, SortDirection } from 'src/app/shared/enums/sort.table';
 
 export enum SchedulerStatus {
   Runned = 1,
@@ -12,16 +13,28 @@ export enum SchedulerStatus {
 }
 
 export enum SchedulerResponseCode {
+  SCHEDULER_CODE_UNSPECIFIED = 0,
   OK = 1,
   Error = 2,
 }
 
+export interface SchedulerUptime {
+  uptime: number;
+  latency: number;
+}
+
+export interface SchedulerUptimeWithDate extends SchedulerUptime {
+  from: Date;
+  to: Date;
+}
+
 export interface Scheduler {
   id: string;
+  name?: string;
   type: Types;
   status: SchedulerStatus;
   interval: number;
-  timeout: number;
+  timeout?: number;
   Config: {
     Http?: {
       method: string;
@@ -83,7 +96,7 @@ export class CheckersService {
     return this.httpClient.post<{ id: string }>(`/api/v1/schedulers`, req);
   }
 
-  getById(id: string) {
+  getById(id: string): Observable<Scheduler> {
     return this.httpClient.get<Scheduler>(`/api/v1/schedulers/${id}`);
   }
 
@@ -99,14 +112,45 @@ export class CheckersService {
     return this.httpClient.delete(`/api/v1/schedulers/${id}`);
   }
 
-  getHistory(id: string, dateFrom: Date, dateTo: Date) {
-    const from = new Date(dateFrom);
-    from.setSeconds(0);
-    const to = new Date(dateTo);
-    to.setSeconds(59);
-    return this.httpClient.get<HistoryPaginated>(
-      `/api/v1/schedulers/${id}/history?dateFrom=${from.toISOString()}&dateTo=${to.toISOString()}`,
-    );
+  getUptimeById(id: string, dateFrom: Date, dateTo: Date): Observable<SchedulerUptimeWithDate> {
+    return this.httpClient
+      .get<SchedulerUptime>(`/api/v1/schedulers/${id}/uptime`, {
+        params: new HttpParams()
+          .set('dateFrom', dateFrom.toISOString())
+          .set('dateTo', dateTo.toISOString()),
+      })
+      .pipe(
+        map((value) => {
+          return {
+            latency: value.latency,
+            uptime: value.uptime,
+            from: dateFrom,
+            to: dateTo,
+          };
+        }),
+      );
+  }
+
+  getHistory(
+    id: string,
+    dateFrom: Date,
+    dateTo: Date,
+    limit: number = 20,
+    page: number = 1,
+    sortBy: SortSchedulerList = SortSchedulerList.SORT_SCHEDULER_LIST_UNSPECIFIED,
+    direction: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
+    status: SchedulerResponseCode = SchedulerResponseCode.SCHEDULER_CODE_UNSPECIFIED,
+  ) {
+    return this.httpClient.get<HistoryPaginated>(`/api/v1/schedulers/${id}/history`, {
+      params: new HttpParams()
+        .set('dateFrom', dateFrom.toISOString())
+        .set('dateTo', dateTo.toISOString())
+        .set('sort_by', `${sortBy}`)
+        .set('sort_direction', `${direction}`)
+        .set('status', `${status}`)
+        .set('page', `${page}`)
+        .set('limit', `${limit}`),
+    });
   }
 
   toSchedulerResponseStatus(status) {

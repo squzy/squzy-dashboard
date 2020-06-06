@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { of, BehaviorSubject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { AgentStatus, AgentStatsTypes } from 'src/app/shared/enums/agent.type';
 import { Time } from 'src/app/shared/date/date';
@@ -125,41 +125,56 @@ export class AgentsService {
   // Should return last 20 history
   getCpuStats(agentId: string) {
     return this.httpClient
-      .get<Paginated<CpusInfo & Timestamp>>(
-        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.CPU}&page=-1&limit=50`,
-      )
+      .get<Paginated<CpusInfo & Timestamp>>(`/api/v1/agents/${agentId}/history`, {
+        params: new HttpParams()
+          .set('type', `${AgentStatsTypes.CPU}`)
+          .set('page', '-1')
+          .set('limit', '50'),
+      })
       .pipe(map((v) => v.stats));
   }
 
   getLiveStat(agentId: string) {
     return this.httpClient
-      .get<Paginated<AllStats & Timestamp>>(
-        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.ALL}&page=-1&limit=1`,
-      )
+      .get<Paginated<AllStats & Timestamp>>(`/api/v1/agents/${agentId}/history`, {
+        params: new HttpParams()
+          .set('type', `${AgentStatsTypes.ALL}`)
+          .set('page', '-1')
+          .set('limit', '1'),
+      })
       .pipe(map((v) => (v.stats && v.stats.length === 1 && v.stats[0]) || null));
   }
 
   getMemoryStats(agentId: string) {
     return this.httpClient
-      .get<Paginated<MemoryInfo & Timestamp>>(
-        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.MEMORY}&page=-1&limit=50`,
-      )
+      .get<Paginated<MemoryInfo & Timestamp>>(`/api/v1/agents/${agentId}/history`, {
+        params: new HttpParams()
+          .set('type', `${AgentStatsTypes.MEMORY}`)
+          .set('page', '-1')
+          .set('limit', '50'),
+      })
       .pipe(map((v) => v.stats));
   }
 
   getDisksStats(agentId: string) {
     return this.httpClient
-      .get<Paginated<DisksInfo & Timestamp>>(
-        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.DISK}&page=-1&limit=50`,
-      )
+      .get<Paginated<DisksInfo & Timestamp>>(`/api/v1/agents/${agentId}/history`, {
+        params: new HttpParams()
+          .set('type', `${AgentStatsTypes.DISK}`)
+          .set('page', '-1')
+          .set('limit', '50'),
+      })
       .pipe(map((v) => v.stats));
   }
 
   getNetStats(agentId: string) {
     return this.httpClient
-      .get<Paginated<NetInfo & Timestamp>>(
-        `/api/v1/agents/${agentId}/history?type=${AgentStatsTypes.NET}&page=-1&limit=50`,
-      )
+      .get<Paginated<NetInfo & Timestamp>>(`/api/v1/agents/${agentId}/history`, {
+        params: new HttpParams()
+          .set('type', `${AgentStatsTypes.NET}`)
+          .set('page', '-1')
+          .set('limit', '50'),
+      })
       .pipe(map((v) => v.stats));
   }
 

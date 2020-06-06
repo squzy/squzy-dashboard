@@ -131,6 +131,7 @@ export class AddCheckerFormComponent implements OnDestroy {
 
   form = this.fb.group({
     type: [null, Validators.required],
+    name: [null],
     interval: [10, Validators.compose([Validators.required, Validators.min(1), integerValidator])],
     timeout: [null, Validators.compose([Validators.min(1), integerValidator])],
     config: [null],
@@ -154,6 +155,7 @@ export class AddCheckerFormComponent implements OnDestroy {
 
     const rq = {
       type: formValue.type,
+      name: formValue.name,
       timeout: formValue.timeout,
       interval: formValue.interval,
       ...formValue.config,

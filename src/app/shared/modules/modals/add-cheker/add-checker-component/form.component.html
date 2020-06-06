@@ -18,6 +18,10 @@
         <mat-error *ngIf="form.get('interval').hasError('notInteger')">Should be integer</mat-error>
       </mat-form-field>
       <mat-form-field>
+        <input matInput placeholder="Set name" formControlName="name">
+        <mat-hint>Better provide uniq name</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
         <input matInput type="number" placeholder="Set timeout" formControlName="timeout">
         <mat-hint>Default it is 10 sec</mat-hint>
         <mat-error *ngIf="form.get('timeout').hasError('min')">Should be more than 0</mat-error>
@@ -170,7 +174,10 @@
                 <input matInput #selectorInput placeholder="Put path">
                 <mat-hint>
                   Valid path
-                  <a target="_blank" href="https://github.com/tidwall/gjson#path-syntax">here</a>
+                  <a
+                    target="_blank"
+                    href="https://github.com/tidwall/gjson#path-syntax"
+                  >here</a>
                 </mat-hint>
               </mat-form-field>
               <button

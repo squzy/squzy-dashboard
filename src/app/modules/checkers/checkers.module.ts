@@ -9,6 +9,7 @@ import { CheckerComponent } from './components/checker/checker.component';
 import { MatCardModule } from '@angular/material/card';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@busacca/ng-pick-datetime';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -54,6 +55,7 @@ const routes: Routes = [
     MatTooltipModule,
     MatIconModule,
     MatCheckboxModule,
+    MatProgressSpinnerModule,
   ],
   providers: [CheckersService],
   declarations: [

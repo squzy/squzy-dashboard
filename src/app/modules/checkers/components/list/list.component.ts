@@ -1,7 +1,21 @@
-import { Component, ChangeDetectionStrategy, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ViewChild,
+  OnInit,
+  OnDestroy,
+  ElementRef,
+} from '@angular/core';
 import { CheckersService, Scheduler } from '../../services/checkers.service';
-import { BehaviorSubject, Subject, combineLatest } from 'rxjs';
-import { switchMap, takeUntil, map } from 'rxjs/operators';
+import { BehaviorSubject, Subject, combineLatest, fromEvent } from 'rxjs';
+import {
+  switchMap,
+  takeUntil,
+  debounceTime,
+  distinctUntilChanged,
+  mapTo,
+  map,
+} from 'rxjs/operators';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
@@ -22,12 +36,13 @@ export class ListComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild('filterInput', { static: true }) filterInput: ElementRef;
 
   selection = new SelectionModel<Scheduler>(true, []);
 
   private obs$ = this.refresh$.pipe(switchMap(() => this.checkersService.getList()));
 
-  displayedColumns: string[] = ['select', 'ID', 'type', 'status'];
+  displayedColumns: string[] = ['select', 'ID', 'name', 'type', 'status'];
 
   constructor(
     private checkersService: CheckersService,
@@ -36,11 +51,27 @@ export class ListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.dataSource.filterPredicate = (data: Scheduler, filter: string) => {
+      return `${data.name ? data.name : ''}_${data.id}_${this.toStatus(data.status)}_${this.toType(
+        data.type,
+      )}`.includes(filter);
+    };
     this.obs$.pipe(takeUntil(this.destroyed$)).subscribe((items) => {
       this.dataSource.data = items;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
+
+    fromEvent<KeyboardEvent>(this.filterInput.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(150),
+        map(() =>
+          this.filterInput.nativeElement.value ? this.filterInput.nativeElement.value.trim() : '',
+        ),
+        distinctUntilChanged(),
+        takeUntil(this.destroyed$),
+      )
+      .subscribe((value: string) => [this.applyFilter(value)]);
   }
 
   isAllSelected() {
@@ -105,5 +136,9 @@ export class ListComponent implements OnInit, OnDestroy {
           this.router.navigate(['checkers', res.id]);
         }
       });
+  }
+
+  private applyFilter(text: string) {
+    this.dataSource.filter = text;
   }
 }
