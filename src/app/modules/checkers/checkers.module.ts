@@ -20,6 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SchedulerConfigComponent } from './components/checker/config/config.component';
 import { SchedulerSnapshotComponent } from './components/checker/snapshot/snapshot.component';
+import { MatSelectModule } from '@angular/material/select';
 
 const routes: Routes = [
   {
@@ -41,6 +42,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    MatSelectModule,
     MatTableModule,
     MatPaginatorModule,
     MatFormFieldModule,

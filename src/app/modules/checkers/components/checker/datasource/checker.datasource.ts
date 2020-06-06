@@ -36,7 +36,7 @@ export class CheckerDataSource implements DataSource<HistoryItem> {
     page: number = 1,
     sortBy: SortSchedulerList = SortSchedulerList.SORT_SCHEDULER_LIST_UNSPECIFIED,
     direction: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
-    status: SchedulerResponseCode = SchedulerResponseCode.SCHEDULER_CODE_UNSPECIFIED,
+    status: SchedulerResponseCode = SchedulerResponseCode.UNSPECIFIED,
   ) {
     this.loadingSubject.next(true);
     return this.checkersService

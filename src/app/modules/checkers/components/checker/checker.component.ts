@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, tap, switchMap, takeUntil, share, mapTo } from 'rxjs/operators';
+import { map, tap, switchMap, takeUntil, share, mapTo, startWith } from 'rxjs/operators';
 import { FormBuilder, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { minusMinute, SECOND, timeToDate, Time, diffInSec } from 'src/app/shared/date/date';
@@ -23,6 +23,7 @@ import { SchedulerSnapshotComponent } from './snapshot/snapshot.component';
 import { CheckerDataSource } from './datasource/checker.datasource';
 import { SortSchedulerList, angularSortDirectionMap } from 'src/app/shared/enums/sort.table';
 import { OWL_DATE_TIME_FORMATS } from '@busacca/ng-pick-datetime';
+import { MatSelect, MatSelectChange } from '@angular/material/select';
 
 interface FormValue {
   dateFrom: Date;
@@ -127,6 +128,14 @@ export class CheckerComponent implements OnInit, OnDestroy {
     })),
   );
 
+  statusCode = [
+    this.responseStatuses.UNSPECIFIED,
+    this.responseStatuses.Error,
+    this.responseStatuses.OK,
+  ];
+
+  statusControl = new FormControl(this.responseStatuses.UNSPECIFIED);
+
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -139,20 +148,34 @@ export class CheckerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    combineLatest(this.currentId$, this.formValue$, this.sort.sortChange, this.paginator.page)
+    combineLatest(
+      this.currentId$,
+      this.formValue$,
+      this.sort.sortChange,
+      this.paginator.page,
+      this.statusControl.valueChanges.pipe(startWith(this.statusControl.value)),
+    )
       .pipe(
-        switchMap(([id, formValue, sort, page]: [string, FormValue, Sort, PageEvent]) =>
-          this.dataSource.load(
-            id,
-            formValue.dateFrom,
-            formValue.dateTo,
-            page.pageSize,
-            page.pageIndex,
-            this.sortMap[sort.active]
-              ? this.sortMap[sort.active]
-              : SortSchedulerList.SORT_SCHEDULER_LIST_UNSPECIFIED,
-            angularSortDirectionMap[sort.direction],
-          ),
+        switchMap(
+          ([id, formValue, sort, page, status]: [
+            string,
+            FormValue,
+            Sort,
+            PageEvent,
+            SchedulerResponseCode,
+          ]) =>
+            this.dataSource.load(
+              id,
+              formValue.dateFrom,
+              formValue.dateTo,
+              page.pageSize,
+              page.pageIndex,
+              this.sortMap[sort.active]
+                ? this.sortMap[sort.active]
+                : SortSchedulerList.SORT_SCHEDULER_LIST_UNSPECIFIED,
+              angularSortDirectionMap[sort.direction],
+              status,
+            ),
         ),
         takeUntil(this.destoryed$),
       )

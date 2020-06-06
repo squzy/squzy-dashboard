@@ -13,7 +13,7 @@ export enum SchedulerStatus {
 }
 
 export enum SchedulerResponseCode {
-  SCHEDULER_CODE_UNSPECIFIED = 0,
+  UNSPECIFIED = 0,
   OK = 1,
   Error = 2,
 }
@@ -139,7 +139,7 @@ export class CheckersService {
     page: number = 1,
     sortBy: SortSchedulerList = SortSchedulerList.SORT_SCHEDULER_LIST_UNSPECIFIED,
     direction: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
-    status: SchedulerResponseCode = SchedulerResponseCode.SCHEDULER_CODE_UNSPECIFIED,
+    status: SchedulerResponseCode = SchedulerResponseCode.UNSPECIFIED,
   ) {
     return this.httpClient.get<HistoryPaginated>(`/api/v1/schedulers/${id}/history`, {
       params: new HttpParams()
