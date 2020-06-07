@@ -171,7 +171,7 @@ export class CheckerComponent implements OnInit, OnDestroy {
               formValue.dateFrom,
               formValue.dateTo,
               page.pageSize,
-              page.pageIndex,
+              page.pageIndex + 1,
               this.sortMap[sort.active]
                 ? this.sortMap[sort.active]
                 : SortSchedulerList.SORT_SCHEDULER_LIST_UNSPECIFIED,
@@ -193,7 +193,7 @@ export class CheckerComponent implements OnInit, OnDestroy {
       disableClear: true,
     });
     this.paginator.page.emit({
-      pageIndex: 1,
+      pageIndex: 0,
       pageSize: this.pageSizes[0],
       length: 0,
     });

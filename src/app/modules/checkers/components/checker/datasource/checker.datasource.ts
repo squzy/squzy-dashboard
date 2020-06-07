@@ -26,6 +26,8 @@ export class CheckerDataSource implements DataSource<HistoryItem> {
 
   disconnect(collectionViewer: CollectionViewer): void {
     this.checkersList$.complete();
+    this.loadingSubject.complete();
+    this.countElement$.complete();
   }
 
   load(
