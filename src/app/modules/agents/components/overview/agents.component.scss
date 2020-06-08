@@ -1,3 +1,5 @@
+@import 'src/theme/theme.scss';
+
 $padding: 40px;
 $min-width: 160px;
 
@@ -39,7 +41,7 @@ $min-width: 160px;
 
       &.mat-tab-label-active {
         color: white;
-        background-color: #3f51b5;
+        background-color: mat-color($primary);
 
         mat-icon {
           color: white;

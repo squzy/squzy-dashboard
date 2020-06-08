@@ -14,6 +14,7 @@ import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { switchMap, takeUntil, debounceTime, map, distinctUntilChanged } from 'rxjs/operators';
 import { ApplicationStatus, statusToString } from 'src/app/shared/enums/application.type';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'sqd-list',
@@ -36,7 +37,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['select', 'id', 'name', 'host', 'status'];
 
-  constructor(private applicationsService: ApplicationsService) {}
+  constructor(private applicationsService: ApplicationsService, private router: Router) {}
 
   ngOnInit() {
     this.dataSource.filterPredicate = (data: Application, filter: string) => {
@@ -123,5 +124,9 @@ export class ListComponent implements OnInit, OnDestroy {
         this.selection.clear();
         this.refresh$.next(null);
       });
+  }
+
+  clickRow(row) {
+    this.router.navigate(['applications', row.id]);
   }
 }
