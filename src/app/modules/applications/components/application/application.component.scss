@@ -1,0 +1,23 @@
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  align-items: center;
+}
+
+$padding: 40px;
+
+:host {
+  padding: $padding;
+  display: flex;
+  flex-direction: column;
+  mat-card {
+    margin-bottom: $padding/2;
+
+    mat-card-header::ng-deep {
+      .mat-card-header-text {
+        margin: 0;
+      }
+    }
+  }
+}

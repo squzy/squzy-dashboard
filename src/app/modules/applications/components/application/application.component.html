@@ -1,13 +1,37 @@
-<nav mat-tab-nav-bar [backgroundColor]="'accent'">
-  <a
-    mat-tab-link
-    *ngFor="let link of navLinks"
-    [routerLink]="link.path"
-    routerLinkActive
-    #rla="routerLinkActive"
-    [routerLinkActiveOptions]="{exact:true}"
-    [active]="rla.isActive"
-  >{{link.label}}</a>
-</nav>
+<mat-card>
+  <ng-container *ngIf="currentApplication$ | async as app; else loading">
+    <mat-card-header>
+      <mat-card-title>Application: {{ app.name }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>ID: {{ app.id }}</p>
+      <p *ngIf="app.host_name">Host: {{ app.host_name }}</p>
+      <p>Status: {{ toStatus(app.status) }}</p>
+    </mat-card-content>
+  </ng-container>
+  <ng-template #loading>
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
+</mat-card>
 
-<router-outlet></router-outlet>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Transactions</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <nav mat-tab-nav-bar [backgroundColor]="'accent'">
+      <a
+        mat-tab-link
+        *ngFor="let link of navLinks"
+        [routerLink]="link.path"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [routerLinkActiveOptions]="{exact:true}"
+        [active]="rla.isActive"
+      >{{link.label}}</a>
+    </nav>
+    <router-outlet></router-outlet>
+  </mat-card-content>
+</mat-card>

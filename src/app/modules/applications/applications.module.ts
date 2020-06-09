@@ -12,7 +12,15 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ApplicationComponent } from './components/application/application.component';
-import { TransactionsOverviewComponent } from './components/overview/overview.component';
+import { TransactionsOverviewComponent } from './components/transaction-overview/overview.component';
+import { TransactionsListComponent } from './components/transaction-list/list.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatListModule } from '@angular/material/list';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@busacca/ng-pick-datetime';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 const routes: Routes = [
   {
@@ -33,6 +41,7 @@ const routes: Routes = [
         children: [
           {
             path: 'list',
+            component: TransactionsListComponent,
           },
           {
             path: 'overview',
@@ -62,8 +71,21 @@ const routes: Routes = [
     MatCheckboxModule,
     MatCardModule,
     MatTabsModule,
+    MatProgressSpinnerModule,
+    MatListModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatIconModule,
+    MatSidenavModule,
   ],
   entryComponents: [],
-  declarations: [ListComponent, ApplicationComponent, TransactionsOverviewComponent],
+  declarations: [
+    ListComponent,
+    ApplicationComponent,
+    TransactionsOverviewComponent,
+    TransactionsListComponent,
+  ],
 })
 export class ApplicationsModule {}

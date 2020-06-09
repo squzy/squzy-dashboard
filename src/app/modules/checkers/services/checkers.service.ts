@@ -116,8 +116,8 @@ export class CheckersService {
     return this.httpClient
       .get<SchedulerUptime>(`/api/v1/schedulers/${id}/uptime`, {
         params: new HttpParams()
-          .set('dateFrom', dateFrom.toISOString())
-          .set('dateTo', dateTo.toISOString()),
+          .set('dateFrom', dateFrom && dateFrom.toISOString())
+          .set('dateTo', dateFrom && dateTo.toISOString()),
       })
       .pipe(
         map((value) => {
@@ -141,15 +141,20 @@ export class CheckersService {
     direction: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
     status: SchedulerResponseCode = SchedulerResponseCode.UNSPECIFIED,
   ) {
+    let params = new HttpParams()
+      .set('sort_by', `${sortBy}`)
+      .set('sort_direction', `${direction}`)
+      .set('status', `${status}`)
+      .set('page', `${page}`)
+      .set('limit', `${limit}`);
+    if (dateFrom) {
+      params = params.set('dateFrom', dateFrom.toISOString());
+    }
+    if (dateTo) {
+      params = params.set('dateTo', dateTo && dateTo.toISOString());
+    }
     return this.httpClient.get<HistoryPaginated>(`/api/v1/schedulers/${id}/history`, {
-      params: new HttpParams()
-        .set('dateFrom', dateFrom.toISOString())
-        .set('dateTo', dateTo.toISOString())
-        .set('sort_by', `${sortBy}`)
-        .set('sort_direction', `${direction}`)
-        .set('status', `${status}`)
-        .set('page', `${page}`)
-        .set('limit', `${limit}`),
+      params,
     });
   }
 

@@ -22,8 +22,6 @@ import { dateFromToValidator } from 'src/app/shared/validators/date.validators';
 import { SchedulerSnapshotComponent } from './snapshot/snapshot.component';
 import { CheckerDataSource } from './datasource/checker.datasource';
 import { SortSchedulerList, angularSortDirectionMap } from 'src/app/shared/enums/sort.table';
-import { OWL_DATE_TIME_FORMATS } from '@busacca/ng-pick-datetime';
-import { MatSelect, MatSelectChange } from '@angular/material/select';
 
 interface FormValue {
   dateFrom: Date;
