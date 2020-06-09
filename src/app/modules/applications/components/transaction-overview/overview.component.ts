@@ -88,6 +88,10 @@ export class TransactionsOverviewComponent {
     this.typeControl.valueChanges.pipe(startWith(this.typeControl.value)),
     this.statusControl.valueChanges.pipe(startWith(this.statusControl.value)),
   ).pipe(
+    tap(() => {
+      this.drawer.close();
+      this.currentStats = null;
+    }),
     switchMap(([id, from, to, groupBy, type, status]) =>
       this.applicationService.getTrasnsactionsGroup(id, from, to, groupBy, type, status),
     ),
