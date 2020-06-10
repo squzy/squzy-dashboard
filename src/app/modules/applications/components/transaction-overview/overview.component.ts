@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy, ViewChild } from '@angular/core';
-import { map, switchMap, startWith, tap } from 'rxjs/operators';
+import { Component, ChangeDetectionStrategy, ViewChild, OnDestroy } from '@angular/core';
+import { map, switchMap, startWith, tap, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import {
   ApplicationsService,
@@ -16,7 +16,7 @@ import {
   TransactionStatus,
   statusToString,
 } from 'src/app/shared/enums/transaction.type';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Subject } from 'rxjs';
 import { MatDrawer } from '@angular/material/sidenav';
 
 function getFilterValue() {
@@ -33,10 +33,15 @@ function getFilterValue() {
   styleUrls: ['./overview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TransactionsOverviewComponent {
+export class TransactionsOverviewComponent implements OnDestroy {
+  private destroyed$ = new Subject();
+
   @ViewChild(MatDrawer, { static: true }) drawer: MatDrawer;
 
-  currentApplicationId$ = this.route.parent.params.pipe(map((p) => p.id as string));
+  currentApplicationId$ = this.route.parent.params.pipe(
+    map((p) => p.id as string),
+    takeUntil(this.destroyed$),
+  );
 
   initValue = getFilterValue();
 
@@ -95,9 +100,15 @@ export class TransactionsOverviewComponent {
     switchMap(([id, from, to, groupBy, type, status]) =>
       this.applicationService.getTrasnsactionsGroup(id, from, to, groupBy, type, status),
     ),
+    takeUntil(this.destroyed$),
   );
 
   constructor(private route: ActivatedRoute, private applicationService: ApplicationsService) {}
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
 
   toSortBy(sortBy: TransactionGroup) {
     return groupTypesToString(sortBy);

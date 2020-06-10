@@ -1,8 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
 import { ApplicationsService } from '../../services/applications.service';
 import { ApplicationStatus, statusToString } from 'src/app/shared/enums/application.type';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'sqd-application',
@@ -10,11 +11,17 @@ import { ApplicationStatus, statusToString } from 'src/app/shared/enums/applicat
   styleUrls: ['./application.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ApplicationComponent {
-  currentId$ = this.route.params.pipe(map((p) => p.id as string));
+export class ApplicationComponent implements OnDestroy {
+  private destoryed$ = new Subject();
+
+  currentId$ = this.route.params.pipe(
+    map((p) => p.id as string),
+    takeUntil(this.destoryed$),
+  );
 
   currentApplication$ = this.currentId$.pipe(
     switchMap((id: string) => this.applicationService.getById(id)),
+    takeUntil(this.destoryed$),
   );
 
   navLinks = [
@@ -29,6 +36,11 @@ export class ApplicationComponent {
   ];
 
   constructor(private route: ActivatedRoute, private applicationService: ApplicationsService) {}
+
+  ngOnDestroy() {
+    this.destoryed$.next();
+    this.destoryed$.complete();
+  }
 
   toStatus(status: ApplicationStatus) {
     return statusToString(status);
