@@ -1,67 +1,68 @@
-<mat-form-field>
-  <mat-label>Group by</mat-label>
-  <mat-select [formControl]="groupByControl">
-    <mat-option *ngFor="let group of groupByGroups" [value]="group">{{ toSortBy(group) }}</mat-option>
-  </mat-select>
-</mat-form-field>
+<ng-container [queryParamGroup]="queryFilterGroup">
+  <mat-form-field>
+    <mat-label>Group by</mat-label>
+    <mat-select (selectionChange)="onGroupByChange($event)" [value]="groupBy.value">
+      <mat-option *ngFor="let group of groupByGroups" [value]="group">{{ toSortBy(group) }}</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-<mat-form-field>
-  <mat-label>Type</mat-label>
-  <mat-select [formControl]="typeControl">
-    <mat-option *ngFor="let type of types" [value]="type">{{ toType(type) }}</mat-option>
-  </mat-select>
-</mat-form-field>
+  <mat-form-field>
+    <mat-label>Type</mat-label>
+    <mat-select (selectionChange)="onTypeChange($event)" [value]="type.value">
+      <mat-option *ngFor="let type of types" [value]="type">{{ toType(type) }}</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-<mat-form-field>
-  <mat-label>Status</mat-label>
-  <mat-select [formControl]="statusControl">
-    <mat-option *ngFor="let status of statuses" [value]="status">{{ toStatus(status) }}</mat-option>
-  </mat-select>
-</mat-form-field>
-<br>
-<mat-form-field>
-  <label for="dateFrom">From:</label>
-  <input
-    matInput
-    [owlDateTimeTrigger]="dateFromComponent"
-    [owlDateTime]="dateFromComponent"
-    [formControl]="dateFrom"
-    autocomplete="off"
-  >
-  <button
-    mat-button
-    *ngIf="dateFrom.value"
-    matSuffix
-    mat-icon-button
-    aria-label="Clear"
-    (click)="dateFrom.setValue(null)"
-  >
-    <mat-icon>close</mat-icon>
-  </button>
-  <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateFromComponent></owl-date-time>
-</mat-form-field>
-<mat-form-field>
-  <label for="dateTo">To:</label>
-  <input
-    matInput
-    [owlDateTimeTrigger]="dateToComponent"
-    [owlDateTime]="dateToComponent"
-    [formControl]="dateTo"
-    autocomplete="off"
-  >
-  <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateToComponent></owl-date-time>
-  <button
-    mat-button
-    *ngIf="dateTo.value"
-    matSuffix
-    mat-icon-button
-    aria-label="Clear"
-    (click)="dateTo.setValue(null)"
-  >
-    <mat-icon>close</mat-icon>
-  </button>
-</mat-form-field>
-
+  <mat-form-field>
+    <mat-label>Status</mat-label>
+    <mat-select (selectionChange)="onStatusChange($event)" [value]="status.value">
+      <mat-option *ngFor="let status of statuses" [value]="status">{{ toStatus(status) }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+    <mat-label>From:</mat-label>
+    <input
+      matInput
+      [owlDateTimeTrigger]="dateFromComponent"
+      [owlDateTime]="dateFromComponent"
+      queryParamName="from"
+      autocomplete="off"
+    >
+    <button
+      mat-button
+      *ngIf="queryFilterGroup.get('from').value"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="queryFilterGroup.get('from').setValue(null)"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+    <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateFromComponent></owl-date-time>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>To:</mat-label>
+    <input
+      matInput
+      [owlDateTimeTrigger]="dateToComponent"
+      [owlDateTime]="dateToComponent"
+      queryParamName="to"
+      autocomplete="off"
+    >
+    <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateToComponent></owl-date-time>
+    <button
+      mat-button
+      *ngIf="queryFilterGroup.get('to').value"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="queryFilterGroup.get('to').setValue(null)"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</ng-container>
 <mat-drawer-container [class.mat-elevation-z2]="true">
   <mat-drawer [position]="'end'" [mode]="'over'">
     <ng-container *ngIf="currentStats">

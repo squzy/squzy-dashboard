@@ -21,6 +21,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { QueryParamModule } from '@ngqp/core';
 
 const routes: Routes = [
   {
@@ -79,6 +80,7 @@ const routes: Routes = [
     MatSelectModule,
     MatIconModule,
     MatSidenavModule,
+    QueryParamModule,
   ],
   entryComponents: [],
   declarations: [
