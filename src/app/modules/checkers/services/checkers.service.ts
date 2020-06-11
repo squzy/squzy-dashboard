@@ -138,7 +138,7 @@ export class CheckersService {
     dateFrom: Date,
     dateTo: Date,
     limit: number = 20,
-    page: number = 1,
+    page: number = 0,
     sortBy: SortSchedulerList = SortSchedulerList.SORT_SCHEDULER_LIST_UNSPECIFIED,
     direction: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
     status: SchedulerResponseCode = SchedulerResponseCode.UNSPECIFIED,

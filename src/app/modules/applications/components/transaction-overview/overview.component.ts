@@ -17,6 +17,7 @@ import {
   typeToString,
   TransactionStatus,
   statusToString,
+  TransactionTypes,
 } from 'src/app/shared/enums/transaction.type';
 import { combineLatest, Subject, of } from 'rxjs';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -102,18 +103,7 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
     TransactionStatus.Successfull,
   ];
 
-  types = [
-    TransactionType.Unspecified,
-    TransactionType.XHR,
-    TransactionType.DB,
-    TransactionType.FETCH,
-    TransactionType.GRPC,
-    TransactionType.GRPC,
-    TransactionType.HTTP,
-    TransactionType.INTERNAL,
-    TransactionType.ROUTER,
-    TransactionType.WEBSOCKET,
-  ];
+  types = TransactionTypes;
 
   currentStats: ITransactionGroup;
 

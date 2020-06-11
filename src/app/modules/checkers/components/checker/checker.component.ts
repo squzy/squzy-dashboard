@@ -52,7 +52,7 @@ export class CheckerComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  private destoryed$ = new Subject();
+  private destroyed$ = new Subject();
 
   pageSizes = [5, 10, 20, 100];
 
@@ -177,11 +177,11 @@ export class CheckerComponent implements OnInit, OnDestroy {
               status,
             ),
         ),
-        takeUntil(this.destoryed$),
+        takeUntil(this.destroyed$),
       )
       .subscribe();
 
-    this.dataSource.count$.pipe(takeUntil(this.destoryed$)).subscribe((value) => {
+    this.dataSource.count$.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
       this.paginator.length = value;
     });
 
@@ -204,27 +204,27 @@ export class CheckerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.destoryed$.next();
+    this.destroyed$.next();
   }
 
   run(id: string) {
     this.checkersService
       .runById(id)
-      .pipe(takeUntil(this.destoryed$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe(() => this.refresh$.next(null));
   }
 
   stop(id: string) {
     this.checkersService
       .stopById(id)
-      .pipe(takeUntil(this.destoryed$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe(() => this.refresh$.next(null));
   }
 
   remove(id: string) {
     this.checkersService
       .removeById(id)
-      .pipe(takeUntil(this.destoryed$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe(() => this.refresh$.next(null));
   }
 

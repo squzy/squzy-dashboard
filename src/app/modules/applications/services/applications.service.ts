@@ -10,12 +10,36 @@ import {
 import { map } from 'rxjs/operators';
 import { SortDirection } from 'src/app/shared/enums/sort.table';
 import { setQueryParams, queryParam } from 'src/app/shared/utils/http.utils';
+import { Time } from 'src/app/shared/date/date';
 
 export interface TransactionListFilters {
   host?: string;
   name?: string;
   path?: string;
   method?: string;
+}
+
+export interface TransactionPaginated {
+  count: number;
+  transactions: Array<Transaction>;
+}
+
+export interface Transaction {
+  id: string;
+  application_id: string;
+  name: string;
+  status: TransactionStatus;
+  type: TransactionType;
+  start_time: Time;
+  end_time: Time;
+  meta?: {
+    host?: string;
+    path?: string;
+    method?: string;
+  };
+  error?: {
+    message: string;
+  };
 }
 
 export interface Application {
@@ -28,6 +52,10 @@ export interface Application {
 export interface ITransactionGroup {
   count: number;
   average_time: number;
+  success_ratio: number;
+  min_time: number;
+  max_time: number;
+  throughput: number;
 }
 
 export interface TransactionGroupResponse {
@@ -48,7 +76,7 @@ export class ApplicationsService {
     applicationId: string,
     from: Date,
     to: Date,
-    page: number = 1,
+    page: number = 0,
     limit: number = 20,
     sortBy: TransactionListSortBy = TransactionListSortBy.Unspecified,
     soryDirection: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
@@ -56,22 +84,25 @@ export class ApplicationsService {
     type: TransactionType = TransactionType.Unspecified,
     filter: TransactionListFilters = {},
   ) {
-    return this.httpClient.get(`/api/v1/applications/${applicationId}/transactions/list`, {
-      params: setQueryParams(
-        queryParam('sort_by', sortBy),
-        queryParam('sort_direction', soryDirection),
-        queryParam('transaction_type', type),
-        queryParam('transaction_status', status),
-        queryParam('host', filter.host),
-        queryParam('name', filter.name),
-        queryParam('path', filter.path),
-        queryParam('method', filter.method),
-        queryParam('dateFrom', from && from.toISOString()),
-        queryParam('dateTo', to && to.toISOString()),
-        queryParam('page', page),
-        queryParam('limit', limit),
-      ),
-    });
+    return this.httpClient.get<TransactionPaginated>(
+      `/api/v1/applications/${applicationId}/transactions/list`,
+      {
+        params: setQueryParams(
+          queryParam('sort_by', sortBy),
+          queryParam('sort_direction', soryDirection),
+          queryParam('transaction_type', type),
+          queryParam('transaction_status', status),
+          queryParam('host', filter.host),
+          queryParam('name', filter.name),
+          queryParam('path', filter.path),
+          queryParam('method', filter.method),
+          queryParam('dateFrom', from && from.toISOString()),
+          queryParam('dateTo', to && to.toISOString()),
+          queryParam('page', page),
+          queryParam('limit', limit),
+        ),
+      },
+    );
   }
 
   getTrasnsactionsGroup(

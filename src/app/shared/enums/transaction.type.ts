@@ -25,6 +25,19 @@ export enum TransactionType {
   ROUTER = 8,
 }
 
+export const TransactionTypes = [
+  TransactionType.Unspecified,
+  TransactionType.XHR,
+  TransactionType.DB,
+  TransactionType.FETCH,
+  TransactionType.GRPC,
+  TransactionType.GRPC,
+  TransactionType.HTTP,
+  TransactionType.INTERNAL,
+  TransactionType.ROUTER,
+  TransactionType.WEBSOCKET,
+];
+
 export enum TransactionListSortBy {
   Unspecified = 0,
   Duration = 1,
