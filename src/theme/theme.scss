@@ -1,12 +1,7 @@
 @import '~@angular/material/theming';
+@import 'colors.scss';
 
 @include mat-core();
-
-$primary: mat-palette($mat-indigo);
-
-$accent: mat-palette($mat-teal);
-
-$warn: mat-palette($mat-red);
 
 $theme: mat-light-theme($primary, $accent, $warn);
 
