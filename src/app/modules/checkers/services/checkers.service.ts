@@ -5,6 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, retry } from 'rxjs/operators';
 import { Types, SelectorTypes } from 'src/app/shared/enums/schedulers.type';
 import { SortSchedulerList, SortDirection } from 'src/app/shared/enums/sort.table';
+import { setQueryParams, queryParam } from 'src/app/shared/utils/http.utils';
 
 export enum SchedulerStatus {
   Runned = 1,
@@ -115,9 +116,10 @@ export class CheckersService {
   getUptimeById(id: string, dateFrom: Date, dateTo: Date): Observable<SchedulerUptimeWithDate> {
     return this.httpClient
       .get<SchedulerUptime>(`/api/v1/schedulers/${id}/uptime`, {
-        params: new HttpParams()
-          .set('dateFrom', dateFrom && dateFrom.toISOString())
-          .set('dateTo', dateFrom && dateTo.toISOString()),
+        params: setQueryParams(
+          queryParam('dateFrom', dateFrom && dateFrom.toISOString()),
+          queryParam('dateTo', dateTo && dateTo.toISOString()),
+        ),
       })
       .pipe(
         map((value) => {
@@ -141,18 +143,15 @@ export class CheckersService {
     direction: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
     status: SchedulerResponseCode = SchedulerResponseCode.UNSPECIFIED,
   ) {
-    let params = new HttpParams()
-      .set('sort_by', `${sortBy}`)
-      .set('sort_direction', `${direction}`)
-      .set('status', `${status}`)
-      .set('page', `${page}`)
-      .set('limit', `${limit}`);
-    if (dateFrom) {
-      params = params.set('dateFrom', dateFrom.toISOString());
-    }
-    if (dateTo) {
-      params = params.set('dateTo', dateTo && dateTo.toISOString());
-    }
+    const params = setQueryParams(
+      queryParam('sort_by', sortBy),
+      queryParam('sort_direction', direction),
+      queryParam('status', status),
+      queryParam('page', page),
+      queryParam('limit', limit),
+      queryParam('dateFrom', dateFrom && dateFrom.toISOString()),
+      queryParam('dateTo', dateTo && dateTo.toISOString()),
+    );
     return this.httpClient.get<HistoryPaginated>(`/api/v1/schedulers/${id}/history`, {
       params,
     });

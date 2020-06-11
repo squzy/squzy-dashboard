@@ -5,8 +5,18 @@ import {
   TransactionGroup,
   TransactionStatus,
   TransactionType,
+  TransactionListSortBy,
 } from 'src/app/shared/enums/transaction.type';
 import { map } from 'rxjs/operators';
+import { SortDirection } from 'src/app/shared/enums/sort.table';
+import { setQueryParams, queryParam } from 'src/app/shared/utils/http.utils';
+
+export interface TransactionListFilters {
+  host?: string;
+  name?: string;
+  path?: string;
+  method?: string;
+}
 
 export interface Application {
   id: string;
@@ -34,27 +44,53 @@ export class ApplicationsService {
     return this.httpClient.get<Application>(`/api/v1/applications/${id}`);
   }
 
+  getTransactionsList(
+    applicationId: string,
+    from: Date,
+    to: Date,
+    page: number = 1,
+    limit: number = 20,
+    sortBy: TransactionListSortBy = TransactionListSortBy.Unspecified,
+    soryDirection: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
+    status: TransactionStatus = TransactionStatus.Unspecified,
+    type: TransactionType = TransactionType.Unspecified,
+    filter: TransactionListFilters = {},
+  ) {
+    return this.httpClient.get(`/api/v1/applications/${applicationId}/transactions/list`, {
+      params: setQueryParams(
+        queryParam('sort_by', sortBy),
+        queryParam('sort_direction', soryDirection),
+        queryParam('transaction_type', type),
+        queryParam('transaction_status', status),
+        queryParam('host', filter.host),
+        queryParam('name', filter.name),
+        queryParam('path', filter.path),
+        queryParam('method', filter.method),
+        queryParam('dateFrom', from && from.toISOString()),
+        queryParam('dateTo', to && to.toISOString()),
+        queryParam('page', page),
+        queryParam('limit', limit),
+      ),
+    });
+  }
+
   getTrasnsactionsGroup(
-    id: string,
+    applicationId: string,
     from: Date,
     to: Date,
     groupBy: TransactionGroup = TransactionGroup.Unspecified,
     status: TransactionStatus = TransactionStatus.Unspecified,
     type: TransactionType = TransactionType.Unspecified,
   ) {
-    let params = new HttpParams()
-      .set('group_by', `${groupBy}`)
-      .set('transaction_type', `${type}`)
-      .set('transaction_status', `${status}`);
-    if (from) {
-      params = params.set('dateFrom', from.toISOString() || '');
-    }
-    if (to) {
-      params = params.set('dateTo', (to && to.toISOString()) || '');
-    }
     return this.httpClient
-      .get<TransactionGroupResponse>(`/api/v1/applications/${id}/transactions/group`, {
-        params,
+      .get<TransactionGroupResponse>(`/api/v1/applications/${applicationId}/transactions/group`, {
+        params: setQueryParams(
+          queryParam('group_by', groupBy),
+          queryParam('transaction_type', type),
+          queryParam('transaction_status', status),
+          queryParam('dateFrom', from && from.toISOString()),
+          queryParam('dateTo', to && to.toISOString()),
+        ),
       })
       .pipe(map((res) => res.transactions || {}));
   }

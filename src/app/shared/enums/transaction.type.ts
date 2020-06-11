@@ -25,6 +25,11 @@ export enum TransactionType {
   ROUTER = 8,
 }
 
+export enum TransactionListSortBy {
+  Unspecified = 0,
+  Duration = 1,
+}
+
 export function typeToString(type: TransactionType) {
   return TransactionType[type];
 }

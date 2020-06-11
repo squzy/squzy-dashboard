@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { AgentStatus, AgentStatsTypes } from 'src/app/shared/enums/agent.type';
 import { Time } from 'src/app/shared/date/date';
+import { setQueryParams, queryParam } from 'src/app/shared/utils/http.utils';
 
 export interface Agent {
   id: string;
@@ -126,10 +127,11 @@ export class AgentsService {
   getCpuStats(agentId: string) {
     return this.httpClient
       .get<Paginated<CpusInfo & Timestamp>>(`/api/v1/agents/${agentId}/history`, {
-        params: new HttpParams()
-          .set('type', `${AgentStatsTypes.CPU}`)
-          .set('page', '-1')
-          .set('limit', '50'),
+        params: setQueryParams(
+          queryParam('type', AgentStatsTypes.CPU),
+          queryParam('page', -1),
+          queryParam('limit', 50),
+        ),
       })
       .pipe(map((v) => v.stats));
   }
@@ -137,10 +139,11 @@ export class AgentsService {
   getLiveStat(agentId: string) {
     return this.httpClient
       .get<Paginated<AllStats & Timestamp>>(`/api/v1/agents/${agentId}/history`, {
-        params: new HttpParams()
-          .set('type', `${AgentStatsTypes.ALL}`)
-          .set('page', '-1')
-          .set('limit', '1'),
+        params: setQueryParams(
+          queryParam('type', AgentStatsTypes.ALL),
+          queryParam('page', -1),
+          queryParam('limit', 1),
+        ),
       })
       .pipe(map((v) => (v.stats && v.stats.length === 1 && v.stats[0]) || null));
   }
@@ -148,10 +151,11 @@ export class AgentsService {
   getMemoryStats(agentId: string) {
     return this.httpClient
       .get<Paginated<MemoryInfo & Timestamp>>(`/api/v1/agents/${agentId}/history`, {
-        params: new HttpParams()
-          .set('type', `${AgentStatsTypes.MEMORY}`)
-          .set('page', '-1')
-          .set('limit', '50'),
+        params: setQueryParams(
+          queryParam('type', AgentStatsTypes.MEMORY),
+          queryParam('page', -1),
+          queryParam('limit', 50),
+        ),
       })
       .pipe(map((v) => v.stats));
   }
@@ -159,10 +163,11 @@ export class AgentsService {
   getDisksStats(agentId: string) {
     return this.httpClient
       .get<Paginated<DisksInfo & Timestamp>>(`/api/v1/agents/${agentId}/history`, {
-        params: new HttpParams()
-          .set('type', `${AgentStatsTypes.DISK}`)
-          .set('page', '-1')
-          .set('limit', '50'),
+        params: setQueryParams(
+          queryParam('type', AgentStatsTypes.DISK),
+          queryParam('page', -1),
+          queryParam('limit', 50),
+        ),
       })
       .pipe(map((v) => v.stats));
   }
@@ -170,10 +175,11 @@ export class AgentsService {
   getNetStats(agentId: string) {
     return this.httpClient
       .get<Paginated<NetInfo & Timestamp>>(`/api/v1/agents/${agentId}/history`, {
-        params: new HttpParams()
-          .set('type', `${AgentStatsTypes.NET}`)
-          .set('page', '-1')
-          .set('limit', '50'),
+        params: setQueryParams(
+          queryParam('type', AgentStatsTypes.NET),
+          queryParam('page', -1),
+          queryParam('limit', 50),
+        ),
       })
       .pipe(map((v) => v.stats));
   }
