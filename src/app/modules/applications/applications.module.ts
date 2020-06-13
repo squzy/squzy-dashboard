@@ -22,6 +22,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { QueryParamModule } from '@ngqp/core';
+import { ApplicationsService } from './services/applications.service';
 
 const routes: Routes = [
   {
@@ -83,6 +84,7 @@ const routes: Routes = [
     QueryParamModule,
   ],
   entryComponents: [],
+  providers: [ApplicationsService],
   declarations: [
     ListComponent,
     ApplicationComponent,

@@ -4,7 +4,6 @@ import { CollectionViewer } from '@angular/cdk/collections';
 import { SortDirection } from 'src/app/shared/enums/sort.table';
 import { finalize, tap, catchError } from 'rxjs/operators';
 import {
-  Transaction,
   ApplicationsService,
   TransactionListFilters,
 } from '../../../services/applications.service';
@@ -13,6 +12,7 @@ import {
   TransactionStatus,
   TransactionType,
 } from 'src/app/shared/enums/transaction.type';
+import { Transaction } from 'src/app/shared/interfaces/transaction.interfaces';
 
 export class TransactionListSource implements DataSource<Transaction> {
   private transactionsList$ = new BehaviorSubject<Transaction[]>([]);

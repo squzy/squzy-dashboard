@@ -15,6 +15,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/applications/applications.module').then((m) => m.ApplicationsModule),
   },
+  {
+    path: 'transactions',
+    loadChildren: () =>
+      import('./modules/transaction/transaction.module').then((m) => m.TransactionModule),
+  },
 ];
 
 @NgModule({

@@ -19,13 +19,14 @@ import {
 } from 'src/app/shared/enums/transaction.type';
 import { QueryParam, QueryParamBuilder } from '@ngqp/core';
 import { tap, switchMap, catchError, takeUntil, map } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApplicationsService } from '../../services/applications.service';
 import { SortDirection, angularSortDirectionMap } from 'src/app/shared/enums/sort.table';
 import { TransactionListSource } from './datasources/list.datasource';
 import { timeToDate, Time, diffInSec, SECOND } from 'src/app/shared/date/date';
 import { roundNumber } from 'src/app/shared/numbers/numbers';
 import { MatSelectChange } from '@angular/material/select';
+import { Transaction } from 'src/app/shared/interfaces/transaction.interfaces';
 
 @Component({
   selector: 'sqd-transactions-list',
@@ -218,6 +219,7 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private applicationService: ApplicationsService,
     private qpb: QueryParamBuilder,
   ) {}
@@ -277,6 +279,10 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
 
   toType(type: TransactionType) {
     return typeToString(type);
+  }
+
+  clickRow(transaction: Transaction) {
+    this.router.navigate(['transactions', transaction.id]);
   }
 
   toStatus(status: TransactionStatus) {

@@ -87,9 +87,7 @@ export interface Paginated<T> {
   stats: Array<T>;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class AgentsService {
   static LIVE = 'live';
 

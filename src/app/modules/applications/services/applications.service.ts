@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ApplicationStatus } from 'src/app/shared/enums/application.type';
 import {
   TransactionGroup,
@@ -10,7 +10,7 @@ import {
 import { map } from 'rxjs/operators';
 import { SortDirection } from 'src/app/shared/enums/sort.table';
 import { setQueryParams, queryParam } from 'src/app/shared/utils/http.utils';
-import { Time } from 'src/app/shared/date/date';
+import { Transaction } from 'src/app/shared/interfaces/transaction.interfaces';
 
 export interface TransactionListFilters {
   host?: string;
@@ -22,24 +22,6 @@ export interface TransactionListFilters {
 export interface TransactionPaginated {
   count: number;
   transactions: Array<Transaction>;
-}
-
-export interface Transaction {
-  id: string;
-  application_id: string;
-  name: string;
-  status: TransactionStatus;
-  type: TransactionType;
-  start_time: Time;
-  end_time: Time;
-  meta?: {
-    host?: string;
-    path?: string;
-    method?: string;
-  };
-  error?: {
-    message: string;
-  };
 }
 
 export interface Application {
@@ -62,9 +44,7 @@ export interface TransactionGroupResponse {
   transactions: { [key: string]: ITransactionGroup };
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ApplicationsService {
   constructor(private httpClient: HttpClient) {}
 

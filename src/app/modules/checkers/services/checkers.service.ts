@@ -81,9 +81,7 @@ export interface HistoryPaginated {
   snapshots: Array<HistoryItem>;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class CheckersService {
   constructor(private httpClient: HttpClient) {}
 
