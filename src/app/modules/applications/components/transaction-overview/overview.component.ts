@@ -214,7 +214,7 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
           TransactionType[this.currentGroupKey];
         break;
     }
-    console.log(queryParams);
+
     this.router.navigate(['applications', this.currentAppId, 'list'], {
       queryParams,
     });
