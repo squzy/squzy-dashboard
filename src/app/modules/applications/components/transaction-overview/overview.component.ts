@@ -219,4 +219,8 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
       queryParams,
     });
   }
+
+  trackBy(item: { key: string }) {
+    return item.key;
+  }
 }
