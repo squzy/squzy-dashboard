@@ -38,8 +38,10 @@ export const TransactionTypes = [
 ];
 
 export enum TransactionListSortBy {
-  Unspecified = 0,
-  Duration = 1,
+  SORT_TRANSACTION_LIST_UNSPECIFIED = 0,
+  DURATION = 1,
+  BY_TRANSACTION_START_TIME = 2,
+  BY_TRANSACTION_END_TIME = 3,
 }
 
 export function typeToString(type: TransactionType) {

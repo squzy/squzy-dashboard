@@ -50,7 +50,9 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
   };
 
   private sortByMap = {
-    Duration: TransactionListSortBy.Duration,
+    Duration: TransactionListSortBy.SORT_TRANSACTION_LIST_UNSPECIFIED,
+    StartTime: TransactionListSortBy.BY_TRANSACTION_START_TIME,
+    EndTime: TransactionListSortBy.BY_TRANSACTION_END_TIME,
   };
 
   displayedColumns: string[] = [
@@ -118,7 +120,7 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
     [TransactionsListComponent.queryParam.sortBy]: this.qpb.numberParam(
       TransactionsListComponent.queryParam.sortBy,
       {
-        emptyOn: TransactionListSortBy.Unspecified,
+        emptyOn: TransactionListSortBy.SORT_TRANSACTION_LIST_UNSPECIFIED,
         serialize: (value: TransactionListSortBy) => `${value}`,
         deserialize: (value) => +value,
       },
@@ -225,7 +227,7 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
       this.queryFilterGroup.patchValue({
         [TransactionsListComponent.queryParam.sortDirection]: angularSortDirectionMap[e.direction],
         [TransactionsListComponent.queryParam.sortBy]:
-          this.sortByMap[e.active] || TransactionListSortBy.Unspecified,
+          this.sortByMap[e.active] || TransactionListSortBy.SORT_TRANSACTION_LIST_UNSPECIFIED,
       });
     });
 

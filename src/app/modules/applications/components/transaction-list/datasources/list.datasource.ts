@@ -41,7 +41,7 @@ export class TransactionListSource implements DataSource<Transaction> {
     to: Date,
     page: number = 0,
     limit: number = 20,
-    sortBy: TransactionListSortBy = TransactionListSortBy.Unspecified,
+    sortBy: TransactionListSortBy = TransactionListSortBy.SORT_TRANSACTION_LIST_UNSPECIFIED,
     soryDirection: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
     status: TransactionStatus = TransactionStatus.Unspecified,
     type: TransactionType = TransactionType.TRANSACTION_TYPE_UNSPECIFIED,
