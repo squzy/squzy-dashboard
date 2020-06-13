@@ -8,11 +8,8 @@ import {
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Subject, BehaviorSubject, combineLatest, of } from 'rxjs';
-import { Validators } from '@angular/forms';
-import { dateFromToValidator } from 'src/app/shared/validators/date.validators';
+import { Subject, combineLatest } from 'rxjs';
 import {
-  TransactionGroup,
   TransactionType,
   TransactionStatus,
   TransactionListSortBy,
@@ -46,13 +43,28 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
     sortDirection: 'sortDirection',
     page: 'page',
     limit: 'limit',
+    host: 'host',
+    name: 'name',
+    path: 'path',
+    method: 'method',
   };
 
   private sortByMap = {
     Duration: TransactionListSortBy.Duration,
   };
 
-  displayedColumns: string[] = ['StartTime', 'EndTime', 'Name', 'Type', 'Status', 'Duration'];
+  displayedColumns: string[] = [
+    'Id',
+    'StartTime',
+    'EndTime',
+    'Name',
+    'Type',
+    'Status',
+    'Duration',
+    'Host',
+    'Path',
+    'Method',
+  ];
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -90,7 +102,7 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
     [TransactionsListComponent.queryParam.type]: this.qpb.numberParam(
       TransactionsListComponent.queryParam.type,
       {
-        emptyOn: TransactionType.Unspecified,
+        emptyOn: TransactionType.TRANSACTION_TYPE_UNSPECIFIED,
         serialize: (value: TransactionType) => `${value}`,
         deserialize: (value) => +value,
       },
@@ -133,6 +145,46 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
         emptyOn: this.pageSizes[0],
         serialize: (value: number) => `${value}`,
         deserialize: (value) => +value,
+      },
+    ),
+
+    [TransactionsListComponent.queryParam.host]: this.qpb.stringParam(
+      TransactionsListComponent.queryParam.host,
+      {
+        emptyOn: '',
+        serialize: (value: string) => `${value}`,
+        deserialize: (value) => value,
+        debounceTime: 300,
+      },
+    ),
+
+    [TransactionsListComponent.queryParam.path]: this.qpb.stringParam(
+      TransactionsListComponent.queryParam.path,
+      {
+        emptyOn: '',
+        serialize: (value: string) => `${value}`,
+        deserialize: (value) => value,
+        debounceTime: 300,
+      },
+    ),
+
+    [TransactionsListComponent.queryParam.name]: this.qpb.stringParam(
+      TransactionsListComponent.queryParam.name,
+      {
+        emptyOn: '',
+        serialize: (value: string) => `${value}`,
+        deserialize: (value) => value,
+        debounceTime: 300,
+      },
+    ),
+
+    [TransactionsListComponent.queryParam.method]: this.qpb.stringParam(
+      TransactionsListComponent.queryParam.method,
+      {
+        emptyOn: '',
+        serialize: (value: string) => `${value}`,
+        deserialize: (value) => value,
+        debounceTime: 300,
       },
     ),
   });
@@ -197,7 +249,12 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
             formValue[TransactionsListComponent.queryParam.sortDirection],
             formValue[TransactionsListComponent.queryParam.status],
             formValue[TransactionsListComponent.queryParam.type],
-            {},
+            {
+              name: formValue[TransactionsListComponent.queryParam.name],
+              host: formValue[TransactionsListComponent.queryParam.host],
+              path: formValue[TransactionsListComponent.queryParam.path],
+              method: formValue[TransactionsListComponent.queryParam.method],
+            },
           ),
         ),
       )
@@ -230,6 +287,10 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
 
   onTypeChange(event: MatSelectChange) {
     this.type.setValue(event.value);
+  }
+
+  onStatusChange(event: MatSelectChange) {
+    this.status.setValue(event.value);
   }
 
   ngOnDestroy() {

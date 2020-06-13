@@ -14,28 +14,27 @@ export enum TransactionStatus {
 }
 
 export enum TransactionType {
-  Unspecified = 0,
-  XHR = 1,
-  FETCH = 2,
-  WEBSOCKET = 3,
-  HTTP = 4,
-  GRPC = 5,
-  DB = 6,
-  INTERNAL = 7,
-  ROUTER = 8,
+  TRANSACTION_TYPE_UNSPECIFIED = 0,
+  TRANSACTION_TYPE_XHR = 1,
+  TRANSACTION_TYPE_FETCH = 2,
+  TRANSACTION_TYPE_WEBSOCKET = 3,
+  TRANSACTION_TYPE_HTTP = 4,
+  TRANSACTION_TYPE_GRPC = 5,
+  TRANSACTION_TYPE_DB = 6,
+  TRANSACTION_TYPE_INTERNAL = 7,
+  TRANSACTION_TYPE_ROUTER = 8,
 }
 
 export const TransactionTypes = [
-  TransactionType.Unspecified,
-  TransactionType.XHR,
-  TransactionType.DB,
-  TransactionType.FETCH,
-  TransactionType.GRPC,
-  TransactionType.GRPC,
-  TransactionType.HTTP,
-  TransactionType.INTERNAL,
-  TransactionType.ROUTER,
-  TransactionType.WEBSOCKET,
+  TransactionType.TRANSACTION_TYPE_UNSPECIFIED,
+  TransactionType.TRANSACTION_TYPE_XHR,
+  TransactionType.TRANSACTION_TYPE_DB,
+  TransactionType.TRANSACTION_TYPE_FETCH,
+  TransactionType.TRANSACTION_TYPE_GRPC,
+  TransactionType.TRANSACTION_TYPE_HTTP,
+  TransactionType.TRANSACTION_TYPE_INTERNAL,
+  TransactionType.TRANSACTION_TYPE_ROUTER,
+  TransactionType.TRANSACTION_TYPE_WEBSOCKET,
 ];
 
 export enum TransactionListSortBy {

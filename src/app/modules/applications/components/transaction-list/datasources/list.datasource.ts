@@ -44,7 +44,7 @@ export class TransactionListSource implements DataSource<Transaction> {
     sortBy: TransactionListSortBy = TransactionListSortBy.Unspecified,
     soryDirection: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
     status: TransactionStatus = TransactionStatus.Unspecified,
-    type: TransactionType = TransactionType.Unspecified,
+    type: TransactionType = TransactionType.TRANSACTION_TYPE_UNSPECIFIED,
     filter: TransactionListFilters = {},
   ) {
     this.loadingSubject.next(true);

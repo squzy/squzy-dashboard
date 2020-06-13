@@ -6,8 +6,8 @@ import {
   OnInit,
   AfterViewInit,
 } from '@angular/core';
-import { map, switchMap, tap, takeUntil, catchError } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { map, switchMap, tap, takeUntil, catchError, share } from 'rxjs/operators';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { ApplicationsService, ITransactionGroup } from '../../services/applications.service';
 import { minusMinute } from 'src/app/shared/date/date';
 import {
@@ -23,6 +23,8 @@ import { combineLatest, Subject, of } from 'rxjs';
 import { MatDrawer } from '@angular/material/sidenav';
 import { QueryParam, QueryParamBuilder } from '@ngqp/core';
 import { MatSelectChange } from '@angular/material/select';
+import { TransactionsListComponent } from '../transaction-list/list.component';
+import { getRoundedPercent, roundNumber } from 'src/app/shared/numbers/numbers';
 
 function getFilterValue() {
   const now = new Date(Date.now());
@@ -41,10 +43,13 @@ function getFilterValue() {
 export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
   private destroyed$ = new Subject();
 
+  private currentAppId: string;
+
   @ViewChild(MatDrawer, { static: true }) drawer: MatDrawer;
 
   currentApplicationId$ = this.route.parent.params.pipe(
     map((p) => p.id as string),
+    tap((id) => (this.currentAppId = id)),
     takeUntil(this.destroyed$),
   );
 
@@ -74,7 +79,7 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
       deserialize: (value) => +value,
     }),
     type: this.qpb.numberParam('type', {
-      emptyOn: TransactionType.Unspecified,
+      emptyOn: TransactionType.TRANSACTION_TYPE_UNSPECIFIED,
       serialize: (value: TransactionType) => `${value}`,
       deserialize: (value) => +value,
     }),
@@ -107,6 +112,8 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
 
   currentStats: ITransactionGroup;
 
+  currentGroupKey: string;
+
   groupList$ = combineLatest(this.currentApplicationId$, this.queryFilterGroup.valueChanges).pipe(
     tap(() => {
       this.drawer.close();
@@ -123,6 +130,7 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private applicationService: ApplicationsService,
     private qpb: QueryParamBuilder,
   ) {}
@@ -148,13 +156,22 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
     return statusToString(status);
   }
 
-  select(value: ITransactionGroup) {
+  select(value: ITransactionGroup, key: string) {
     this.currentStats = value;
+    this.currentGroupKey = key;
     this.drawer.open();
   }
 
   onGroupByChange(event: MatSelectChange) {
     this.groupBy.setValue(event.value);
+  }
+
+  percent(value: number) {
+    return getRoundedPercent(value, 2);
+  }
+
+  round(value: number) {
+    return roundNumber(value, 2);
   }
 
   onTypeChange(event: MatSelectChange) {
@@ -163,5 +180,43 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
 
   onStatusChange(event: MatSelectChange) {
     this.status.setValue(event.value);
+  }
+
+  goToList() {
+    const queryParams: Params = {};
+    const value = this.queryFilterGroup.value;
+    if (value.from) {
+      queryParams[TransactionsListComponent.queryParam.dateFrom] = value.from;
+    }
+    if (value.to) {
+      queryParams[TransactionsListComponent.queryParam.dateTo] = value.to;
+    }
+    queryParams[TransactionsListComponent.queryParam.status] = value.status;
+    queryParams[TransactionsListComponent.queryParam.type] = value.type;
+    switch (value.groupBy) {
+      case TransactionGroup.Unspecified:
+        break;
+      case TransactionGroup.Host:
+        queryParams[TransactionsListComponent.queryParam.host] = this.currentGroupKey;
+        break;
+      case TransactionGroup.Method:
+        queryParams[TransactionsListComponent.queryParam.method] = this.currentGroupKey;
+        break;
+      case TransactionGroup.Name:
+        queryParams[TransactionsListComponent.queryParam.name] = this.currentGroupKey;
+        break;
+      case TransactionGroup.Path:
+        queryParams[TransactionsListComponent.queryParam.path] = this.currentGroupKey;
+        break;
+
+      case TransactionGroup.Type:
+        queryParams[TransactionsListComponent.queryParam.type] =
+          TransactionType[this.currentGroupKey];
+        break;
+    }
+    console.log(queryParams);
+    this.router.navigate(['applications', this.currentAppId, 'list'], {
+      queryParams,
+    });
   }
 }

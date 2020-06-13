@@ -2,7 +2,11 @@
   <mat-form-field>
     <mat-label>Group by</mat-label>
     <mat-select (selectionChange)="onGroupByChange($event)" [value]="groupBy.value">
-      <mat-option *ngFor="let group of groupByGroups" [value]="group">{{ toSortBy(group) }}</mat-option>
+      <mat-option *ngFor="let group of groupByGroups" [value]="group">
+        {{
+        toSortBy(group)
+        }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -16,7 +20,11 @@
   <mat-form-field>
     <mat-label>Status</mat-label>
     <mat-select (selectionChange)="onStatusChange($event)" [value]="status.value">
-      <mat-option *ngFor="let status of statuses" [value]="status">{{ toStatus(status) }}</mat-option>
+      <mat-option *ngFor="let status of statuses" [value]="status">
+        {{
+        toStatus(status)
+        }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
   <br>
@@ -68,9 +76,15 @@
     <ng-container *ngIf="currentStats">
       <p>
         Count: {{ currentStats.count }}
-        <a href>View</a>
+        <button mat-icon-button (click)="goToList()">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
       </p>
-      <p>Average time: {{ currentStats.average_time || 0 }} sec</p>
+      <p>Average time: {{ round(currentStats.average_time) || 0 }} sec</p>
+      <p>Min time: {{ round(currentStats.min_time) || 0 }} sec</p>
+      <p>Max time: {{ round(currentStats.max_time) || 0 }} sec</p>
+      <p>Success ration: {{ percent(currentStats.success_ratio) || 0 }}</p>
+      <p>Throughput: {{ round(currentStats.throughput) || 0 }} count/min</p>
     </ng-container>
   </mat-drawer>
   <mat-drawer-content>
@@ -78,7 +92,7 @@
       <div mat-subheader>Select transaction group</div>
       <mat-list-item
         *ngFor="let item of groupList$ | async | keyvalue"
-        (click)="select(item.value)"
+        (click)="select(item.value, item.key)"
       >{{ item.key }}</mat-list-item>
     </mat-list>
   </mat-drawer-content>

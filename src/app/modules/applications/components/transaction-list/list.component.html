@@ -1,5 +1,10 @@
 <ng-container [queryParamGroup]="queryFilterGroup">
   <table mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="Id">
+      <th mat-header-cell *matHeaderCellDef>Id</th>
+      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+    </ng-container>
+
     <ng-container matColumnDef="StartTime">
       <th mat-header-cell *matHeaderCellDef>
         <mat-form-field>
@@ -35,7 +40,12 @@
     </ng-container>
 
     <ng-container matColumnDef="Name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput queryParamName="name" type="text">
+        </mat-form-field>
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.name }}</td>
     </ng-container>
 
@@ -52,13 +62,50 @@
     </ng-container>
 
     <ng-container matColumnDef="Status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-form-field>
+          <mat-label>Status</mat-label>
+          <mat-select (selectionChange)="onStatusChange($event)" [value]="type.value">
+            <mat-option *ngFor="let type of statuses" [value]="type">{{ toStatus(type) }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </th>
       <td mat-cell *matCellDef="let element">{{ toStatus(element.status) }}</td>
     </ng-container>
 
     <ng-container matColumnDef="Duration">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Duration</th>
       <td mat-cell *matCellDef="let element">{{ getDuration(element.end_time, element.start_time) }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Host">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-form-field>
+          <mat-label>Host</mat-label>
+          <input matInput queryParamName="host" type="text">
+        </mat-form-field>
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.meta?.host }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Path">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-form-field>
+          <mat-label>Path</mat-label>
+          <input matInput queryParamName="path" type="text">
+        </mat-form-field>
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.meta?.path }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Method">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-form-field>
+          <mat-label>Method</mat-label>
+          <input matInput queryParamName="method" type="text">
+        </mat-form-field>
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.meta?.method }}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

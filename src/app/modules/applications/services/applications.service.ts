@@ -81,7 +81,7 @@ export class ApplicationsService {
     sortBy: TransactionListSortBy = TransactionListSortBy.Unspecified,
     soryDirection: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
     status: TransactionStatus = TransactionStatus.Unspecified,
-    type: TransactionType = TransactionType.Unspecified,
+    type: TransactionType = TransactionType.TRANSACTION_TYPE_UNSPECIFIED,
     filter: TransactionListFilters = {},
   ) {
     return this.httpClient.get<TransactionPaginated>(
@@ -111,7 +111,7 @@ export class ApplicationsService {
     to: Date,
     groupBy: TransactionGroup = TransactionGroup.Unspecified,
     status: TransactionStatus = TransactionStatus.Unspecified,
-    type: TransactionType = TransactionType.Unspecified,
+    type: TransactionType = TransactionType.TRANSACTION_TYPE_UNSPECIFIED,
   ) {
     return this.httpClient
       .get<TransactionGroupResponse>(`/api/v1/applications/${applicationId}/transactions/group`, {
