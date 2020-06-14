@@ -30,17 +30,19 @@ export class TransactionSegmentComponent {
 
   constructor(private router: Router) {}
   getPosition(): Information {
-    if (!this.transaction || this.min >= this.max) {
+    if (!this.transaction) {
       return;
     }
     const diffMaxMin = this.max - this.min;
     const leftTime = timeToDate(this.transaction.start_time);
     const rightTime = timeToDate(this.transaction.end_time);
     return {
-      left: `${((+leftTime - this.min) / diffMaxMin) * 100}%`,
-      width: `${
-        (diffInSec(this.transaction.end_time, this.transaction.start_time) / diffMaxMin) * 100
-      }%`,
+      left: !diffMaxMin ? '0%' : `${((+leftTime - this.min) / diffMaxMin) * 100}%`,
+      width: !diffMaxMin
+        ? '100%'
+        : `${
+            (diffInSec(this.transaction.end_time, this.transaction.start_time) / diffMaxMin) * 100
+          }%`,
       padding: `${(this.level - 1) * 15}px`,
       leftTime,
       rightTime,
