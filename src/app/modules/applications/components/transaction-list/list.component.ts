@@ -301,12 +301,13 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
       ];
 
     if (
+      sortBy &&
+      direction &&
       sortBy !== TransactionListSortBy.SORT_TRANSACTION_LIST_UNSPECIFIED &&
       direction !== SortDirection.SORT_DIRECTION_UNSPECIFIED
     ) {
       this.sort.active = sortBy;
       this.sort.direction = direction;
-
       (this.sort.sortables.get(sortBy) as MatSortHeader)._arrowDirection = direction;
       (this.sort.sortables.get(sortBy) as MatSortHeader)._setAnimationTransitionState({
         toState: 'active',

@@ -58,7 +58,7 @@ export class ApplicationsService {
     to: Date,
     page: number = 0,
     limit: number = 20,
-    sortBy: TransactionListSortBy = TransactionListSortBy.SORT_TRANSACTION_LIST_UNSPECIFIED,
+    sortBy: TransactionListSortBy = TransactionListSortBy.BY_TRANSACTION_START_TIME,
     soryDirection: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
     status: TransactionStatus = TransactionStatus.Unspecified,
     type: TransactionType = TransactionType.TRANSACTION_TYPE_UNSPECIFIED,
