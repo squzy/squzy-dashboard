@@ -16,3 +16,9 @@ export const angularSortDirectionMap = {
   asc: SortDirection.ASC,
   desc: SortDirection.DESC,
 };
+
+export const angularSortDirectionReverstMap = {
+  [SortDirection.SORT_DIRECTION_UNSPECIFIED]: '',
+  [SortDirection.ASC]: 'asc',
+  [SortDirection.DESC]: 'desc',
+};

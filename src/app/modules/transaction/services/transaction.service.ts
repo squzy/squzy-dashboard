@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Transaction } from 'src/app/shared/interfaces/transaction.interfaces';
+import { map } from 'rxjs/operators';
 
 export interface Children<T> {
   children?: Array<T>;
 }
 
-type TransactionWithChildren = Transaction & Children<Transaction>;
+export type TransactionWithChildren = { transaction: Transaction } & Children<Transaction>;
 
 @Injectable()
 export class TransactionService {

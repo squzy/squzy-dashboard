@@ -1,1 +1,61 @@
-{{ rootTransaction$ | async | json }}
+<mat-card *ngIf="root">
+  <mat-card-header>
+    <mat-card-title>Transaction: {{ root.id }}</mat-card-title>
+    <mat-card-subtitle>
+      Application
+      <button mat-icon-button (click)="goToApplication(root.application_id)">
+        <mat-icon>open_in_new</mat-icon>
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="information">
+      <p>
+        Status:
+        <strong>{{ toStatus(root.status) }}</strong>
+      </p>
+      <p *ngIf="root.error?.message">
+        Error:
+        <strong>{{ root.error.message }}</strong>
+      </p>
+      <p>
+        Type:
+        <strong>{{ toType(root.type) }}</strong>
+      </p>
+      <p>
+        Start:
+        <strong>{{ timeToDate(root.start_time) | date: 'full' }}</strong>
+      </p>
+      <p>
+        End:
+        <strong>{{ timeToDate(root.end_time) | date: 'full' }}</strong>
+      </p>
+      <p *ngIf="root.parent_id">
+        Parent:
+        <strong>{{ root.parent_id }}</strong>
+        <button mat-icon-button (click)="goToPage(root.parent_id)">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+      </p>
+      <p *ngIf="root.meta?.method">
+        Method:
+        <strong>{{ root.meta.method }}</strong>
+      </p>
+      <p *ngIf="root.meta?.host">
+        Host:
+        <strong>{{ root.meta.host }}</strong>
+      </p>
+      <p *ngIf="root.meta?.path">
+        Path:
+        <strong>{{ root.meta.path }}</strong>
+      </p>
+    </div>
+    <h2>Segments</h2>
+    <sqd-transaction-segment
+      [transaction]="root"
+      [min]="min"
+      [max]="max"
+      [dictChildren]="dictChildren"
+    ></sqd-transaction-segment>
+  </mat-card-content>
+</mat-card>

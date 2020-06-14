@@ -7,7 +7,7 @@ import {
   AfterViewInit,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Subject, combineLatest } from 'rxjs';
 import {
   TransactionType,
@@ -18,10 +18,14 @@ import {
   TransactionTypes,
 } from 'src/app/shared/enums/transaction.type';
 import { QueryParam, QueryParamBuilder } from '@ngqp/core';
-import { tap, switchMap, catchError, takeUntil, map } from 'rxjs/operators';
+import { switchMap, takeUntil, map, tap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApplicationsService } from '../../services/applications.service';
-import { SortDirection, angularSortDirectionMap } from 'src/app/shared/enums/sort.table';
+import {
+  SortDirection,
+  angularSortDirectionMap,
+  angularSortDirectionReverstMap,
+} from 'src/app/shared/enums/sort.table';
 import { TransactionListSource } from './datasources/list.datasource';
 import { timeToDate, Time, diffInSec, SECOND } from 'src/app/shared/date/date';
 import { roundNumber } from 'src/app/shared/numbers/numbers';
@@ -51,9 +55,16 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
   };
 
   private sortByMap = {
-    Duration: TransactionListSortBy.SORT_TRANSACTION_LIST_UNSPECIFIED,
+    Duration: TransactionListSortBy.DURATION,
     StartTime: TransactionListSortBy.BY_TRANSACTION_START_TIME,
     EndTime: TransactionListSortBy.BY_TRANSACTION_END_TIME,
+  };
+
+  private sortByReverseMap = {
+    [TransactionListSortBy.SORT_TRANSACTION_LIST_UNSPECIFIED]: null,
+    [TransactionListSortBy.DURATION]: 'Duration',
+    [TransactionListSortBy.BY_TRANSACTION_START_TIME]: 'StartTime',
+    [TransactionListSortBy.BY_TRANSACTION_END_TIME]: 'EndTime',
   };
 
   displayedColumns: string[] = [
@@ -270,7 +281,37 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
   }
 
   ngAfterViewInit() {
-    this.queryFilterGroup.patchValue({});
+    const page = this.queryFilterGroup.value[TransactionsListComponent.queryParam.page];
+    const limit = this.queryFilterGroup.value[TransactionsListComponent.queryParam.limit];
+    this.paginator.pageIndex = (page || 1) - 1;
+    this.paginator.pageSize = limit || this.pageSizes[0];
+
+    const sortBy = this.sortByReverseMap[
+      this.queryFilterGroup.value[
+        TransactionsListComponent.queryParam.sortBy ||
+          TransactionListSortBy.SORT_TRANSACTION_LIST_UNSPECIFIED
+      ]
+    ];
+    const direction =
+      angularSortDirectionReverstMap[
+        this.queryFilterGroup.value[
+          TransactionsListComponent.queryParam.sortDirection ||
+            SortDirection.SORT_DIRECTION_UNSPECIFIED
+        ]
+      ];
+
+    if (
+      sortBy !== TransactionListSortBy.SORT_TRANSACTION_LIST_UNSPECIFIED &&
+      direction !== SortDirection.SORT_DIRECTION_UNSPECIFIED
+    ) {
+      this.sort.active = sortBy;
+      this.sort.direction = direction;
+
+      (this.sort.sortables.get(sortBy) as MatSortHeader)._arrowDirection = direction;
+      (this.sort.sortables.get(sortBy) as MatSortHeader)._setAnimationTransitionState({
+        toState: 'active',
+      });
+    }
   }
 
   toDate(time: Time) {

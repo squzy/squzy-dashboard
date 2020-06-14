@@ -5,6 +5,7 @@ export interface Transaction {
   id: string;
   application_id: string;
   name: string;
+  parent_id?: string;
   status: TransactionStatus;
   type: TransactionType;
   start_time: Time;

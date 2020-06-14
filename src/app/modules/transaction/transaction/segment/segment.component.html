@@ -1,0 +1,39 @@
+<ng-container *ngIf="getPosition() as information">
+  <div class="content">
+    <div class="info" [style.paddingLeft]="information.padding">
+      <p>
+        <span>TransationId: {{ transaction.id }}</span>
+        <button *ngIf="level != 1" mat-icon-button (click)="goToPage(transaction.id)">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+      </p>
+      <p>Name: {{ transaction.name }}</p>
+    </div>
+    <div class="progress">
+      <ng-container>
+        <div
+          class="caret"
+          [style.left]="information.left"
+          [style.width]="information.width"
+          [class.fail]="transaction.status == failStatus"
+        >
+          <div class="left">{{ information.leftTime | date: 'hh:mm:ss' }}</div>
+          <div class="right">{{ information.rightTime | date: 'hh:mm:ss' }}</div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <ng-container *ngIf="dictChildren[transaction.id]">
+    <sqd-transaction-segment
+      *ngFor="let transaction of dictChildren[transaction.id]"
+      [transaction]="transaction"
+      [min]="min"
+      [max]="max"
+      [dictChildren]="dictChildren"
+      [level]="level + 1"
+    ></sqd-transaction-segment>
+  </ng-container>
+</ng-container>
