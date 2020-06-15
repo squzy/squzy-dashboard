@@ -121,7 +121,9 @@
           <ng-container
             *ngSwitchCase="groupByList.GROUP_TRANSACTION_UNSPECIFIED"
           >{{ 'ENUMS.TRANSACTIONS.TYPE.' + item.key | translate }}</ng-container>
-          <ng-container *ngSwitchDefault>{{ item.key }}</ng-container>
+          <ng-container
+            *ngSwitchDefault
+          >{{ item.key ? item.key : ('MODULES.APPLICATIONS.TRANSACTION_GROUP.MISSING_INFORMATION' | translate) }}</ng-container>
         </ng-container>
       </mat-list-item>
     </mat-list>

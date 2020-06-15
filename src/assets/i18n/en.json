@@ -209,7 +209,8 @@
         "MAX_TIME": "Max time",
         "SUCCESS_RATIO": "Success ration",
         "THROUGHPUT": "Throughput",
-        "SELECT_GROUP": "Select any group in table"
+        "SELECT_GROUP": "Select any group in table",
+        "MISSING_INFORMATION": "No information"
       },
       "TABLE": {
         "ID": "Id",
