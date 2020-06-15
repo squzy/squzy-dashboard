@@ -9,6 +9,19 @@ mat-nav-list {
     }
   }
 }
+mat-drawer::ng-deep {
+  .mat-drawer-inner-container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+  .lang {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 100px;
+  }
+}
+
 .spacer {
   flex: 1 1 auto;
 }
