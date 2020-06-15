@@ -28,19 +28,15 @@ export class ApplicationComponent implements OnDestroy {
   navLinks = [
     {
       path: './list',
-      label: this.translateService.instant('MODULES.APPLICATIONS.MENU.LIST'),
+      label: 'MODULES.APPLICATIONS.MENU.LIST',
     },
     {
       path: './overview',
-      label: this.translateService.instant('MODULES.APPLICATIONS.MENU.OVERVIEW'),
+      label: 'MODULES.APPLICATIONS.MENU.OVERVIEW',
     },
   ];
 
-  constructor(
-    private route: ActivatedRoute,
-    private applicationService: ApplicationsService,
-    private translateService: TranslateService,
-  ) {}
+  constructor(private route: ActivatedRoute, private applicationService: ApplicationsService) {}
 
   ngOnDestroy() {
     this.destoryed$.next();
