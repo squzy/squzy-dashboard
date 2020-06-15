@@ -8,6 +8,7 @@ import { TransactionSegmentComponent } from './transaction/segment/segment.compo
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   {
@@ -24,6 +25,7 @@ const routes: Routes = [
     MatIconModule,
     MatButtonModule,
     MatDividerModule,
+    TranslateModule.forChild({}),
   ],
   entryComponents: [],
   providers: [TransactionService],

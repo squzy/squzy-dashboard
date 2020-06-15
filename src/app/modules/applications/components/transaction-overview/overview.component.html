@@ -1,35 +1,37 @@
 <ng-container [queryParamGroup]="queryFilterGroup">
   <mat-form-field>
-    <mat-label>Group by</mat-label>
+    <mat-label>{{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.GROUP_BY' | translate }}</mat-label>
     <mat-select (selectionChange)="onGroupByChange($event)" [value]="groupBy.value">
-      <mat-option *ngFor="let group of groupByGroups" [value]="group">
-        {{
-        toSortBy(group)
-        }}
-      </mat-option>
+      <mat-option
+        *ngFor="let group of groupByGroups"
+        [value]="group"
+      >{{ 'ENUMS.TRANSACTIONS.GROUP_BY.' + group | translate }}</mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field>
-    <mat-label>Type</mat-label>
+    <mat-label>{{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.TYPE' | translate }}</mat-label>
     <mat-select (selectionChange)="onTypeChange($event)" [value]="type.value">
-      <mat-option *ngFor="let type of types" [value]="type">{{ toType(type) }}</mat-option>
+      <mat-option *ngFor="let type of types" [value]="type">
+        {{
+        'ENUMS.TRANSACTIONS.TYPE.' + type | translate
+        }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field>
-    <mat-label>Status</mat-label>
+    <mat-label>{{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.STATUS' | translate }}</mat-label>
     <mat-select (selectionChange)="onStatusChange($event)" [value]="status.value">
-      <mat-option *ngFor="let status of statuses" [value]="status">
-        {{
-        toStatus(status)
-        }}
-      </mat-option>
+      <mat-option
+        *ngFor="let status of statuses"
+        [value]="status"
+      >{{ 'ENUMS.TRANSACTIONS.STATUS.' + status | translate }}</mat-option>
     </mat-select>
   </mat-form-field>
   <br>
   <mat-form-field>
-    <mat-label>From:</mat-label>
+    <mat-label>{{ 'LABELS.FROM' | translate }}:</mat-label>
     <input
       matInput
       [owlDateTimeTrigger]="dateFromComponent"
@@ -50,7 +52,7 @@
     <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateFromComponent></owl-date-time>
   </mat-form-field>
   <mat-form-field>
-    <mat-label>To:</mat-label>
+    <mat-label>{{ 'LABELS.TO' | translate }}:</mat-label>
     <input
       matInput
       [owlDateTimeTrigger]="dateToComponent"
@@ -75,25 +77,53 @@
   <mat-drawer [position]="'end'" [mode]="'over'">
     <ng-container *ngIf="currentStats">
       <p>
-        Count: {{ currentStats.count }}
-        <button mat-icon-button (click)="goToList()">
+        {{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.COUNT' | translate }}: {{ currentStats.count }}
+        <button
+          mat-icon-button
+          (click)="goToList()"
+        >
           <mat-icon>open_in_new</mat-icon>
         </button>
       </p>
-      <p>Average time: {{ round(currentStats.average_time) || 0 }} sec</p>
-      <p>Min time: {{ round(currentStats.min_time) || 0 }} sec</p>
-      <p>Max time: {{ round(currentStats.max_time) || 0 }} sec</p>
-      <p>Success ration: {{ percent(currentStats.success_ratio) || 0 }}</p>
-      <p>Throughput: {{ round(currentStats.throughput) || 0 }} count/min</p>
+      <p>
+        {{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.AVG_TIME' | translate }}:
+        {{ round(currentStats.average_time / SECOND) || 0 }} {{ 'LABELS.SECOND' | translate }}
+      </p>
+      <p>
+        {{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.MIN_TIME' | translate }}:
+        {{ round(currentStats.min_time / SECOND) || 0 }} {{ 'LABELS.SECOND' | translate }}
+      </p>
+      <p>
+        {{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.MAX_TIME' | translate }}:
+        {{ round(currentStats.max_time / SECOND) || 0 }} {{ 'LABELS.SECOND' | translate }}
+      </p>
+      <p>
+        {{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.SUCCESS_RATIO' | translate }}:
+        {{ percent(currentStats.success_ratio) || 0 }}
+      </p>
+      <p>
+        {{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.THROUGHPUT' | translate }}:
+        {{ round(currentStats.throughput) || 0 }} {{ 'LABELS.THROUGHPUT' | translate }}
+      </p>
     </ng-container>
   </mat-drawer>
   <mat-drawer-content>
     <mat-list role="list">
-      <div mat-subheader>Select transaction group</div>
+      <div mat-subheader>{{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.SELECT_GROUP' | translate }}</div>
       <mat-list-item
         *ngFor="let item of groupList$ | async | keyvalue; trackBy: trackBy"
         (click)="select(item.value, item.key)"
-      >{{ item.key }}</mat-list-item>
+      >
+        <ng-container [ngSwitch]="currentGroupByKey">
+          <ng-container
+            *ngSwitchCase="groupByList.BY_TYPE"
+          >{{ 'ENUMS.TRANSACTIONS.TYPE.' + item.key | translate }}</ng-container>
+          <ng-container
+            *ngSwitchCase="groupByList.GROUP_TRANSACTION_UNSPECIFIED"
+          >{{ 'ENUMS.TRANSACTIONS.TYPE.' + item.key | translate }}</ng-container>
+          <ng-container *ngSwitchDefault>{{ item.key }}</ng-container>
+        </ng-container>
+      </mat-list-item>
     </mat-list>
   </mat-drawer-content>
 </mat-drawer-container>

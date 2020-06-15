@@ -1,9 +1,17 @@
-import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { filter, switchMap, map } from 'rxjs/operators';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+  OnDestroy,
+} from '@angular/core';
+import { BehaviorSubject, Subject, Observable, combineLatest } from 'rxjs';
+import { filter, switchMap, map, takeUntil } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
 import { AgentsService } from 'src/app/modules/agents/services/agents.service';
-import { timeToDate } from 'src/app/shared/date/date';
+import { timeToDate, FormRangeValue } from 'src/app/shared/date/date';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'sqd-disks-stat',
@@ -11,15 +19,25 @@ import { timeToDate } from 'src/app/shared/date/date';
   styleUrls: ['./disks-stat.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DisksStatComponent implements OnChanges {
+export class DisksStatComponent implements OnChanges, OnDestroy {
+  private destroyed$ = new Subject();
+
   @Input() agentId: string;
 
-  private _agentId$ = new BehaviorSubject(this.agentId);
+  @Input() range: FormRangeValue;
 
-  private getDiskStream$ = this._agentId$.pipe(
-    filter((v) => !!v),
-    switchMap((agentId) => this.agentsService.getDisksStats(agentId)),
-    filter((v) => !!v),
+  private range$ = new BehaviorSubject<FormRangeValue>(null);
+
+  private _agentId$ = new BehaviorSubject(null);
+
+  private getDiskStream$ = combineLatest(
+    this._agentId$.pipe(filter((v) => !!v)),
+    this.range$.pipe(filter((v) => !!v)),
+  ).pipe(
+    switchMap(([agentId, range]) =>
+      this.agentsService.getDisksStats(agentId, range.dateFrom, range.dateTo),
+    ),
+    takeUntil(this.destroyed$),
   );
 
   private _defaultOptions: ChartOptions = {
@@ -31,10 +49,6 @@ export class DisksStatComponent implements OnChanges {
             unit: 'minute',
           },
           stacked: true,
-
-          ticks: {
-            source: 'data',
-          },
           display: true,
         },
       ],
@@ -52,6 +66,9 @@ export class DisksStatComponent implements OnChanges {
 
   disksCharts$ = this.getDiskStream$.pipe(
     map((stats) => {
+      if (!stats) {
+        return [];
+      }
       const labels = [];
       const datasets = {};
       stats.forEach((item) => {
@@ -76,7 +93,7 @@ export class DisksStatComponent implements OnChanges {
           ...this._defaultOptions,
           title: {
             display: true,
-            text: `Path: ${disk}`,
+            text: `${this.translateService.instant('MODULES.STATS.DISK.PATH')}: ${disk}`,
           },
         },
         labels,
@@ -87,13 +104,23 @@ export class DisksStatComponent implements OnChanges {
         })),
       }));
     }),
+    takeUntil(this.destroyed$),
   );
 
-  constructor(private agentsService: AgentsService) {}
+  constructor(private agentsService: AgentsService, private translateService: TranslateService) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if ('agentId' in changes) {
       this._agentId$.next(changes.agentId.currentValue);
     }
+
+    if ('range' in changes) {
+      this.range$.next(changes.range.currentValue);
+    }
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

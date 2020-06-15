@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, switchMap, takeUntil } from 'rxjs/operators';
 import { ApplicationsService } from '../../services/applications.service';
-import { ApplicationStatus, statusToString } from 'src/app/shared/enums/application.type';
+import { ApplicationStatus } from 'src/app/shared/enums/application.type';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -40,9 +40,5 @@ export class ApplicationComponent implements OnDestroy {
   ngOnDestroy() {
     this.destoryed$.next();
     this.destoryed$.complete();
-  }
-
-  toStatus(status: ApplicationStatus) {
-    return statusToString(status);
   }
 }

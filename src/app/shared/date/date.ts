@@ -8,6 +8,11 @@ export interface Time {
   nanos: number;
 }
 
+export interface FormRangeValue {
+  dateFrom: Date;
+  dateTo: Date;
+}
+
 export const minusSecond = (unixDate: number, seconds: number): Date => {
   return new Date(unixDate - seconds * SECOND);
 };

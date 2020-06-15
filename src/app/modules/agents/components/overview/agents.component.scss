@@ -77,6 +77,11 @@ $min-width: 160px;
   .content {
     margin: 15px 15px 0 15px;
     flex: 1 1;
+    .date-form {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+    }
     .checkers-layout {
       flex: 1 1;
     }

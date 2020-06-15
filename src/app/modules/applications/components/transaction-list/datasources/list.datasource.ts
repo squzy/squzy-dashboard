@@ -43,7 +43,7 @@ export class TransactionListSource implements DataSource<Transaction> {
     limit: number = 20,
     sortBy: TransactionListSortBy = TransactionListSortBy.SORT_TRANSACTION_LIST_UNSPECIFIED,
     soryDirection: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
-    status: TransactionStatus = TransactionStatus.Unspecified,
+    status: TransactionStatus = TransactionStatus.TRANSACTION_CODE_UNSPECIFIED,
     type: TransactionType = TransactionType.TRANSACTION_TYPE_UNSPECIFIED,
     filter: TransactionListFilters = {},
   ) {

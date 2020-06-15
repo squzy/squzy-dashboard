@@ -9,14 +9,11 @@ import {
 import { map, switchMap, tap, takeUntil, catchError, share } from 'rxjs/operators';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { ApplicationsService, ITransactionGroup } from '../../services/applications.service';
-import { minusMinute } from 'src/app/shared/date/date';
+import { minusMinute, SECOND } from 'src/app/shared/date/date';
 import {
   TransactionGroup,
-  groupTypesToString,
   TransactionType,
-  typeToString,
   TransactionStatus,
-  statusToString,
   TransactionTypes,
 } from 'src/app/shared/enums/transaction.type';
 import { combineLatest, Subject, of } from 'rxjs';
@@ -56,12 +53,12 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
   initValue = getFilterValue();
 
   groupByGroups = [
-    TransactionGroup.Unspecified,
-    TransactionGroup.Type,
-    TransactionGroup.Method,
-    TransactionGroup.Name,
-    TransactionGroup.Host,
-    TransactionGroup.Path,
+    TransactionGroup.GROUP_TRANSACTION_UNSPECIFIED,
+    TransactionGroup.BY_TYPE,
+    TransactionGroup.BY_METHOD,
+    TransactionGroup.BY_NAME,
+    TransactionGroup.BY_HOST,
+    TransactionGroup.BY_PATH,
   ];
 
   queryFilterGroup = this.qpb.group({
@@ -74,7 +71,7 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
       deserialize: (value) => (value ? new Date(value) : null),
     }),
     groupBy: this.qpb.numberParam('grouBy', {
-      emptyOn: TransactionGroup.Unspecified,
+      emptyOn: TransactionGroup.GROUP_TRANSACTION_UNSPECIFIED,
       serialize: (value: TransactionGroup) => `${value}`,
       deserialize: (value) => +value,
     }),
@@ -84,7 +81,7 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
       deserialize: (value) => +value,
     }),
     status: this.qpb.numberParam('status', {
-      emptyOn: TransactionStatus.Unspecified,
+      emptyOn: TransactionStatus.TRANSACTION_CODE_UNSPECIFIED,
       serialize: (value: TransactionStatus) => `${value}`,
       deserialize: (value) => +value,
     }),
@@ -103,22 +100,27 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
   }
 
   statuses = [
-    TransactionStatus.Unspecified,
-    TransactionStatus.Failed,
-    TransactionStatus.Successfull,
+    TransactionStatus.TRANSACTION_CODE_UNSPECIFIED,
+    TransactionStatus.TRANSACTION_FAILED,
+    TransactionStatus.TRANSACTION_SUCCESSFUL,
   ];
 
   types = TransactionTypes;
 
+  groupByList = TransactionGroup;
+
   currentStats: ITransactionGroup;
 
   currentGroupKey: string;
+
+  currentGroupByKey: TransactionGroup = TransactionGroup.GROUP_TRANSACTION_UNSPECIFIED;
 
   groupList$ = combineLatest(this.currentApplicationId$, this.queryFilterGroup.valueChanges).pipe(
     tap(() => {
       this.drawer.close();
       this.currentStats = null;
     }),
+    tap(([id, { from, to, groupBy, type, status }]) => (this.currentGroupByKey = groupBy)),
     switchMap(([id, { from, to, groupBy, type, status }]) =>
       this.applicationService
         .getTrasnsactionsGroup(id, from, to, groupBy, status, type)
@@ -127,6 +129,8 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
     catchError(() => of({})),
     takeUntil(this.destroyed$),
   );
+
+  SECOND = SECOND;
 
   constructor(
     private route: ActivatedRoute,
@@ -142,18 +146,6 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.destroyed$.next();
     this.destroyed$.complete();
-  }
-
-  toSortBy(sortBy: TransactionGroup) {
-    return groupTypesToString(sortBy);
-  }
-
-  toType(type: TransactionType) {
-    return typeToString(type);
-  }
-
-  toStatus(status: TransactionStatus) {
-    return statusToString(status);
   }
 
   select(value: ITransactionGroup, key: string) {
@@ -194,22 +186,22 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
     queryParams[TransactionsListComponent.queryParam.status] = value.status;
     queryParams[TransactionsListComponent.queryParam.type] = value.type;
     switch (value.groupBy) {
-      case TransactionGroup.Unspecified:
+      case TransactionGroup.GROUP_TRANSACTION_UNSPECIFIED:
         break;
-      case TransactionGroup.Host:
+      case TransactionGroup.BY_HOST:
         queryParams[TransactionsListComponent.queryParam.host] = this.currentGroupKey;
         break;
-      case TransactionGroup.Method:
+      case TransactionGroup.BY_METHOD:
         queryParams[TransactionsListComponent.queryParam.method] = this.currentGroupKey;
         break;
-      case TransactionGroup.Name:
+      case TransactionGroup.BY_NAME:
         queryParams[TransactionsListComponent.queryParam.name] = this.currentGroupKey;
         break;
-      case TransactionGroup.Path:
+      case TransactionGroup.BY_PATH:
         queryParams[TransactionsListComponent.queryParam.path] = this.currentGroupKey;
         break;
 
-      case TransactionGroup.Type:
+      case TransactionGroup.BY_TYPE:
         queryParams[TransactionsListComponent.queryParam.type] =
           TransactionType[this.currentGroupKey];
         break;

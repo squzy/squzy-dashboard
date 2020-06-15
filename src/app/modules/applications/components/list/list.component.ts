@@ -13,8 +13,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { switchMap, takeUntil, debounceTime, map, distinctUntilChanged } from 'rxjs/operators';
-import { ApplicationStatus, statusToString } from 'src/app/shared/enums/application.type';
+import { ApplicationStatus } from 'src/app/shared/enums/application.type';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'sqd-list',
@@ -37,18 +38,22 @@ export class ListComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['select', 'id', 'name', 'host', 'status'];
 
-  constructor(private applicationsService: ApplicationsService, private router: Router) {}
+  constructor(
+    private applicationsService: ApplicationsService,
+    private router: Router,
+    private translateService: TranslateService,
+  ) {}
 
   ngOnInit() {
     this.dataSource.filterPredicate = (data: Application, filter: string) => {
-      return `${data.name ? data.name : ''}_${data.id}_${this.toStatus(data.status)}_${
-        data.host_name
-      }}`
+      return `${data.name ? data.name : ''}_${data.id}_${this.translateService.instant(
+        'ENUMS.APPLICATIONS.STATUS.' + data.status,
+      )}_${data.host_name}}`
         .toLocaleLowerCase()
         .includes(filter);
     };
     this.obs$.pipe(takeUntil(this.destroyed$)).subscribe((items) => {
-      this.dataSource.data = items;
+      this.dataSource.data = items || [];
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
@@ -79,16 +84,14 @@ export class ListComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
   }
 
-  toStatus(status: ApplicationStatus) {
-    return statusToString(status);
-  }
-
   private applyFilter(text: string) {
     this.dataSource.filter = text.toLocaleLowerCase();
   }
 
   enabled() {
-    const arr = this.selection.selected.filter((e) => e.status === ApplicationStatus.Disabled);
+    const arr = this.selection.selected.filter(
+      (e) => e.status === ApplicationStatus.APPLICATION_STATUS_DISABLED,
+    );
     if (!arr.length) {
       this.selection.clear();
     }
@@ -101,7 +104,9 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   disabled() {
-    const arr = this.selection.selected.filter((e) => e.status === ApplicationStatus.Enabled);
+    const arr = this.selection.selected.filter(
+      (e) => e.status === ApplicationStatus.APPLICATION_STATUS_ENABLED,
+    );
     if (!arr.length) {
       this.selection.clear();
     }
@@ -114,7 +119,9 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   archived() {
-    const arr = this.selection.selected.filter((e) => e.status !== ApplicationStatus.Archived);
+    const arr = this.selection.selected.filter(
+      (e) => e.status !== ApplicationStatus.APPLICATION_STATUS_ARCHIVED,
+    );
     if (!arr.length) {
       this.selection.clear();
     }

@@ -3,16 +3,18 @@ import { ActivatedRoute } from '@angular/router';
 import { map, tap, switchMap, takeUntil, share, mapTo, startWith } from 'rxjs/operators';
 import { FormBuilder, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import { minusMinute, SECOND, timeToDate, Time, diffInSec } from 'src/app/shared/date/date';
+import {
+  minusMinute,
+  SECOND,
+  timeToDate,
+  Time,
+  diffInSec,
+  FormRangeValue,
+  MS_TO_NANOS,
+} from 'src/app/shared/date/date';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { BehaviorSubject, combineLatest, Subject, timer, of } from 'rxjs';
-import {
-  CheckersService,
-  SchedulerStatus,
-  SchedulerResponseCode,
-  Scheduler,
-  HistoryItem,
-} from '../../services/checkers.service';
+import { CheckersService, Scheduler, HistoryItem } from '../../services/checkers.service';
 import { roundNumber, getRoundedPercent } from 'src/app/shared/numbers/numbers';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -22,11 +24,7 @@ import { dateFromToValidator } from 'src/app/shared/validators/date.validators';
 import { SchedulerSnapshotComponent } from './snapshot/snapshot.component';
 import { CheckerDataSource } from './datasource/checker.datasource';
 import { SortSchedulerList, angularSortDirectionMap } from 'src/app/shared/enums/sort.table';
-
-interface FormValue {
-  dateFrom: Date;
-  dateTo: Date;
-}
+import { SchedulerStatus, SchedulerResponseCode } from 'src/app/shared/enums/schedulers.type';
 
 class CrossFieldErrorMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -88,7 +86,7 @@ export class CheckerComponent implements OnInit, OnDestroy {
 
   responseStatuses = SchedulerResponseCode;
 
-  formValue$ = new BehaviorSubject<FormValue>(this.filterForm.value);
+  formValue$ = new BehaviorSubject<FormRangeValue>(this.filterForm.value);
 
   currentId$ = this.route.params.pipe(map((p) => p.id as string));
 
@@ -122,19 +120,19 @@ export class CheckerComponent implements OnInit, OnDestroy {
     ),
     map((value) => ({
       uptime: getRoundedPercent(value.uptime),
-      latency: roundNumber(value.latency / SECOND, 3),
+      latency: roundNumber(value.latency / (SECOND * MS_TO_NANOS), 3),
       dateFrom: value.from,
       dateTo: value.to,
     })),
   );
 
   statusCode = [
-    this.responseStatuses.UNSPECIFIED,
-    this.responseStatuses.Error,
+    this.responseStatuses.SCHEDULER_CODE_UNSPECIFIED,
+    this.responseStatuses.ERROR,
     this.responseStatuses.OK,
   ];
 
-  statusControl = new FormControl(this.responseStatuses.UNSPECIFIED);
+  statusControl = new FormControl(this.responseStatuses.SCHEDULER_CODE_UNSPECIFIED);
 
   constructor(
     private route: ActivatedRoute,
@@ -159,7 +157,7 @@ export class CheckerComponent implements OnInit, OnDestroy {
         switchMap(
           ([id, formValue, sort, page, status]: [
             string,
-            FormValue,
+            FormRangeValue,
             Sort,
             PageEvent,
             SchedulerResponseCode,
@@ -226,18 +224,6 @@ export class CheckerComponent implements OnInit, OnDestroy {
       .removeById(id)
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => this.refresh$.next(null));
-  }
-
-  toSchedulerStatus(status) {
-    return this.checkersService.toSchedulerStatus(status);
-  }
-
-  toResponseStatus(status) {
-    return this.checkersService.toSchedulerResponseStatus(status);
-  }
-
-  toType(type) {
-    return this.checkersService.toType(type);
   }
 
   toDate(time: Time) {

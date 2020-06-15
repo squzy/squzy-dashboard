@@ -1,12 +1,14 @@
 <mat-card>
   <ng-container *ngIf="currentApplication$ | async as app; else loading">
     <mat-card-header>
-      <mat-card-title>Application: {{ app.name }}</mat-card-title>
+      <mat-card-title>{{ 'MODULES.APPLICATIONS.PAGE.APPLICATION' | translate }}: {{ app.name }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <p>ID: {{ app.id }}</p>
-      <p *ngIf="app.host_name">Host: {{ app.host_name }}</p>
-      <p>Status: {{ toStatus(app.status) }}</p>
+      <p>{{ 'MODULES.APPLICATIONS.PAGE.ID' | translate }}: {{ app.id }}</p>
+      <p
+        *ngIf="app.host_name"
+      >{{ 'MODULES.APPLICATIONS.PAGE.HOST' | translate }}: {{ app.host_name }}</p>
+      <p>{{ 'MODULES.APPLICATIONS.PAGE.STATUS' | translate }}: {{ 'ENUMS.APPLICATIONS.STATUS.' + app.status | translate }}</p>
     </mat-card-content>
   </ng-container>
   <ng-template #loading>
@@ -18,7 +20,7 @@
 
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Transactions</mat-card-title>
+    <mat-card-title>{{ 'MODULES.APPLICATIONS.PAGE.TRANSACTIONS' | translate }}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <nav mat-tab-nav-bar [backgroundColor]="'accent'">
@@ -29,7 +31,7 @@
         routerLinkActive
         #rla="routerLinkActive"
         [active]="rla.isActive"
-      >{{link.label}}</a>
+      >{{ link.label }}</a>
     </nav>
     <router-outlet></router-outlet>
   </mat-card-content>

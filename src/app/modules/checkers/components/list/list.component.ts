@@ -22,6 +22,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AddCheckerService } from 'src/app/shared/modules/modals/add-cheker/add-checker.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'sqd-list',
@@ -48,13 +49,14 @@ export class ListComponent implements OnInit, OnDestroy {
     private checkersService: CheckersService,
     private router: Router,
     private addCheckerService: AddCheckerService,
+    private translateService: TranslateService,
   ) {}
 
   ngOnInit() {
     this.dataSource.filterPredicate = (data: Scheduler, filter: string) => {
-      return `${data.name ? data.name : ''}_${data.id}_${this.toStatus(data.status)}_${this.toType(
-        data.type,
-      )}`
+      return `${data.name ? data.name : ''}_${data.id}_${this.translateService.instant(
+        'ENUMS.CHECKERS.STATUS.' + data.status,
+      )}_${this.translateService.instant('ENUMS.CHECKERS.TYPE.' + data.type)}`
         .toLocaleLowerCase()
         .includes(filter);
     };
@@ -88,14 +90,6 @@ export class ListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.destroyed$.next();
-  }
-
-  toType(type) {
-    return this.checkersService.toType(type);
-  }
-
-  toStatus(status) {
-    return this.checkersService.toSchedulerStatus(status);
   }
 
   clickRow(row) {

@@ -23,6 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { QueryParamModule } from '@ngqp/core';
 import { ApplicationsService } from './services/applications.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   {
@@ -82,6 +83,7 @@ const routes: Routes = [
     MatIconModule,
     MatSidenavModule,
     QueryParamModule,
+    TranslateModule.forChild({}),
   ],
   entryComponents: [],
   providers: [ApplicationsService],

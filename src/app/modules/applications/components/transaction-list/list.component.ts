@@ -13,8 +13,6 @@ import {
   TransactionType,
   TransactionStatus,
   TransactionListSortBy,
-  typeToString,
-  statusToString,
   TransactionTypes,
 } from 'src/app/shared/enums/transaction.type';
 import { QueryParam, QueryParamBuilder } from '@ngqp/core';
@@ -124,7 +122,7 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
     [TransactionsListComponent.queryParam.status]: this.qpb.numberParam(
       TransactionsListComponent.queryParam.status,
       {
-        emptyOn: TransactionStatus.Unspecified,
+        emptyOn: TransactionStatus.TRANSACTION_CODE_UNSPECIFIED,
         serialize: (value: TransactionStatus) => `${value}`,
         deserialize: (value) => +value,
       },
@@ -216,9 +214,9 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
   }
 
   statuses = [
-    TransactionStatus.Unspecified,
-    TransactionStatus.Failed,
-    TransactionStatus.Successfull,
+    TransactionStatus.TRANSACTION_CODE_UNSPECIFIED,
+    TransactionStatus.TRANSACTION_FAILED,
+    TransactionStatus.TRANSACTION_SUCCESSFUL,
   ];
 
   transactionList$ = combineLatest(
@@ -319,16 +317,8 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
     return timeToDate(time);
   }
 
-  toType(type: TransactionType) {
-    return typeToString(type);
-  }
-
   clickRow(transaction: Transaction) {
     this.router.navigate(['transactions', transaction.id]);
-  }
-
-  toStatus(status: TransactionStatus) {
-    return statusToString(status);
   }
 
   getDuration(a: Time, b: Time) {

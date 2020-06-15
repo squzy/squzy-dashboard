@@ -1,10 +1,6 @@
 export enum ApplicationStatus {
-  Unspecified = 0,
-  Enabled = 1,
-  Disabled = 2,
-  Archived = 3,
-}
-
-export function statusToString(type: ApplicationStatus) {
-  return ApplicationStatus[type];
+  APPLICATION_STATUS_UNSPECIFIED = 0,
+  APPLICATION_STATUS_ENABLED = 1,
+  APPLICATION_STATUS_DISABLED = 2,
+  APPLICATION_STATUS_ARCHIVED = 3,
 }

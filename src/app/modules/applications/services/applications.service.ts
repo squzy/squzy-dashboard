@@ -60,7 +60,7 @@ export class ApplicationsService {
     limit: number = 20,
     sortBy: TransactionListSortBy = TransactionListSortBy.BY_TRANSACTION_START_TIME,
     soryDirection: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
-    status: TransactionStatus = TransactionStatus.Unspecified,
+    status: TransactionStatus = TransactionStatus.TRANSACTION_CODE_UNSPECIFIED,
     type: TransactionType = TransactionType.TRANSACTION_TYPE_UNSPECIFIED,
     filter: TransactionListFilters = {},
   ) {
@@ -89,8 +89,8 @@ export class ApplicationsService {
     applicationId: string,
     from: Date,
     to: Date,
-    groupBy: TransactionGroup = TransactionGroup.Unspecified,
-    status: TransactionStatus = TransactionStatus.Unspecified,
+    groupBy: TransactionGroup = TransactionGroup.GROUP_TRANSACTION_UNSPECIFIED,
+    status: TransactionStatus = TransactionStatus.TRANSACTION_CODE_UNSPECIFIED,
     type: TransactionType = TransactionType.TRANSACTION_TYPE_UNSPECIFIED,
   ) {
     return this.httpClient

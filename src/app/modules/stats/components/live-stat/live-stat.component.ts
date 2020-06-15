@@ -1,9 +1,17 @@
-import { Component, Input, SimpleChanges, OnChanges, ChangeDetectionStrategy } from '@angular/core';
-import { BehaviorSubject, timer } from 'rxjs';
-import { filter, switchMap, map, tap } from 'rxjs/operators';
+import {
+  Component,
+  Input,
+  SimpleChanges,
+  OnChanges,
+  ChangeDetectionStrategy,
+  OnDestroy,
+} from '@angular/core';
+import { BehaviorSubject, timer, Subject } from 'rxjs';
+import { filter, switchMap, map, tap, takeUntil, share } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
 import { AgentsService } from 'src/app/modules/agents/services/agents.service';
 import { AgentStatus } from 'src/app/shared/enums/agent.type';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'sqd-live-stat',
@@ -11,7 +19,9 @@ import { AgentStatus } from 'src/app/shared/enums/agent.type';
   styleUrls: ['./live-stat.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LiveStatComponent implements OnChanges {
+export class LiveStatComponent implements OnChanges, OnDestroy {
+  private destroyed$ = new Subject();
+
   @Input() agentId: string;
 
   private _agentId$ = new BehaviorSubject(this.agentId);
@@ -31,7 +41,7 @@ export class LiveStatComponent implements OnChanges {
       },
       title: {
         display: true,
-        text: 'Disks Statistic',
+        text: this.translateService.instant('MODULES.STATS.LIVE.DISK_STAT'),
       },
       legend: {
         display: false,
@@ -43,7 +53,7 @@ export class LiveStatComponent implements OnChanges {
       },
       title: {
         display: true,
-        text: 'Net Stats',
+        text: this.translateService.instant('MODULES.STATS.LIVE.NET_STAT'),
       },
       legend: {
         display: false,
@@ -62,7 +72,7 @@ export class LiveStatComponent implements OnChanges {
       },
       title: {
         display: true,
-        text: 'Virtual Memory stats',
+        text: this.translateService.instant('MODULES.STATS.LIVE.VIRTUAL_MEMORY'),
       },
       legend: {
         display: false,
@@ -90,7 +100,7 @@ export class LiveStatComponent implements OnChanges {
       },
       title: {
         display: true,
-        text: 'Swap Memory stats',
+        text: this.translateService.instant('MODULES.STATS.LIVE.SWAP_MEMORY'),
       },
       legend: {
         display: false,
@@ -119,7 +129,7 @@ export class LiveStatComponent implements OnChanges {
       },
       title: {
         display: true,
-        text: 'CPU Loading',
+        text: this.translateService.instant('MODULES.STATS.LIVE.CPU_LOADING'),
       },
       legend: {
         display: false,
@@ -143,10 +153,14 @@ export class LiveStatComponent implements OnChanges {
 
   private agentId_ = this._agentId$.pipe(filter((v) => !!v));
 
-  agentInfo$ = this.agentId_.pipe(switchMap((id) => this.agentsService.getById(id)));
+  agentInfo$ = this.agentId_.pipe(
+    switchMap((id) => this.agentsService.getById(id)),
+    share(),
+    takeUntil(this.destroyed$),
+  );
 
-  liveStats$ = this.agentId_.pipe(
-    switchMap((agentId) => timer(0, 10000).pipe(map(() => agentId))),
+  liveStats$ = this.agentInfo$.pipe(
+    switchMap((agentInfo) => timer(0, agentInfo.interval * 1000).pipe(map(() => agentInfo.id))),
     switchMap((agentId) => this.agentsService.getLiveStat(agentId)),
     map((stats) => {
       if (!stats) {
@@ -254,7 +268,9 @@ export class LiveStatComponent implements OnChanges {
         cpuChart: (() => {
           return stats.cpu_info.cpus.reduce(
             (prev, cur, index) => {
-              prev.labels.push(`CPU ${index + 1}`);
+              prev.labels.push(
+                `${this.translateService.instant('MODULES.STATS.CPU.CPU')} ${index + 1}`,
+              );
               prev.datasets[0].data.push(cur.load / 100);
               return prev;
             },
@@ -270,9 +286,10 @@ export class LiveStatComponent implements OnChanges {
         })(),
       };
     }),
+    takeUntil(this.destroyed$),
   );
 
-  constructor(private agentsService: AgentsService) {}
+  constructor(private agentsService: AgentsService, private translateService: TranslateService) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if ('agentId' in changes) {
@@ -280,7 +297,8 @@ export class LiveStatComponent implements OnChanges {
     }
   }
 
-  statusToString(status: AgentStatus) {
-    return this.agentsService.statusToString(status);
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

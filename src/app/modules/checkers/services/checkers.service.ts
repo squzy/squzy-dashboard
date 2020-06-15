@@ -1,23 +1,16 @@
 import { Injectable } from '@angular/core';
-import { of, Observable } from 'rxjs';
-import { MINUTE, SECOND, Time } from 'src/app/shared/date/date';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, retry } from 'rxjs/operators';
-import { Types, SelectorTypes } from 'src/app/shared/enums/schedulers.type';
+import { Observable } from 'rxjs';
+import { Time } from 'src/app/shared/date/date';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import {
+  Types,
+  SelectorTypes,
+  SchedulerStatus,
+  SchedulerResponseCode,
+} from 'src/app/shared/enums/schedulers.type';
 import { SortSchedulerList, SortDirection } from 'src/app/shared/enums/sort.table';
 import { setQueryParams, queryParam } from 'src/app/shared/utils/http.utils';
-
-export enum SchedulerStatus {
-  Runned = 1,
-  Stopped = 2,
-  Removed = 3,
-}
-
-export enum SchedulerResponseCode {
-  UNSPECIFIED = 0,
-  OK = 1,
-  Error = 2,
-}
 
 export interface SchedulerUptime {
   uptime: number;
@@ -81,14 +74,16 @@ export interface HistoryPaginated {
   snapshots: Array<HistoryItem>;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class CheckersService {
   constructor(private httpClient: HttpClient) {}
 
   getList() {
     return this.httpClient
       .get<Array<Scheduler>>('/api/v1/schedulers')
-      .pipe(map((list) => (list || []).filter((item) => item.status !== SchedulerStatus.Removed)));
+      .pipe(map((list) => (list || []).filter((item) => item.status !== SchedulerStatus.REMOVED)));
   }
 
   addChecker(req) {
@@ -139,7 +134,7 @@ export class CheckersService {
     page: number = 0,
     sortBy: SortSchedulerList = SortSchedulerList.SORT_SCHEDULER_LIST_UNSPECIFIED,
     direction: SortDirection = SortDirection.SORT_DIRECTION_UNSPECIFIED,
-    status: SchedulerResponseCode = SchedulerResponseCode.UNSPECIFIED,
+    status: SchedulerResponseCode = SchedulerResponseCode.SCHEDULER_CODE_UNSPECIFIED,
   ) {
     const params = setQueryParams(
       queryParam('sort_by', sortBy),
@@ -153,17 +148,5 @@ export class CheckersService {
     return this.httpClient.get<HistoryPaginated>(`/api/v1/schedulers/${id}/history`, {
       params,
     });
-  }
-
-  toSchedulerResponseStatus(status) {
-    return SchedulerResponseCode[status];
-  }
-
-  toSchedulerStatus(status) {
-    return SchedulerStatus[status];
-  }
-
-  toType(type) {
-    return Types[type];
   }
 }

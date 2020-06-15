@@ -1,43 +1,48 @@
 <div class="agent-info" *ngIf="agentInfo$ | async as agentInfo">
   <p>
-    <strong>Id</strong>
+    <strong>{{ 'MODULES.STATS.LIVE.ID' | translate }}</strong>
     : {{ agentInfo.id }}
   </p>
+
   <p>
-    <strong>Status</strong>
-    : {{ statusToString(agentInfo.status) }}
+    <strong>{{ 'MODULES.STATS.LIVE.INTERVAL' | translate }}</strong>
+    : {{ agentInfo.interval }} sec
+  </p>
+  <p>
+    <strong>{{ 'MODULES.STATS.LIVE.STATUS' | translate }}</strong>
+    : {{ 'ENUMS.AGENTS.STATUS.' + agentInfo.status | translate }}
   </p>
   <p *ngIf="agentInfo.agent_name">
-    <strong>Name</strong>
+    <strong>{{ 'MODULES.STATS.LIVE.NAME' | translate }}</strong>
     : {{ agentInfo.agent_name }}
   </p>
   <ng-container *ngIf="agentInfo.host_info">
     <p>
-      <strong>Host</strong>
+      <strong>{{ 'MODULES.STATS.LIVE.HOST' | translate }}</strong>
       : {{ agentInfo.host_info.host_name }}
     </p>
     <p>
-      <strong>OS</strong>
+      <strong>{{ 'MODULES.STATS.LIVE.OS' | translate }}</strong>
       : {{ agentInfo.host_info.os }}
     </p>
     <ng-container *ngIf="agentInfo.host_info.platform_info">
       <p>
-        <strong>Platform</strong>
+        <strong>{{ 'MODULES.STATS.LIVE.PLATFORM' | translate }}</strong>
         : {{ agentInfo.host_info.platform_info.name }}
       </p>
       <p>
-        <strong>Family</strong>
+        <strong>{{ 'MODULES.STATS.LIVE.FAMILY' | translate }}</strong>
         : {{ agentInfo.host_info.platform_info.family }}
       </p>
       <p>
-        <strong>Version</strong>
+        <strong>{{ 'MODULES.STATS.LIVE.VERSION' | translate }}</strong>
         : {{ agentInfo.host_info.platform_info.version }}
       </p>
     </ng-container>
   </ng-container>
 </div>
 <ng-container *ngIf="liveStats$ | async as stats; else noStats">
-  <h3>Live timestamp: {{ stats.timestamp | date: 'medium' }}</h3>
+  <h3>{{ 'MODULES.STATS.LIVE.LIVE_STAMP' | translate }}: {{ stats.timestamp | date: 'd/M/yyyy HH:mm:ss' }}</h3>
   <div class="charts">
     <div class="cpu">
       <canvas
@@ -93,5 +98,5 @@
   </div>
 </ng-container>
 <ng-template #noStats>
-  <h3>Waiting recieved stat from server</h3>
+  <h3>{{ 'MODULES.STATS.LIVE.WAITING_LABEL' | translate }}</h3>
 </ng-template>

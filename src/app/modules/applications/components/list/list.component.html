@@ -1,12 +1,24 @@
 <mat-card>
   <mat-card-header>
-    <button [disabled]="!selection.selected.length" mat-stroked-button (click)="enabled()">Enable</button>
-    <button [disabled]="!selection.selected.length" mat-stroked-button (click)="disabled()">Disable</button>
-    <button [disabled]="!selection.selected.length" mat-stroked-button (click)="archived()">Archived</button>
+    <button
+      [disabled]="!selection.selected.length"
+      mat-stroked-button
+      (click)="enabled()"
+    >{{ 'MODULES.APPLICATIONS.TABLE.ENABLE' | translate }}</button>
+    <button
+      [disabled]="!selection.selected.length"
+      mat-stroked-button
+      (click)="disabled()"
+    >{{ 'MODULES.APPLICATIONS.TABLE.DISABLE' | translate }}</button>
+    <button
+      [disabled]="!selection.selected.length"
+      mat-stroked-button
+      (click)="archived()"
+    >{{ 'MODULES.APPLICATIONS.TABLE.ARCHIVE' | translate }}</button>
   </mat-card-header>
   <mat-card-content>
     <mat-form-field>
-      <mat-label>Filter</mat-label>
+      <mat-label>{{ 'MODULES.APPLICATIONS.TABLE.FILTER' | translate }}</mat-label>
       <input matInput #filterInput>
     </mat-form-field>
     <table
@@ -34,27 +46,42 @@
       </ng-container>
 
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>ID</th>
-        <td mat-cell *matCellDef="let element">{{element.id}}</td>
+        <th mat-header-cell *matHeaderCellDef>{{ 'MODULES.APPLICATIONS.TABLE.ID' | translate }}</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
       </ng-container>
 
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let element">{{element.name ? element.name : "-"}}</td>
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+        >{{ 'MODULES.APPLICATIONS.TABLE.NAME' | translate }}</th>
+        <td mat-cell *matCellDef="let element">{{ element.name ? element.name : '-' }}</td>
       </ng-container>
 
       <ng-container matColumnDef="host">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Host</th>
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+        >{{ 'MODULES.APPLICATIONS.TABLE.HOST' | translate }}</th>
         <td mat-cell *matCellDef="let element">{{ element.host_name ? element.host_name : '-' }}</td>
       </ng-container>
 
       <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-        <td mat-cell *matCellDef="let element">{{toStatus(element.status)}}</td>
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+        >{{ 'MODULES.APPLICATIONS.TABLE.STATUS' | translate }}</th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+        >{{ 'ENUMS.APPLICATIONS.STATUS.' + element.status | translate }}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="clickRow(row)"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="clickRow(row)"></tr>
     </table>
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </mat-card-content>

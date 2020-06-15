@@ -3,7 +3,7 @@
     <mat-grid-tile>
       <canvas
         baseChart
-        [datasets]="stats[memoryType].dataset"
+        [datasets]="stats[memoryType] && stats[memoryType].dataset || []"
         chartType="line"
         [labels]="stats.labels"
         [options]="optionsByType[memoryType]"

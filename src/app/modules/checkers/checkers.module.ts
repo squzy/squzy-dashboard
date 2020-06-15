@@ -21,6 +21,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SchedulerConfigComponent } from './components/checker/config/config.component';
 import { SchedulerSnapshotComponent } from './components/checker/snapshot/snapshot.component';
 import { MatSelectModule } from '@angular/material/select';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   {
@@ -45,8 +46,8 @@ const routes: Routes = [
     MatSelectModule,
     MatTableModule,
     MatPaginatorModule,
-    MatFormFieldModule,
     MatCardModule,
+    MatFormFieldModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     ReactiveFormsModule,
@@ -58,6 +59,7 @@ const routes: Routes = [
     MatIconModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
+    TranslateModule.forChild({}),
   ],
   providers: [CheckersService],
   declarations: [

@@ -26,7 +26,7 @@ export class TransactionSegmentComponent {
   @Input() level = 1;
   @Input() dictChildren: { [key: string]: Array<Transaction> } = {};
 
-  failStatus = TransactionStatus.Failed;
+  failStatus = TransactionStatus.TRANSACTION_FAILED;
 
   constructor(private router: Router) {}
   getPosition(): Information {
@@ -51,5 +51,9 @@ export class TransactionSegmentComponent {
 
   goToPage(id: string) {
     this.router.navigate(['transactions', id]);
+  }
+
+  trackByFn(item: Transaction) {
+    return item.id;
   }
 }

@@ -11,12 +11,7 @@ import { map, switchMap, tap, takeUntil } from 'rxjs/operators';
 import { Transaction } from 'src/app/shared/interfaces/transaction.interfaces';
 import { Subject } from 'rxjs';
 import { timeToDate, Time } from 'src/app/shared/date/date';
-import {
-  TransactionStatus,
-  statusToString,
-  typeToString,
-  TransactionType,
-} from 'src/app/shared/enums/transaction.type';
+import { TransactionStatus, TransactionType } from 'src/app/shared/enums/transaction.type';
 
 @Component({
   selector: 'sqd-transactions',
@@ -69,14 +64,6 @@ export class TransactionComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.transactions$.subscribe();
-  }
-
-  toStatus(status: TransactionStatus) {
-    return statusToString(status);
-  }
-
-  toType(type: TransactionType) {
-    return typeToString(type);
   }
 
   timeToDate(time: Time): Date {

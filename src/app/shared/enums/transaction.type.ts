@@ -1,16 +1,16 @@
 export enum TransactionGroup {
-  Unspecified = 0,
-  Type = 1,
-  Name = 2,
-  Method = 3,
-  Host = 4,
-  Path = 5,
+  GROUP_TRANSACTION_UNSPECIFIED = 0,
+  BY_TYPE = 1,
+  BY_NAME = 2,
+  BY_METHOD = 3,
+  BY_HOST = 4,
+  BY_PATH = 5,
 }
 
 export enum TransactionStatus {
-  Unspecified = 0,
-  Successfull = 1,
-  Failed = 2,
+  TRANSACTION_CODE_UNSPECIFIED = 0,
+  TRANSACTION_SUCCESSFUL = 1,
+  TRANSACTION_FAILED = 2,
 }
 
 export enum TransactionType {
@@ -42,16 +42,4 @@ export enum TransactionListSortBy {
   DURATION = 1,
   BY_TRANSACTION_START_TIME = 2,
   BY_TRANSACTION_END_TIME = 3,
-}
-
-export function typeToString(type: TransactionType) {
-  return TransactionType[type];
-}
-
-export function statusToString(status: TransactionStatus) {
-  return TransactionStatus[status];
-}
-
-export function groupTypesToString(group: TransactionGroup) {
-  return TransactionGroup[group];
 }

@@ -3,7 +3,7 @@
     <mat-card-header>
       <mat-card-title>Configuration</mat-card-title>
       <button
-        *ngIf="info.status === statuses.Stopped"
+        *ngIf="info.status === statuses.STOPPED"
         mat-icon-button
         aria-label="Run"
         matTooltip="Run"
@@ -13,7 +13,7 @@
         <mat-icon>play_arrow</mat-icon>
       </button>
       <button
-        *ngIf="info.status === statuses.Runned"
+        *ngIf="info.status === statuses.REMOVED"
         mat-icon-button
         aria-label="Pause"
         matTooltip="Pause"
@@ -23,7 +23,7 @@
         <mat-icon>pause</mat-icon>
       </button>
       <button
-        *ngIf="info.status !== statuses.Removed"
+        *ngIf="info.status !== statuses.REMOVED"
         mat-icon-button
         aria-label="Remove"
         matTooltip="Remove"
@@ -35,15 +35,15 @@
     </mat-card-header>
     <mat-card-content class="flex">
       <div class="column width-100">
-        <p>ID: {{ info.id }}</p>
+        <p>{{ 'MODULES.CHECKERS.PAGE.ID' | translate }}: {{ info.id }}</p>
       </div>
       <div class="column width-100" *ngIf="info.name">
-        <p>Name: {{ info.name }}</p>
+        <p>{{ 'MODULES.CHECKERS.PAGE.NAME' | translate }}: {{ info.name }}</p>
       </div>
       <div class="column width-50">
         <p>
-          Type:
-          <strong>{{ toType(info.type) }}</strong>
+          {{ 'MODULES.CHECKERS.PAGE.TYPE' | translate }}:
+          <strong>{{ 'ENUMS.CHECKERS.TYPE.' + info.type | translate }}</strong>
           <button
             (click)="showConfig(info)"
             mat-icon-button
@@ -54,30 +54,42 @@
           </button>
         </p>
         <p>
-          Status:
-          <strong>{{ toSchedulerStatus(info.status) }}</strong>
+          {{ 'MODULES.CHECKERS.PAGE.STATUS' | translate }}:
+          <strong>{{ 'ENUMS.CHECKERS.STATUS.' + info.status | translate }}</strong>
         </p>
       </div>
       <div class="column width-50 before-lint">
-        <p>Interval: {{ info.interval }} sec</p>
-        <p *ngIf="info.timeout">Timeout: {{ info.timeout }} sec</p>
+        <p>
+          {{ 'MODULES.CHECKERS.PAGE.INTERVAL' | translate }}: {{ info.interval }}
+          {{ 'LABELS.SECOND' | translate }}
+        </p>
+        <p *ngIf="info.timeout">
+          {{ 'MODULES.CHECKERS.PAGE.TIMEOUT' | translate }}: {{ info.timeout }}
+          {{ 'LABELS.SECOND' | translate }}
+        </p>
       </div>
     </mat-card-content>
   </mat-card>
   <mat-card class="flex flex-column width-50">
     <ng-container *ngIf="uptime$ | async as info; else loading">
       <mat-card-header>
-        <mat-card-title>Statistic</mat-card-title>
+        <mat-card-title>{{ 'MODULES.CHECKERS.PAGE.STATISTICS' | translate }}</mat-card-title>
       </mat-card-header>
       <mat-card-content class="flex">
         <div class="column width-100">
-          <p>{{ info.dateFrom | date: 'medium' }} - {{ info.dateTo | date: 'medium' }}</p>
+          <p>
+            {{ info.dateFrom | date: 'd/M/yyyy HH:mm:ss' }} -
+            {{ info.dateTo | date: 'd/M/yyyy HH:mm:ss' }}
+          </p>
         </div>
         <div class="column width-50">
-          <p>Uptime: {{ info.uptime }}</p>
+          <p>{{ 'MODULES.CHECKERS.PAGE.UPTIME' | translate }}: {{ info.uptime }}</p>
         </div>
         <div class="column width-50 before-lint">
-          <p>Latency: {{ info.latency }} sec</p>
+          <p>
+            {{ 'MODULES.CHECKERS.PAGE.LATENCY' | translate }}: {{ info.latency }}
+            {{ 'LABELS.SECOND' | translate }}
+          </p>
         </div>
       </mat-card-content>
     </ng-container>
@@ -93,7 +105,7 @@
   <mat-card-content class="flex">
     <form [formGroup]="filterForm">
       <mat-form-field>
-        <label for="dateFrom">From:</label>
+        <label for="dateFrom">{{ 'LABELS.FROM' | translate }}:</label>
         <input
           matInput
           [owlDateTimeTrigger]="dateFromComponent"
@@ -103,10 +115,14 @@
           [errorStateMatcher]="errorMatcher"
         >
         <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateFromComponent></owl-date-time>
-        <mat-error *ngIf="filterForm.hasError('dateToLessThenFrom')">Date to less then date from</mat-error>
+        <mat-error *ngIf="filterForm.hasError('dateToLessThenFrom')">
+          {{
+          'ERRORS.dateToLessThenFrom' | translate
+          }}
+        </mat-error>
       </mat-form-field>
       <mat-form-field>
-        <label for="dateTo">To:</label>
+        <label for="dateTo">{{ 'LABELS.TO' | translate }}:</label>
         <input
           matInput
           [owlDateTimeTrigger]="dateToComponent"
@@ -116,15 +132,26 @@
           [errorStateMatcher]="errorMatcher"
         >
         <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateToComponent></owl-date-time>
-        <mat-error *ngIf="filterForm.hasError('dateToLessThenFrom')">Date to less then date from</mat-error>
+        <mat-error *ngIf="filterForm.hasError('dateToLessThenFrom')">
+          {{
+          'ERRORS.dateToLessThenFrom' | translate
+          }}
+        </mat-error>
       </mat-form-field>
-      <button mat-stroked-button [disabled]="!filterForm.valid" (click)="onSubmit()">Apply</button>
+      <button
+        mat-stroked-button
+        [disabled]="!filterForm.valid"
+        (click)="onSubmit()"
+      >{{ 'LABELS.APPLY' | translate }}</button>
     </form>
   </mat-card-content>
 </mat-card>
 <mat-card class="flex flex-column">
   <mat-card-header *ngIf="formValue$ | async as currentTime">
-    <mat-card-title>{{ currentTime.dateFrom | date: 'medium' }} - {{ currentTime.dateTo | date: 'medium' }}</mat-card-title>
+    <mat-card-title>
+      {{ currentTime.dateFrom | date: 'd/M/yyyy HH:mm:ss' }} -
+      {{ currentTime.dateTo | date: 'd/M/yyyy HH:mm:ss' }}
+    </mat-card-title>
     <button
       matTooltip="Auto-refresh"
       matTooltipPosition="above"
@@ -140,38 +167,61 @@
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef>
           <mat-form-field>
-            <mat-label>Select status</mat-label>
+            <mat-label>{{ 'MODULES.CHECKERS.PAGE.SELECT_STATUS_CODE' | translate }}</mat-label>
             <mat-select [formControl]="statusControl">
-              <mat-option
-                *ngFor="let status of statusCode"
-                [value]="status"
-              >{{ toResponseStatus(status) }}</mat-option>
+              <mat-option *ngFor="let status of statusCode" [value]="status">
+                {{
+                'ENUMS.CHECKERS.STATUS_CODE.' + status | translate
+                }}
+              </mat-option>
             </mat-select>
           </mat-form-field>
         </th>
-        <td mat-cell *matCellDef="let element">{{ toResponseStatus(element.code) }}</td>
+        <td
+          mat-cell
+          *matCellDef="let element"
+        >{{ 'ENUMS.CHECKERS.STATUS_CODE.' + element.code | translate }}</td>
       </ng-container>
       <ng-container matColumnDef="startTime">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Time</th>
-        <td mat-cell *matCellDef="let element">{{ toDate(element.meta.start_time) | date: 'medium'}}</td>
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+        >{{ 'MODULES.CHECKERS.PAGE.START_TIME' | translate }}</th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+        >{{ toDate(element.meta.start_time) | date: 'd/M/yyyy HH:mm:ss' }}</td>
       </ng-container>
       <ng-container matColumnDef="endTime">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>End Time</th>
-        <td mat-cell *matCellDef="let element">{{ toDate(element.meta.end_time) | date: 'medium'}}</td>
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+        >{{ 'MODULES.CHECKERS.PAGE.END_TIME' | translate }}</th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+        >{{ toDate(element.meta.end_time) | date: 'd/M/yyyy HH:mm:ss' }}</td>
       </ng-container>
 
       <ng-container matColumnDef="latency">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Latency</th>
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+        >{{ 'MODULES.CHECKERS.PAGE.LATENCY' | translate }}</th>
         <td mat-cell *matCellDef="let element">
-          <ng-container
-            *ngIf="element.code != responseStatuses.Error; else errTempl"
-          >{{ getLatency(element.meta.end_time,element.meta.start_time ) }} sec</ng-container>
-          <ng-template #errTempl>Check return error</ng-template>
+          <ng-container *ngIf="element.code != responseStatuses.ERROR; else errTempl">
+            {{ getLatency(element.meta.end_time, element.meta.start_time) }}
+            {{ 'LABELS.SECOND' | translate }}
+          </ng-container>
+          <ng-template #errTempl>{{ 'MODULES.CHECKERS.PAGE.CHECKER_ERROR_MSG' | translate}}</ng-template>
         </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="clickRow(row)"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="clickRow(row)"></tr>
     </table>
     <mat-paginator [pageSizeOptions]="pageSizes" showFirstLastButtons></mat-paginator>
   </mat-card-content>

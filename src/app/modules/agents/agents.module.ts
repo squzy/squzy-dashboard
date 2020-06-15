@@ -8,6 +8,11 @@ import { StatsModule } from '../stats/stats.modules';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@busacca/ng-pick-datetime';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   {
@@ -39,6 +44,12 @@ const routes: Routes = [
     MatIconModule,
     MatCardModule,
     MatCheckboxModule,
+    MatFormFieldModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    TranslateModule.forChild({}),
   ],
   declarations: [AgentsComponent],
   providers: [AgentsService],
