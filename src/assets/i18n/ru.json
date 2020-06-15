@@ -189,7 +189,7 @@
         "NAME": "Имя"
       },
       "PAGE": {
-        "TRANSACTION": "Транзакции",
+        "TRANSACTION": "Транзакция",
         "APPLICATION": "Приложение",
         "STATUS": "Статус",
         "ERROR": "Ошибка",
