@@ -4,11 +4,18 @@
       <mat-card-title>{{ 'MODULES.APPLICATIONS.PAGE.APPLICATION' | translate }}: {{ app.name }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <p>{{ 'MODULES.APPLICATIONS.PAGE.ID' | translate }}: {{ app.id }}</p>
-      <p
-        *ngIf="app.host_name"
-      >{{ 'MODULES.APPLICATIONS.PAGE.HOST' | translate }}: {{ app.host_name }}</p>
-      <p>{{ 'MODULES.APPLICATIONS.PAGE.STATUS' | translate }}: {{ 'ENUMS.APPLICATIONS.STATUS.' + app.status | translate }}</p>
+      <p>
+        <strong>{{ 'MODULES.APPLICATIONS.PAGE.ID' | translate }}</strong>
+        : {{ app.id }}
+      </p>
+      <p *ngIf="app.host_name">
+        <strong>{{ 'MODULES.APPLICATIONS.PAGE.HOST' | translate }}</strong>
+        : {{ app.host_name }}
+      </p>
+      <p>
+        <strong>{{ 'MODULES.APPLICATIONS.PAGE.STATUS' | translate }}</strong>
+        : {{ 'ENUMS.APPLICATIONS.STATUS.' + app.status | translate }}
+      </p>
     </mat-card-content>
   </ng-container>
   <ng-template #loading>

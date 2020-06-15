@@ -9,7 +9,7 @@
     </ng-container>
 
     <ng-container matColumnDef="StartTime">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header [arrowPosition]="'before'">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
         <mat-form-field>
           <mat-label>{{ 'LABELS.FROM' | translate }}:</mat-label>
           <input
@@ -29,7 +29,7 @@
     </ng-container>
 
     <ng-container matColumnDef="EndTime">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header [arrowPosition]="'before'">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
         <mat-form-field>
           <mat-label>{{ 'LABELS.TO' | translate }}:</mat-label>
           <input
@@ -99,9 +99,11 @@
         mat-header-cell
         *matHeaderCellDef
         mat-sort-header
-        [arrowPosition]="'before'"
       >{{ 'MODULES.APPLICATIONS.TRANSACTION_LIST.DURATION' | translate}}</th>
-      <td mat-cell *matCellDef="let element">{{ getDuration(element.end_time, element.start_time) }}</td>
+      <td
+        mat-cell
+        *matCellDef="let element"
+      >{{ getDuration(element.end_time, element.start_time) }} {{ 'LABELS.SECOND' | translate }}</td>
     </ng-container>
 
     <ng-container matColumnDef="Host">

@@ -235,6 +235,7 @@
         "FILTER": "Filter"
       },
       "PAGE": {
+        "CONFIGURATION": "Configuration",
         "ID": "Id",
         "NAME": "Name",
         "TYPE": "Type",

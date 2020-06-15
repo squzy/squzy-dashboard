@@ -1,7 +1,7 @@
 <div class="flex">
   <mat-card class="flex flex-column width-50" *ngIf="checkInfo$ | async as info">
     <mat-card-header>
-      <mat-card-title>Configuration</mat-card-title>
+      <mat-card-title>{{ 'MODULES.CHECKERS.PAGE.CONFIGURATION' | translate }}</mat-card-title>
       <button
         *ngIf="info.status === statuses.STOPPED"
         mat-icon-button
@@ -35,15 +35,22 @@
     </mat-card-header>
     <mat-card-content class="flex">
       <div class="column width-100">
-        <p>{{ 'MODULES.CHECKERS.PAGE.ID' | translate }}: {{ info.id }}</p>
+        <p>
+          <strong>{{ 'MODULES.CHECKERS.PAGE.ID' | translate }}</strong>
+          : {{ info.id }}
+        </p>
       </div>
       <div class="column width-100" *ngIf="info.name">
-        <p>{{ 'MODULES.CHECKERS.PAGE.NAME' | translate }}: {{ info.name }}</p>
+        <p>
+          <strong>{{ 'MODULES.CHECKERS.PAGE.NAME' | translate }}</strong>
+          : {{ info.name }}
+        </p>
       </div>
       <div class="column width-50">
         <p>
-          {{ 'MODULES.CHECKERS.PAGE.TYPE' | translate }}:
-          <strong>{{ 'ENUMS.CHECKERS.TYPE.' + info.type | translate }}</strong>
+          <strong>{{ 'MODULES.CHECKERS.PAGE.TYPE' | translate }}</strong>
+          :
+          {{ 'ENUMS.CHECKERS.TYPE.' + info.type | translate }}
           <button
             (click)="showConfig(info)"
             mat-icon-button
@@ -54,17 +61,20 @@
           </button>
         </p>
         <p>
-          {{ 'MODULES.CHECKERS.PAGE.STATUS' | translate }}:
-          <strong>{{ 'ENUMS.CHECKERS.STATUS.' + info.status | translate }}</strong>
+          <strong>{{ 'MODULES.CHECKERS.PAGE.STATUS' | translate }}</strong>
+          :
+          {{ 'ENUMS.CHECKERS.STATUS.' + info.status | translate }}
         </p>
       </div>
       <div class="column width-50 before-lint">
         <p>
-          {{ 'MODULES.CHECKERS.PAGE.INTERVAL' | translate }}: {{ info.interval }}
+          <strong>{{ 'MODULES.CHECKERS.PAGE.INTERVAL' | translate }}</strong>
+          : {{ info.interval }}
           {{ 'LABELS.SECOND' | translate }}
         </p>
         <p *ngIf="info.timeout">
-          {{ 'MODULES.CHECKERS.PAGE.TIMEOUT' | translate }}: {{ info.timeout }}
+          <strong>{{ 'MODULES.CHECKERS.PAGE.TIMEOUT' | translate }}</strong>
+          : {{ info.timeout }}
           {{ 'LABELS.SECOND' | translate }}
         </p>
       </div>
