@@ -4,6 +4,7 @@ import { map, switchMap, takeUntil } from 'rxjs/operators';
 import { ApplicationsService } from '../../services/applications.service';
 import { ApplicationStatus } from 'src/app/shared/enums/application.type';
 import { Subject } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'sqd-application',
@@ -27,15 +28,19 @@ export class ApplicationComponent implements OnDestroy {
   navLinks = [
     {
       path: './list',
-      label: 'List',
+      label: this.translateService.instant('MODULES.APPLICATIONS.MENU.LIST'),
     },
     {
       path: './overview',
-      label: 'Overview',
+      label: this.translateService.instant('MODULES.APPLICATIONS.MENU.OVERVIEW'),
     },
   ];
 
-  constructor(private route: ActivatedRoute, private applicationService: ApplicationsService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private applicationService: ApplicationsService,
+    private translateService: TranslateService,
+  ) {}
 
   ngOnDestroy() {
     this.destoryed$.next();

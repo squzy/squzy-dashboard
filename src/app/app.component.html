@@ -5,7 +5,18 @@
     </button>
     <button mat-button [routerLink]="'/'">Squzy Dashboard</button>
     <span class="spacer"></span>
-    <span *ngIf="version$ | async as version">Version: {{ version }}</span>
+    <button
+      mat-button
+      [matMenuTriggerFor]="menu"
+    >{{ 'LANG.' + (currentLocale$ | async) | translate }}</button>
+    <mat-menu #menu="matMenu">
+      <button
+        mat-menu-item
+        (click)="setLang(locale)"
+        *ngFor="let locale of locales; trackBy: trackBy"
+      >{{ 'LANG.' + locale | translate }}</button>
+    </mat-menu>
+    <span *ngIf="version$ | async as version">{{ 'LABELS.VERSION' | translate }}: {{ version }}</span>
   </mat-toolbar-row>
 </mat-toolbar>
 

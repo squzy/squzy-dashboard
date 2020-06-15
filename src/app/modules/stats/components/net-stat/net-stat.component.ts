@@ -6,7 +6,7 @@ import {
   ChangeDetectionStrategy,
   OnDestroy,
 } from '@angular/core';
-import { BehaviorSubject, Subject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, Subject, combineLatest } from 'rxjs';
 import { filter, switchMap, map, takeUntil, tap } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
 import { AgentsService } from 'src/app/modules/agents/services/agents.service';

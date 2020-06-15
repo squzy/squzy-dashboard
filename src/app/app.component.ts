@@ -1,6 +1,10 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, OnInit } from '@angular/core';
 import { AppService } from './shared/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
+import { MatSelectChange } from '@angular/material/select';
+import { Subject, BehaviorSubject } from 'rxjs';
+import { takeUntil, startWith, tap } from 'rxjs/operators';
+import { StorageService } from './shared/services/storage.service';
 
 @Component({
   selector: 'sqd-root',
@@ -8,8 +12,12 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
-  version$ = this.appService.getVersion();
+export class AppComponent implements OnInit, OnDestroy {
+  private destroyed$ = new Subject();
+
+  version$ = this.appService.getVersion().pipe(takeUntil(this.destroyed$));
+
+  locales = ['en', 'ru'];
 
   links = [
     {
@@ -26,5 +34,38 @@ export class AppComponent {
     },
   ];
 
-  constructor(private appService: AppService) {}
+  private readonly STORAGE_KEY = 'LANG';
+
+  currentLocale$ = new BehaviorSubject(
+    this.storageService.get(this.STORAGE_KEY) || this.locales[0],
+  );
+
+  constructor(
+    private appService: AppService,
+    private translateService: TranslateService,
+    private storageService: StorageService,
+  ) {}
+
+  ngOnInit() {
+    this.currentLocale$
+      .pipe(
+        tap((locale) => this.storageService.set(this.STORAGE_KEY, locale)),
+        tap((locale) => this.translateService.use(locale)),
+        takeUntil(this.destroyed$),
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
+  trackBy(str: string) {
+    return str;
+  }
+
+  setLang(locale: string) {
+    this.currentLocale$.next(locale);
+  }
 }

@@ -1,10 +1,24 @@
 {
+  "LANG": {
+    "en": "English",
+    "ru": "Russian"
+  },
   "LABELS": {
+    "VERSION": "Version",
     "SECOND": "sec",
     "FROM": "From",
     "TO": "To",
     "APPLY": "Apply",
-    "THROUGHPUT": "Count/Min"
+    "THROUGHPUT": "Count/Min",
+    "PAGINATOR": {
+      "ITEM_PER_PAGE": "Item per page:",
+      "NEXT_PAGE": "Next page",
+      "PREV_PAGE": "Previous page",
+      "FIRST_PAGE": "First page",
+      "LAST_PAGE": "Last page",
+      "RANGE_PAGE_LABEL_1": "0 from {{length}}",
+      "RANGE_PAGE_LABEL_2": "{{startIndex}} - {{endIndex}} from {{length}}"
+    }
   },
   "ERRORS": {
     "dateToLessThenFrom": "Date to less then date from",
@@ -112,6 +126,14 @@
       "ADD_CHECKER": {
         "TITLE": "Add checker",
         "SELECT_TYPE": "Select type of checker",
+        "SELECT_INTERVAL": "Provide interval",
+        "SELECT_NAME": "Provide name",
+        "SELECT_HOST": "Provide host",
+        "SELECT_PORT": "Provide port",
+        "SELECT_URL": "Provide url",
+        "SELECT_TIMEOUT": "Provide timeout",
+        "SELECT_SERVICE_NAME": "Provide service name",
+        "SELECT_CONCURRENCY": "Provide concurrency",
         "NAME_HINT": "Better provide uniq name",
         "TIMEOUT_HINT": "Default it is 10 sec",
         "SELECT_METHOD": "Select method",
@@ -182,6 +204,10 @@
       }
     },
     "APPLICATIONS": {
+      "MENU": {
+        "LIST": "List",
+        "OVERVIEW": "Overview"
+      },
       "PAGE": {
         "APPLICATION": "Application",
         "ID": "Id",
@@ -201,7 +227,7 @@
       },
       "TRANSACTION_GROUP": {
         "GROUP_BY": "Group by",
-        "COUNT": "COUNT",
+        "COUNT": "Count",
         "TYPE": "Type",
         "STATUS": "Status",
         "AVG_TIME": "Average time",

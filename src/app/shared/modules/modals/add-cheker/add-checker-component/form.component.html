@@ -15,7 +15,12 @@
         <mat-error *ngIf="form.get('type').hasError('required')">{{ 'ERRORS.REQUIRED' | translate }}</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="number" placeholder="Set interval" formControlName="interval">
+        <input
+          matInput
+          type="number"
+          placeholder="{{ 'MODULES.MODALS.ADD_CHECKER.SELECT_INTERVAL' | translate}}"
+          formControlName="interval"
+        >
         <mat-error
           *ngIf="form.get('interval').hasError('min')"
         >{{ 'ERRORS.minInterval' | translate }}</mat-error>
@@ -27,11 +32,20 @@
         >{{ 'ERRORS.integer' | translate }}</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Set name" formControlName="name">
+        <input
+          matInput
+          placeholder="{{ 'MODULES.MODALS.ADD_CHECKER.SELECT_NAME' | translate}}"
+          formControlName="name"
+        >
         <mat-hint>{{ 'MODULES.MODALS.ADD_CHECKER.NAME_HINT' | translate}}</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="number" placeholder="Set timeout" formControlName="timeout">
+        <input
+          matInput
+          type="number"
+          placeholder="{{ 'MODULES.MODALS.ADD_CHECKER.SELECT_TIMEOUT' | translate}}"
+          formControlName="timeout"
+        >
         <mat-hint>{{ 'MODULES.MODALS.ADD_CHECKER.TIMEOUT_HINT' | translate}}</mat-hint>
         <mat-error
           *ngIf="form.get('timeout').hasError('min')"
@@ -44,7 +58,11 @@
         <ng-container formGroupName="config">
           <ng-container *ngSwitchCase="TcpType" formGroupName="tcpConfig">
             <mat-form-field>
-              <input matInput placeholder="Set host" formControlName="host">
+              <input
+                matInput
+                placeholder="{{ 'MODULES.MODALS.ADD_CHECKER.SELECT_HOST' | translate}}"
+                formControlName="host"
+              >
               <mat-error
                 *ngIf="tcpConfig.get('host').hasError('required')"
               >{{ 'ERRORS.REQUIRED' | translate }}</mat-error>
@@ -53,7 +71,12 @@
               >{{ 'ERRORS.notValidHost' | translate }}</mat-error>
             </mat-form-field>
             <mat-form-field>
-              <input matInput type="number" placeholder="Set port" formControlName="port">
+              <input
+                matInput
+                type="number"
+                placeholder="{{ 'MODULES.MODALS.ADD_CHECKER.SELECT_PORT' | translate}}"
+                formControlName="port"
+              >
               <mat-error
                 *ngIf="tcpConfig.get('port').hasError('required')"
               >{{ 'ERRORS.REQUIRED' | translate }}</mat-error>
@@ -70,10 +93,18 @@
           </ng-container>
           <ng-container *ngSwitchCase="GrpcType" formGroupName="grpcConfig">
             <mat-form-field>
-              <input matInput placeholder="Set service name" formControlName="service">
+              <input
+                matInput
+                placeholder="{{ 'MODULES.MODALS.ADD_CHECKER.SELECT_SERVICE_NAME' | translate}}"
+                formControlName="service"
+              >
             </mat-form-field>
             <mat-form-field>
-              <input matInput placeholder="Set host" formControlName="host">
+              <input
+                matInput
+                placeholder="{{ 'MODULES.MODALS.ADD_CHECKER.SELECT_HOST' | translate}}"
+                formControlName="host"
+              >
               <mat-error
                 *ngIf="grpcConfig.get('host').hasError('required')"
               >{{ 'ERRORS.REQUIRED' | translate }}</mat-error>
@@ -82,7 +113,12 @@
               >{{ 'ERRORS.notValidHost' | translate }}</mat-error>
             </mat-form-field>
             <mat-form-field>
-              <input matInput type="number" placeholder="Set port" formControlName="port">
+              <input
+                matInput
+                type="number"
+                placeholder="{{ 'MODULES.MODALS.ADD_CHECKER.SELECT_PORT' | translate}}"
+                formControlName="port"
+              >
               <mat-error
                 *ngIf="grpcConfig.get('port').hasError('required')"
               >{{ 'ERRORS.REQUIRED' | translate }}</mat-error>
@@ -99,7 +135,11 @@
           </ng-container>
           <ng-container *ngSwitchCase="SiteMapType" formGroupName="siteMapConfig">
             <mat-form-field>
-              <input matInput placeholder="Set url" formControlName="url">
+              <input
+                matInput
+                placeholder="{{ 'MODULES.MODALS.ADD_CHECKER.SELECT_URL' | translate}}"
+                formControlName="url"
+              >
               <mat-error
                 *ngIf="siteMapConfig.get('url').hasError('required')"
               >{{ 'ERRORS.REQUIRED' | translate }}</mat-error>
@@ -111,7 +151,7 @@
               <input
                 matInput
                 type="number"
-                placeholder="Set concurrency"
+                placeholder="{{ 'MODULES.MODALS.ADD_CHECKER.SELECT_CONCURRENCY' | translate}}"
                 formControlName="concurrency"
               >
               <mat-error
