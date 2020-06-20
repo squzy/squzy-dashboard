@@ -82,9 +82,9 @@
           <mat-label>{{ 'MODULES.APPLICATIONS.TRANSACTION_LIST.STATUS' | translate}}</mat-label>
           <mat-select (selectionChange)="onStatusChange($event)" [value]="type.value">
             <mat-option
-              *ngFor="let status of statuses"
-              [value]="type"
-            >{{ 'ENUMS.TRANSACTIONS.STATUS.' + status | translate }}</mat-option>
+              *ngFor="let trStatus of statuses"
+              [value]="trStatus"
+            >{{ 'ENUMS.TRANSACTIONS.STATUS.' + trStatus | translate }}</mat-option>
           </mat-select>
         </mat-form-field>
       </th>
