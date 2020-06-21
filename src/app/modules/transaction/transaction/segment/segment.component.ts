@@ -37,15 +37,17 @@ export class TransactionSegmentComponent {
     const diffMaxMin = this.max - this.min;
     const leftTime = timeToDate(this.transaction.start_time);
     const rightTime = timeToDate(this.transaction.end_time);
-    const left = diffMaxMin <= 0 ? 0 : ((+leftTime - this.min) / diffMaxMin) * 100;
+    const left = !diffMaxMin || diffMaxMin <= 0 ? 0 : ((+leftTime - this.min) / diffMaxMin) * 100;
     return {
       left: `${left}%`,
-      width: !diffMaxMin
-        ? '100%'
-        : `${Math.min(
-            (diffInSec(this.transaction.end_time, this.transaction.start_time) / diffMaxMin) * 100,
-            100 - left,
-          )}%`,
+      width:
+        !diffMaxMin || diffMaxMin <= 0
+          ? '100%'
+          : `${Math.min(
+              (diffInSec(this.transaction.end_time, this.transaction.start_time) / diffMaxMin) *
+                100,
+              100 - left,
+            )}%`,
       padding: `${(this.level - 1) * 15}px`,
       leftTime,
       rightTime,
