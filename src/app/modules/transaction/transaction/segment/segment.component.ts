@@ -24,6 +24,7 @@ export class TransactionSegmentComponent {
   @Input() min: number;
   @Input() max: number;
   @Input() level = 1;
+  @Input() appId: string;
   @Input() dictChildren: { [key: string]: Array<Transaction> } = {};
 
   failStatus = TransactionStatus.TRANSACTION_FAILED;
@@ -36,13 +37,15 @@ export class TransactionSegmentComponent {
     const diffMaxMin = this.max - this.min;
     const leftTime = timeToDate(this.transaction.start_time);
     const rightTime = timeToDate(this.transaction.end_time);
+    const left = !diffMaxMin ? 0 : ((+leftTime - this.min) / diffMaxMin) * 100;
     return {
-      left: !diffMaxMin ? '0%' : `${((+leftTime - this.min) / diffMaxMin) * 100}%`,
+      left: `${left}%`,
       width: !diffMaxMin
         ? '100%'
-        : `${
-            (diffInSec(this.transaction.end_time, this.transaction.start_time) / diffMaxMin) * 100
-          }%`,
+        : `${Math.max(
+            (diffInSec(this.transaction.end_time, this.transaction.start_time) / diffMaxMin) * 100,
+            100 - left,
+          )}%`,
       padding: `${(this.level - 1) * 15}px`,
       leftTime,
       rightTime,
@@ -55,5 +58,9 @@ export class TransactionSegmentComponent {
 
   trackByFn(item: Transaction) {
     return item.id;
+  }
+
+  goToAppPage(appId: string) {
+    this.router.navigate(['applications', appId]);
   }
 }

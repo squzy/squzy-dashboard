@@ -8,6 +8,12 @@
         </button>
       </p>
       <p>{{ 'MODULES.TRANSACTION.SEGMENTS.NAME' | translate }}: {{ transaction.name }}</p>
+      <p *ngIf="appId !== transaction.application_id ">
+        <span>{{ 'MODULES.TRANSACTION.PAGE.APPLICATION' | translate }}: {{ transaction.application_id }}</span>
+        <button mat-icon-button (click)="goToAppPage(transaction.application_id)">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+      </p>
     </div>
     <div class="progress">
       <ng-container>
@@ -32,6 +38,7 @@
       [transaction]="transaction"
       [min]="min"
       [max]="max"
+      [appId]="appId"
       [dictChildren]="dictChildren"
       [level]="level + 1"
     ></sqd-transaction-segment>
