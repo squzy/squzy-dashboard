@@ -202,8 +202,7 @@ export class TransactionsOverviewComponent implements AfterViewInit, OnDestroy {
         break;
 
       case TransactionGroup.BY_TYPE:
-        queryParams[TransactionsListComponent.queryParam.type] =
-          TransactionType[this.currentGroupKey];
+        queryParams[TransactionsListComponent.queryParam.type] = this.currentGroupKey;
         break;
     }
 
