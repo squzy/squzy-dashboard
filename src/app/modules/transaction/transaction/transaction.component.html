@@ -27,11 +27,11 @@
       </p>
       <p>
         {{ 'MODULES.TRANSACTION.PAGE.START_TIME' | translate }}:
-        <strong>{{ timeToDate(root.start_time) | date: 'd/M/yyyy HH:mm:ss' }}</strong>
+        <strong>{{ timeToDate(root.start_time) | date: 'd/M/yyyy HH:mm:ss.SSS' }}</strong>
       </p>
       <p>
         {{ 'MODULES.TRANSACTION.PAGE.END_TIME' | translate }}:
-        <strong>{{ timeToDate(root.end_time) | date: 'd/M/yyyy HH:mm:ss' }}</strong>
+        <strong>{{ timeToDate(root.end_time) | date: 'd/M/yyyy HH:mm:ss.SSS' }}</strong>
       </p>
       <p *ngIf="root.parent_id">
         {{ 'MODULES.TRANSACTION.PAGE.PARENT' | translate }}:

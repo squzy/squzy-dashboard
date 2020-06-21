@@ -23,8 +23,8 @@
           [style.width]="information.width"
           [class.fail]="transaction.status == failStatus"
         >
-          <div class="left">{{ information.leftTime | date: 'HH:mm:ss' }}</div>
-          <div class="right">{{ information.rightTime | date: 'HH:mm:ss' }}</div>
+          <div class="left">{{ information.leftTime | date: 'HH:mm:ss.SSS' }}</div>
+          <div class="right">{{ information.rightTime | date: 'HH:mm:ss.SSS' }}</div>
         </div>
       </ng-container>
     </div>
