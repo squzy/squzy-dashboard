@@ -1,0 +1,15 @@
+table {
+  width: 100%;
+  overflow-x: scroll;
+  display: block;
+  .mat-row {
+    &:hover {
+      cursor: pointer;
+      background: #b4b4b433;
+    }
+  }
+}
+
+:host {
+  display: block;
+}

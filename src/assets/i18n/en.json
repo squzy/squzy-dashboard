@@ -1,0 +1,282 @@
+{
+  "LANG": {
+    "en": "English",
+    "ru": "Russian"
+  },
+  "LABELS": {
+    "VERSION": "Version",
+    "SECOND": "sec",
+    "FROM": "From",
+    "TO": "To",
+    "APPLY": "Apply",
+    "THROUGHPUT": "Count/Min",
+    "PAGINATOR": {
+      "ITEM_PER_PAGE": "Item per page:",
+      "NEXT_PAGE": "Next page",
+      "PREV_PAGE": "Previous page",
+      "FIRST_PAGE": "First page",
+      "LAST_PAGE": "Last page",
+      "RANGE_PAGE_LABEL_1": "0 from {{length}}",
+      "RANGE_PAGE_LABEL_2": "{{startIndex}} - {{endIndex}} from {{length}}"
+    }
+  },
+  "ERRORS": {
+    "dateToLessThenFrom": "Date to less then date from",
+    "REQUIRED": "Required",
+    "minInterval": "Should be more than 0",
+    "integer": "Should be integer",
+    "notValidHost": "Not valid host",
+    "maxPort": "Should be more less 65535",
+    "minPort": "Should be more than 0",
+    "notValidUrl": "Not valid url",
+    "minConcurrency": "Should be more than 0",
+    "minStatusCode": "Should be more than 0",
+    "maxStatusCode": "Should be more less 503"
+  },
+  "MENU": {
+    "AGENTS": "Agents",
+    "CHECKERS": "Checkers",
+    "APPLICATIONS": "Applications"
+  },
+  "ENUMS": {
+    "AGENTS": {
+      "STATUS": {
+        "0": "Unspecified",
+        "1": "Registred",
+        "2": "Runned",
+        "3": "Disconnected",
+        "4": "Unregisted"
+      },
+      "TYPE": {
+        "0": "Unspecified",
+        "1": "All",
+        "2": "CPU",
+        "3": "Disk",
+        "4": "Memory",
+        "5": "Net"
+      }
+    },
+    "APPLICATIONS": {
+      "STATUS": {
+        "0": "Unspecified",
+        "1": "Enabled",
+        "2": "Disabled",
+        "3": "Archived"
+      }
+    },
+    "TRANSACTIONS": {
+      "STATUS": {
+        "0": "Unspecified",
+        "1": "Success",
+        "2": "Fail"
+      },
+      "GROUP_BY": {
+        "0": "Unspecified",
+        "1": "By type",
+        "2": "By name",
+        "3": "By method",
+        "4": "By host",
+        "5": "By path"
+      },
+      "TYPE": {
+        "0": "Unspecified",
+        "1": "Xhr",
+        "2": "Fetch",
+        "3": "Websocket",
+        "4": "Http",
+        "5": "Grpc",
+        "6": "Database",
+        "7": "Internal",
+        "8": "Router"
+      }
+    },
+    "CHECKERS": {
+      "PARSE_TYPE": {
+        "0": "Unspecified",
+        "1": "String",
+        "2": "Bool",
+        "3": "Number",
+        "4": "Time",
+        "5": "Any",
+        "6": "Raw"
+      },
+      "TYPE": {
+        "0": "Unspecified",
+        "1": "Tcp",
+        "2": "Grpc",
+        "3": "Http",
+        "4": "SiteMap",
+        "5": "Json value"
+      },
+      "STATUS": {
+        "0": "Unspecified",
+        "1": "Runned",
+        "2": "Stopped",
+        "3": "Removed"
+      },
+      "STATUS_CODE": {
+        "0": "Unspecified",
+        "1": "Success",
+        "2": "Fail"
+      }
+    }
+  },
+  "MODULES": {
+    "MODALS": {
+      "ADD_CHECKER": {
+        "TITLE": "Add checker",
+        "SELECT_TYPE": "Select type of checker",
+        "SELECT_INTERVAL": "Provide interval",
+        "SELECT_NAME": "Provide name",
+        "SELECT_HOST": "Provide host",
+        "SELECT_PORT": "Provide port",
+        "SELECT_URL": "Provide url",
+        "SELECT_TIMEOUT": "Provide timeout",
+        "SELECT_SERVICE_NAME": "Provide service name",
+        "SELECT_CONCURRENCY": "Provide concurrency",
+        "NAME_HINT": "Better provide uniq name",
+        "TIMEOUT_HINT": "Default it is 10 sec",
+        "SELECT_METHOD": "Select method",
+        "HEADER_HINT": "Use ':' like separator for header key and value",
+        "SELECT_PARSE_TYPE": "Select parse type",
+        "VALID_PATH": "Valid path",
+        "ADD_BUTTON": "Add",
+        "PUT_PATH": "Put path",
+        "NEW_HEADER": "Put headers"
+      }
+    },
+    "STATS": {
+      "CPU": {
+        "CPU": "CPU"
+      },
+      "DISK": {
+        "PATH": "Path"
+      },
+      "NET": {
+        "INTERFACE": "Interface"
+      },
+      "MEMORY": {
+        "MEMORY": "memory"
+      },
+      "LIVE": {
+        "ID": "Id",
+        "CPU_LOADING": "CPU loading",
+        "SWAP_MEMORY": "Swap memory",
+        "VIRTUAL_MEMORY": "Virtual memory",
+        "DISK_STAT": "Disk stat",
+        "NET_STAT": "Net stat",
+        "INTERVAL": "Interval",
+        "STATUS": "Status",
+        "NAME": "Name",
+        "HOST": "Host",
+        "PLATFORM": "Platform",
+        "OS": "OS",
+        "FAMILY": "Family",
+        "VERSION": "Version",
+        "LIVE_STAMP": "Live timestamp",
+        "WAITING_LABEL": "Waiting recieved stat from server"
+      }
+    },
+    "AGENT": {
+      "PAGE": {
+        "SHOW_ALL": "Show all",
+        "HOME_LABEL": "Please select any agent in list in left menu"
+      }
+    },
+    "TRANSACTION": {
+      "SEGMENTS": {
+        "ID": "Id",
+        "NAME": "Name"
+      },
+      "PAGE": {
+        "TRANSACTION": "Transaction",
+        "APPLICATION": "Application",
+        "STATUS": "Status",
+        "ERROR": "Error",
+        "TYPE": "Type",
+        "START_TIME": "Start time",
+        "END_TIME": "End time",
+        "PARENT": "Parent",
+        "METHOD": "Method",
+        "HOST": "Host",
+        "PATH": "Path",
+        "SEGMENTS": "Segments"
+      }
+    },
+    "APPLICATIONS": {
+      "MENU": {
+        "LIST": "List",
+        "OVERVIEW": "Overview"
+      },
+      "PAGE": {
+        "APPLICATION": "Application",
+        "ID": "Id",
+        "STATUS": "Status",
+        "HOST": "Host",
+        "TRANSACTIONS": "Transactions"
+      },
+      "TRANSACTION_LIST": {
+        "ID": "Id",
+        "NAME": "Name",
+        "TYPE": "Type",
+        "DURATION": "Duration",
+        "STATUS": "Status",
+        "HOST": "Host",
+        "PATH": "Path",
+        "METHOD": "Method"
+      },
+      "TRANSACTION_GROUP": {
+        "GROUP_BY": "Group by",
+        "COUNT": "Count",
+        "TYPE": "Type",
+        "STATUS": "Status",
+        "AVG_TIME": "Average time",
+        "MIN_TIME": "Min time",
+        "MAX_TIME": "Max time",
+        "SUCCESS_RATIO": "Success ration",
+        "THROUGHPUT": "Throughput",
+        "SELECT_GROUP": "Select any group in table",
+        "MISSING_INFORMATION": "No information"
+      },
+      "TABLE": {
+        "ID": "Id",
+        "ENABLE": "Enable",
+        "DISABLE": "Disable",
+        "ARCHIVE": "Archive",
+        "FILTER": "Filter",
+        "NAME": "Name",
+        "HOST": "Host",
+        "STATUS": "Status"
+      }
+    },
+    "CHECKERS": {
+      "TABLE": {
+        "ID": "Id",
+        "NAME": "Name",
+        "TYPE": "Type",
+        "STATUS": "Status",
+        "ADD": "Add",
+        "RUN": "Run",
+        "STOP": "Stop",
+        "REMOVE": "Remove",
+        "FILTER": "Filter"
+      },
+      "PAGE": {
+        "CONFIGURATION": "Configuration",
+        "ID": "Id",
+        "NAME": "Name",
+        "TYPE": "Type",
+        "STATUS": "Status",
+        "TIMEOUT": "Timeout",
+        "INTERVAL": "Interval",
+        "STATISTICS": "Statistic",
+        "UPTIME": "Uptime",
+        "LATENCY": "Latency",
+        "SELECT_STATUS_CODE": "Select status",
+        "START_TIME": "Start time",
+        "END_TIME": "End time",
+        "CHECKER_ERROR_MSG": "Check return error"
+      }
+    }
+  }
+}

@@ -3,9 +3,9 @@ export const roundNumber = (value: number, countNumber = 2) => {
   return Math.round((value + Number.EPSILON) * devider) / devider;
 };
 
-export const getRoundedPercent = (value: number) => {
+export const getRoundedPercent = (value: number, count = 2) => {
   if (isNaN(value)) {
     return `100 %`;
   }
-  return `${roundNumber(value) * 100} %`;
+  return `${roundNumber(value, count) * 100} %`;
 };

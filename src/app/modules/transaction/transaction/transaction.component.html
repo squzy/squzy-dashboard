@@ -1,0 +1,65 @@
+<mat-card *ngIf="root">
+  <mat-card-header>
+    <mat-card-title>{{ 'MODULES.TRANSACTION.PAGE.TRANSACTION' | translate }}: {{ root.id }}</mat-card-title>
+    <mat-card-subtitle>
+      {{ 'MODULES.TRANSACTION.PAGE.APPLICATION' | translate }}
+      <button
+        mat-icon-button
+        (click)="goToApplication(root.application_id)"
+      >
+        <mat-icon>open_in_new</mat-icon>
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="information">
+      <p>
+        {{ 'MODULES.TRANSACTION.PAGE.STATUS' | translate }}:
+        <strong>{{ 'ENUMS.TRANSACTIONS.STATUS.' + root.status | translate }}</strong>
+      </p>
+      <p *ngIf="root.error?.message">
+        {{ 'MODULES.TRANSACTION.PAGE.ERROR' | translate }}:
+        <strong>{{ root.error.message }}</strong>
+      </p>
+      <p>
+        {{ 'MODULES.TRANSACTION.PAGE.TYPE' | translate }}:
+        <strong>{{ 'ENUMS.TRANSACTIONS.TYPE.' + root.type | translate }}</strong>
+      </p>
+      <p>
+        {{ 'MODULES.TRANSACTION.PAGE.START_TIME' | translate }}:
+        <strong>{{ timeToDate(root.start_time) | date: 'd/M/yyyy HH:mm:ss.SSS' }}</strong>
+      </p>
+      <p>
+        {{ 'MODULES.TRANSACTION.PAGE.END_TIME' | translate }}:
+        <strong>{{ timeToDate(root.end_time) | date: 'd/M/yyyy HH:mm:ss.SSS' }}</strong>
+      </p>
+      <p *ngIf="root.parent_id">
+        {{ 'MODULES.TRANSACTION.PAGE.PARENT' | translate }}:
+        <strong>{{ root.parent_id }}</strong>
+        <button mat-icon-button (click)="goToPage(root.parent_id)">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+      </p>
+      <p *ngIf="root.meta?.method">
+        {{ 'MODULES.TRANSACTION.PAGE.METHOD' | translate }}:
+        <strong>{{ root.meta.method }}</strong>
+      </p>
+      <p *ngIf="root.meta?.host">
+        {{ 'MODULES.TRANSACTION.PAGE.HOST' | translate }}:
+        <strong>{{ root.meta.host }}</strong>
+      </p>
+      <p *ngIf="root.meta?.path">
+        {{ 'MODULES.TRANSACTION.PAGE.PATH' | translate }}:
+        <strong>{{ root.meta.path }}</strong>
+      </p>
+    </div>
+    <h2>{{ 'MODULES.TRANSACTION.PAGE.SEGMENTS' | translate }}</h2>
+    <sqd-transaction-segment
+      [transaction]="root"
+      [min]="min"
+      [max]="max"
+      [appId]="root.application_id"
+      [dictChildren]="dictChildren"
+    ></sqd-transaction-segment>
+  </mat-card-content>
+</mat-card>

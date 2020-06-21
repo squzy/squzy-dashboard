@@ -8,9 +8,16 @@ import { MemoryStatComponent } from './components/memory-stat/memory-stat.compon
 import { DisksStatComponent } from './components/disks-stat/disks-stat.component';
 import { NetStatComponent } from './components/net-stat/net-stat.component';
 import { LiveStatComponent } from './components/live-stat/live-stat.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
-  imports: [CommonModule, ChartsModule, MatCardModule, MatGridListModule],
+  imports: [
+    CommonModule,
+    ChartsModule,
+    MatCardModule,
+    MatGridListModule,
+    TranslateModule.forChild({}),
+  ],
   declarations: [
     CpuStatsComponent,
     MemoryStatComponent,

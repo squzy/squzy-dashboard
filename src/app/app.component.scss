@@ -1,12 +1,27 @@
+@import 'src/theme/colors.scss';
+
 mat-nav-list {
   a {
     opacity: 1;
     color: black;
     &.active {
-      background-color: #e8e8e8;
+      background-color: mat-color($primary, 50);
     }
   }
 }
+mat-drawer::ng-deep {
+  .mat-drawer-inner-container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+  .lang {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 100px;
+  }
+}
+
 .spacer {
   flex: 1 1 auto;
 }

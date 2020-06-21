@@ -1,24 +1,31 @@
 export enum Types {
-  Tcp = 1,
-  Grpc = 2,
-  Http = 3,
-  SiteMap = 4,
-  HttpJsonValue = 5,
+  SCHEDULER_TYPE_UNSPECIFIED = 0,
+  TCP = 1,
+  GRPC = 2,
+  HTTP = 3,
+  SITE_MAP = 4,
+  HTTP_JSON_VALUE = 5,
 }
 
 export enum SelectorTypes {
-  String = 1,
-  Bool = 2,
-  Number = 3,
-  Time = 4,
-  Any = 5,
-  Raw = 6,
+  JSON_PARSE_VALUE_UNSPECIFIED = 0,
+  STRING = 1,
+  BOOL = 2,
+  NUMBER = 3,
+  TIME = 4,
+  ANY = 5,
+  RAW = 6,
 }
 
-export function selectorToString(selector: SelectorTypes) {
-  return SelectorTypes[selector];
+export enum SchedulerStatus {
+  SCHEDULER_STATUS_UNSPECIFIED = 0,
+  RUNNED = 1,
+  STOPPED = 2,
+  REMOVED = 3,
 }
 
-export function typeToString(type: Types) {
-  return Types[type];
+export enum SchedulerResponseCode {
+  SCHEDULER_CODE_UNSPECIFIED = 0,
+  OK = 1,
+  ERROR = 2,
 }

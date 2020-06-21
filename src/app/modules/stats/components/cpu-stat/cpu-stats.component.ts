@@ -1,8 +1,17 @@
-import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { filter, switchMap, map } from 'rxjs/operators';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+  OnDestroy,
+} from '@angular/core';
+import { BehaviorSubject, Subject, Observable, combineLatest } from 'rxjs';
+import { filter, switchMap, map, takeUntil } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
 import { AgentsService } from 'src/app/modules/agents/services/agents.service';
+import { FormRangeValue } from 'src/app/shared/date/date';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'sqd-cpu-stats',
@@ -10,10 +19,16 @@ import { AgentsService } from 'src/app/modules/agents/services/agents.service';
   styleUrls: ['./cpu-stats.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CpuStatsComponent implements OnChanges {
+export class CpuStatsComponent implements OnChanges, OnDestroy {
+  private destroyed$ = new Subject();
+
   @Input() agentId: string;
 
-  private _agentId$ = new BehaviorSubject(this.agentId);
+  @Input() range: FormRangeValue;
+
+  private range$ = new BehaviorSubject<FormRangeValue>(null);
+
+  private _agentId$ = new BehaviorSubject(null);
 
   options: ChartOptions = {
     scales: {
@@ -25,7 +40,6 @@ export class CpuStatsComponent implements OnChanges {
           },
           stacked: true,
           ticks: {
-            source: 'auto',
             beginAtZero: true,
           },
           display: true,
@@ -42,11 +56,17 @@ export class CpuStatsComponent implements OnChanges {
     },
   };
 
-  data$ = this._agentId$.pipe(
-    filter((v) => !!v),
-    switchMap((agentId) => this.agentsService.getCpuStats(agentId)),
-    filter((v) => !!v),
+  data$ = combineLatest(
+    this._agentId$.pipe(filter((v) => !!v)),
+    this.range$.pipe(filter((v) => !!v)),
+  ).pipe(
+    switchMap(([agentId, range]) =>
+      this.agentsService.getCpuStats(agentId, range.dateFrom, range.dateTo),
+    ),
     map((history) => {
+      if (!history) {
+        return [];
+      }
       const length = history[0].cpu_info.cpus.length;
 
       const datasets = Array(length)
@@ -66,19 +86,29 @@ export class CpuStatsComponent implements OnChanges {
         dataset: [
           {
             data: item,
-            label: `CPU ${index + 1}`,
+            label: `${this.translateService.instant('MODULES.STATS.CPU.CPU')} ${index + 1}`,
             lineTension: 0,
           },
         ],
       }));
     }),
+    takeUntil(this.destroyed$),
   );
 
-  constructor(private agentsService: AgentsService) {}
+  constructor(private agentsService: AgentsService, private translateService: TranslateService) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if ('agentId' in changes) {
       this._agentId$.next(changes.agentId.currentValue);
     }
+
+    if ('range' in changes) {
+      this.range$.next(changes.range.currentValue);
+    }
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

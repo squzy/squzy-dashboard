@@ -9,6 +9,7 @@ import { CheckerComponent } from './components/checker/checker.component';
 import { MatCardModule } from '@angular/material/card';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@busacca/ng-pick-datetime';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,6 +20,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SchedulerConfigComponent } from './components/checker/config/config.component';
 import { SchedulerSnapshotComponent } from './components/checker/snapshot/snapshot.component';
+import { MatSelectModule } from '@angular/material/select';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   {
@@ -40,10 +43,11 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    MatSelectModule,
     MatTableModule,
     MatPaginatorModule,
-    MatFormFieldModule,
     MatCardModule,
+    MatFormFieldModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     ReactiveFormsModule,
@@ -54,6 +58,8 @@ const routes: Routes = [
     MatTooltipModule,
     MatIconModule,
     MatCheckboxModule,
+    MatProgressSpinnerModule,
+    TranslateModule.forChild({}),
   ],
   providers: [CheckersService],
   declarations: [

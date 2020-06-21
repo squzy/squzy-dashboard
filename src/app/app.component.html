@@ -5,16 +5,33 @@
     </button>
     <button mat-button [routerLink]="'/'">Squzy Dashboard</button>
     <span class="spacer"></span>
-    <span *ngIf="version$ | async as version">Version: {{ version }}</span>
+    <span *ngIf="version$ | async as version">{{ 'LABELS.VERSION' | translate }}: {{ version }}</span>
   </mat-toolbar-row>
 </mat-toolbar>
 
 <mat-drawer-container class="example-container" autosize>
   <mat-drawer #drawer mode="side" [opened]="true">
     <mat-nav-list>
-      <a mat-list-item [routerLink]="'/agents'" routerLinkActive="active">Agents</a>
-      <a mat-list-item [routerLink]="'/checkers'" routerLinkActive="active">Checkers</a>
+      <a
+        mat-list-item
+        *ngFor="let item of links"
+        [routerLink]="item.path"
+        routerLinkActive="active"
+      >{{ item.text | translate }}</a>
     </mat-nav-list>
+    <div class="lang">
+      <button
+        mat-button
+        [matMenuTriggerFor]="menu"
+      >{{ 'LANG.' + (currentLocale$ | async) | translate }}</button>
+      <mat-menu #menu="matMenu">
+        <button
+          mat-menu-item
+          (click)="setLang(locale)"
+          *ngFor="let locale of locales; trackBy: trackBy"
+        >{{ 'LANG.' + locale | translate }}</button>
+      </mat-menu>
+    </div>
   </mat-drawer>
   <mat-drawer-content>
     <div style="height: 92vh;">

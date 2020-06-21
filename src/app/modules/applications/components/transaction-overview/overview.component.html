@@ -1,0 +1,131 @@
+<ng-container [queryParamGroup]="queryFilterGroup">
+  <mat-form-field>
+    <mat-label>{{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.GROUP_BY' | translate }}</mat-label>
+    <mat-select (selectionChange)="onGroupByChange($event)" [value]="groupBy.value">
+      <mat-option
+        *ngFor="let group of groupByGroups"
+        [value]="group"
+      >{{ 'ENUMS.TRANSACTIONS.GROUP_BY.' + group | translate }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.TYPE' | translate }}</mat-label>
+    <mat-select (selectionChange)="onTypeChange($event)" [value]="type.value">
+      <mat-option *ngFor="let type of types" [value]="type">
+        {{
+        'ENUMS.TRANSACTIONS.TYPE.' + type | translate
+        }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.STATUS' | translate }}</mat-label>
+    <mat-select (selectionChange)="onStatusChange($event)" [value]="status.value">
+      <mat-option
+        *ngFor="let status of statuses"
+        [value]="status"
+      >{{ 'ENUMS.TRANSACTIONS.STATUS.' + status | translate }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+    <mat-label>{{ 'LABELS.FROM' | translate }}:</mat-label>
+    <input
+      matInput
+      [owlDateTimeTrigger]="dateFromComponent"
+      [owlDateTime]="dateFromComponent"
+      queryParamName="from"
+      autocomplete="off"
+    >
+    <button
+      mat-button
+      *ngIf="queryFilterGroup.get('from').value"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="queryFilterGroup.get('from').setValue(null)"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+    <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateFromComponent></owl-date-time>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{ 'LABELS.TO' | translate }}:</mat-label>
+    <input
+      matInput
+      [owlDateTimeTrigger]="dateToComponent"
+      [owlDateTime]="dateToComponent"
+      queryParamName="to"
+      autocomplete="off"
+    >
+    <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateToComponent></owl-date-time>
+    <button
+      mat-button
+      *ngIf="queryFilterGroup.get('to').value"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="queryFilterGroup.get('to').setValue(null)"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</ng-container>
+<mat-drawer-container [class.mat-elevation-z2]="true">
+  <mat-drawer [position]="'end'" [mode]="'over'">
+    <ng-container *ngIf="currentStats">
+      <p>
+        {{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.COUNT' | translate }}: {{ currentStats.count }}
+        <button
+          mat-icon-button
+          (click)="goToList()"
+        >
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+      </p>
+      <p>
+        {{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.AVG_TIME' | translate }}:
+        {{ round(currentStats.average_time / SECOND) || 0 }} {{ 'LABELS.SECOND' | translate }}
+      </p>
+      <p>
+        {{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.MIN_TIME' | translate }}:
+        {{ round(currentStats.min_time / SECOND) || 0 }} {{ 'LABELS.SECOND' | translate }}
+      </p>
+      <p>
+        {{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.MAX_TIME' | translate }}:
+        {{ round(currentStats.max_time / SECOND) || 0 }} {{ 'LABELS.SECOND' | translate }}
+      </p>
+      <p>
+        {{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.SUCCESS_RATIO' | translate }}:
+        {{ percent(currentStats.success_ratio) || 0 }}
+      </p>
+      <p>
+        {{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.THROUGHPUT' | translate }}:
+        {{ round(currentStats.throughput) || 0 }} {{ 'LABELS.THROUGHPUT' | translate }}
+      </p>
+    </ng-container>
+  </mat-drawer>
+  <mat-drawer-content>
+    <mat-list role="list">
+      <div mat-subheader>{{ 'MODULES.APPLICATIONS.TRANSACTION_GROUP.SELECT_GROUP' | translate }}</div>
+      <mat-list-item
+        *ngFor="let item of groupList$ | async | keyvalue; trackBy: trackBy"
+        (click)="select(item.value, item.key)"
+      >
+        <ng-container [ngSwitch]="currentGroupByKey">
+          <ng-container
+            *ngSwitchCase="groupByList.BY_TYPE"
+          >{{ 'ENUMS.TRANSACTIONS.TYPE.' + item.key | translate }}</ng-container>
+          <ng-container
+            *ngSwitchCase="groupByList.GROUP_TRANSACTION_UNSPECIFIED"
+          >{{ 'ENUMS.TRANSACTIONS.TYPE.' + item.key | translate }}</ng-container>
+          <ng-container
+            *ngSwitchDefault
+          >{{ item.key ? item.key : ('MODULES.APPLICATIONS.TRANSACTION_GROUP.MISSING_INFORMATION' | translate) }}</ng-container>
+        </ng-container>
+      </mat-list-item>
+    </mat-list>
+  </mat-drawer-content>
+</mat-drawer-container>

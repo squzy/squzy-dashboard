@@ -9,6 +9,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { CommonInterceptor } from './interceptors/common.interceptor';
 import { ModalsModule } from './modules/modals/modals.module';
 import { AppService } from './services/app.service';
+import { StorageService } from './services/storage.service';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { TranslateService } from '@ngx-translate/core';
+import { PaginatorI18n } from './services/paginatorIntl.service';
 
 const sharedModules = [
   CommonModule,
@@ -24,6 +28,15 @@ const sharedModules = [
 @NgModule({
   imports: sharedModules,
   exports: sharedModules,
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: CommonInterceptor, multi: true }, AppService],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: CommonInterceptor, multi: true },
+    AppService,
+    StorageService,
+    {
+      provide: MatPaginatorIntl,
+      deps: [TranslateService],
+      useClass: PaginatorI18n,
+    },
+  ],
 })
 export class SharedModule {}

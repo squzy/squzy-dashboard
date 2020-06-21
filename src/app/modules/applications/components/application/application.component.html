@@ -1,0 +1,45 @@
+<mat-card>
+  <ng-container *ngIf="currentApplication$ | async as app; else loading">
+    <mat-card-header>
+      <mat-card-title>{{ 'MODULES.APPLICATIONS.PAGE.APPLICATION' | translate }}: {{ app.name }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        <strong>{{ 'MODULES.APPLICATIONS.PAGE.ID' | translate }}</strong>
+        : {{ app.id }}
+      </p>
+      <p *ngIf="app.host_name">
+        <strong>{{ 'MODULES.APPLICATIONS.PAGE.HOST' | translate }}</strong>
+        : {{ app.host_name }}
+      </p>
+      <p>
+        <strong>{{ 'MODULES.APPLICATIONS.PAGE.STATUS' | translate }}</strong>
+        : {{ 'ENUMS.APPLICATIONS.STATUS.' + app.status | translate }}
+      </p>
+    </mat-card-content>
+  </ng-container>
+  <ng-template #loading>
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
+</mat-card>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ 'MODULES.APPLICATIONS.PAGE.TRANSACTIONS' | translate }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <nav mat-tab-nav-bar [backgroundColor]="'accent'">
+      <a
+        mat-tab-link
+        *ngFor="let link of navLinks"
+        [routerLink]="link.path"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [active]="rla.isActive"
+      >{{ link.label | translate}}</a>
+    </nav>
+    <router-outlet></router-outlet>
+  </mat-card-content>
+</mat-card>

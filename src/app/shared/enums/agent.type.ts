@@ -7,8 +7,9 @@ export enum AgentStatsTypes {
 }
 
 export enum AgentStatus {
-  Registred = 1,
-  Runned = 2,
-  Disconnected = 3,
-  Unregister = 4,
+  AGENT_STATUS_UNSPECIFIED = 0,
+  REGISTRED = 1,
+  RUNNED = 2,
+  DISCONNECTED = 3,
+  UNREGISTRED = 4,
 }

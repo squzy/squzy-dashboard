@@ -1,11 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import {
-  Types,
-  SelectorTypes,
-  selectorToString,
-  typeToString,
-} from 'src/app/shared/enums/schedulers.type';
+import { Types, SelectorTypes } from 'src/app/shared/enums/schedulers.type';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { integerValidator } from 'src/app/shared/validators/number.validators';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -28,15 +23,15 @@ export class AddCheckerFormComponent implements OnDestroy {
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  TcpType = Types.Tcp;
+  TcpType = Types.TCP;
 
-  GrpcType = Types.Grpc;
+  GrpcType = Types.GRPC;
 
-  HttpType = Types.Http;
+  HttpType = Types.HTTP;
 
-  SiteMapType = Types.SiteMap;
+  SiteMapType = Types.SITE_MAP;
 
-  HttpJsonValueType = Types.HttpJsonValue;
+  HttpJsonValueType = Types.HTTP_JSON_VALUE;
 
   schdedulerTypes = [
     this.HttpType,
@@ -49,12 +44,12 @@ export class AddCheckerFormComponent implements OnDestroy {
   methods = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE'];
 
   selectors = [
-    SelectorTypes.Any,
-    SelectorTypes.Bool,
-    SelectorTypes.Number,
-    SelectorTypes.Raw,
-    SelectorTypes.String,
-    SelectorTypes.Time,
+    SelectorTypes.ANY,
+    SelectorTypes.BOOL,
+    SelectorTypes.NUMBER,
+    SelectorTypes.RAW,
+    SelectorTypes.STRING,
+    SelectorTypes.TIME,
   ];
 
   httpConfig = this.fb.group({
@@ -112,25 +107,26 @@ export class AddCheckerFormComponent implements OnDestroy {
   });
 
   private configMap = {
-    [Types.Tcp]: this.fb.group({
+    [Types.TCP]: this.fb.group({
       tcpConfig: this.tcpConfig,
     }),
-    [Types.Grpc]: this.fb.group({
+    [Types.GRPC]: this.fb.group({
       grpcConfig: this.grpcConfig,
     }),
-    [Types.SiteMap]: this.fb.group({
+    [Types.SITE_MAP]: this.fb.group({
       siteMapConfig: this.siteMapConfig,
     }),
-    [Types.Http]: this.fb.group({
+    [Types.HTTP]: this.fb.group({
       httpConfig: this.httpConfig,
     }),
-    [Types.HttpJsonValue]: this.fb.group({
+    [Types.HTTP_JSON_VALUE]: this.fb.group({
       httpValueConfig: this.httpValueConfig,
     }),
   };
 
   form = this.fb.group({
     type: [null, Validators.required],
+    name: [null],
     interval: [10, Validators.compose([Validators.required, Validators.min(1), integerValidator])],
     timeout: [null, Validators.compose([Validators.min(1), integerValidator])],
     config: [null],
@@ -154,6 +150,7 @@ export class AddCheckerFormComponent implements OnDestroy {
 
     const rq = {
       type: formValue.type,
+      name: formValue.name,
       timeout: formValue.timeout,
       interval: formValue.interval,
       ...formValue.config,
@@ -191,14 +188,6 @@ export class AddCheckerFormComponent implements OnDestroy {
 
   removeSelector(control: AbstractControl, index: number) {
     control.value.splice(index, 1);
-  }
-
-  toSelectorType(selector: SelectorTypes) {
-    return selectorToString(selector);
-  }
-
-  toType(type: Types) {
-    return typeToString(type);
   }
 
   addSelector(control: AbstractControl, select: MatSelect, input: MatInput) {

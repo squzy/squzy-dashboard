@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,9 @@ export class AppService {
   constructor(private httpClient: HttpClient) {}
 
   getVersion() {
-    return this.httpClient.get('/app/version').pipe(map((v: any) => v.version));
+    return this.httpClient.get<string>('/app/version').pipe(
+      map((v: any) => v.version),
+      catchError((err) => of('local')),
+    );
   }
 }

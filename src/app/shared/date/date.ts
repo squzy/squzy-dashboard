@@ -8,6 +8,11 @@ export interface Time {
   nanos: number;
 }
 
+export interface FormRangeValue {
+  dateFrom: Date;
+  dateTo: Date;
+}
+
 export const minusSecond = (unixDate: number, seconds: number): Date => {
   return new Date(unixDate - seconds * SECOND);
 };
@@ -17,13 +22,13 @@ export const minusMinute = (unixDate: number, minutes: number): Date => {
 };
 
 export function timeToDate(time: Time): Date {
-  return new Date(time.seconds * 1000 + Math.round(time.nanos / MS_TO_NANOS));
+  return new Date(time.seconds * 1000 + Math.round((time.nanos || 0) / MS_TO_NANOS));
 }
 
 export function diffInSec(timeA: Time, timeB: Time): number {
   return (
     timeA.seconds * 1000 -
     timeB.seconds * 1000 +
-    Math.round((timeA.nanos - timeB.nanos) / MS_TO_NANOS)
+    Math.round(((timeA.nanos || 0) - (timeB.nanos || 0)) / MS_TO_NANOS)
   );
 }

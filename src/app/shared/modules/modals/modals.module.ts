@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   imports: [
     CommonModule,
@@ -23,6 +24,7 @@ import { MatInputModule } from '@angular/material/input';
     MatButtonModule,
     MatChipsModule,
     MatIconModule,
+    TranslateModule.forChild({}),
   ],
   exports: [],
   providers: [AddCheckerService],

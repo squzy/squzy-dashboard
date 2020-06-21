@@ -1,9 +1,17 @@
-import { Component, Input, SimpleChanges, OnChanges, ChangeDetectionStrategy } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { filter, switchMap, map } from 'rxjs/operators';
+import {
+  Component,
+  Input,
+  SimpleChanges,
+  OnChanges,
+  ChangeDetectionStrategy,
+  OnDestroy,
+} from '@angular/core';
+import { BehaviorSubject, Subject, combineLatest } from 'rxjs';
+import { filter, switchMap, map, takeUntil, tap } from 'rxjs/operators';
 import { ChartOptions } from 'chart.js';
 import { AgentsService } from 'src/app/modules/agents/services/agents.service';
-import { timeToDate } from 'src/app/shared/date/date';
+import { timeToDate, FormRangeValue } from 'src/app/shared/date/date';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'sqd-net-stat',
@@ -11,15 +19,25 @@ import { timeToDate } from 'src/app/shared/date/date';
   styleUrls: ['./net-stat.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NetStatComponent implements OnChanges {
+export class NetStatComponent implements OnChanges, OnDestroy {
+  private destroyed$ = new Subject();
+
   @Input() agentId: string;
 
-  private _agentId$ = new BehaviorSubject(this.agentId);
+  private _agentId$ = new BehaviorSubject(null);
 
-  private getNetStream$ = this._agentId$.pipe(
-    filter((v) => !!v),
-    switchMap((agentId) => this.agentsService.getNetStats(agentId)),
-    filter((v) => !!v),
+  @Input() range: FormRangeValue;
+
+  private range$ = new BehaviorSubject<FormRangeValue>(null);
+
+  private getNetStream$ = combineLatest(
+    this._agentId$.pipe(filter((v) => !!v)),
+    this.range$.pipe(filter((v) => !!v)),
+  ).pipe(
+    switchMap(([agentId, range]) =>
+      this.agentsService.getNetStats(agentId, range.dateFrom, range.dateTo),
+    ),
+    takeUntil(this.destroyed$),
   );
 
   private _defaultOptions: ChartOptions = {
@@ -31,10 +49,6 @@ export class NetStatComponent implements OnChanges {
             unit: 'minute',
           },
           stacked: true,
-
-          ticks: {
-            source: 'data',
-          },
           display: true,
         },
       ],
@@ -43,6 +57,9 @@ export class NetStatComponent implements OnChanges {
 
   netCharts$ = this.getNetStream$.pipe(
     map((stats) => {
+      if (!stats) {
+        return [];
+      }
       const labels = [];
       const datasets = {};
       const types = new Set();
@@ -67,7 +84,7 @@ export class NetStatComponent implements OnChanges {
           ...this._defaultOptions,
           title: {
             display: true,
-            text: `Interface: ${iface}`,
+            text: `${this.translateService.instant('MODULES.STATS.NET.INTERFACE')}: ${iface}`,
           },
         },
         labels,
@@ -78,13 +95,23 @@ export class NetStatComponent implements OnChanges {
         })),
       }));
     }),
+    takeUntil(this.destroyed$),
   );
 
-  constructor(private agentsService: AgentsService) {}
+  constructor(private agentsService: AgentsService, private translateService: TranslateService) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if ('agentId' in changes) {
       this._agentId$.next(changes.agentId.currentValue);
     }
+
+    if ('range' in changes) {
+      this.range$.next(changes.range.currentValue);
+    }
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

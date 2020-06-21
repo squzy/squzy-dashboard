@@ -1,0 +1,20 @@
+:host {
+  margin-top: 10px;
+  display: block;
+  mat-drawer::ng-deep {
+    width: 40%;
+
+    .mat-drawer-inner-container {
+      margin-left: 10px;
+    }
+  }
+  mat-list-item {
+    &:hover {
+      cursor: pointer;
+      background: #b4b4b433;
+    }
+  }
+  mat-drawer-content {
+    min-height: 300px;
+  }
+}

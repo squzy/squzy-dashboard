@@ -1,3 +1,5 @@
+@import 'src/theme/colors.scss';
+
 $padding: 40px;
 $min-width: 160px;
 
@@ -39,7 +41,7 @@ $min-width: 160px;
 
       &.mat-tab-label-active {
         color: white;
-        background-color: #3f51b5;
+        background-color: mat-color($primary);
 
         mat-icon {
           color: white;
@@ -75,6 +77,11 @@ $min-width: 160px;
   .content {
     margin: 15px 15px 0 15px;
     flex: 1 1;
+    .date-form {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+    }
     .checkers-layout {
       flex: 1 1;
     }

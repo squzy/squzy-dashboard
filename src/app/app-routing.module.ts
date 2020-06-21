@@ -10,6 +10,16 @@ const routes: Routes = [
     path: 'checkers',
     loadChildren: () => import('./modules/checkers/checkers.module').then((m) => m.ChekersModule),
   },
+  {
+    path: 'applications',
+    loadChildren: () =>
+      import('./modules/applications/applications.module').then((m) => m.ApplicationsModule),
+  },
+  {
+    path: 'transactions',
+    loadChildren: () =>
+      import('./modules/transaction/transaction.module').then((m) => m.TransactionModule),
+  },
 ];
 
 @NgModule({
