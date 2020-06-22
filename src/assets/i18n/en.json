@@ -263,6 +263,9 @@
       },
       "PAGE": {
         "CONFIGURATION": "Configuration",
+        "RUN": "Run",
+        "STOP": "Stop",
+        "REMOVE": "Remove",
         "ID": "Id",
         "NAME": "Name",
         "TYPE": "Type",

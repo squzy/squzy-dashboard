@@ -6,17 +6,17 @@
         *ngIf="info.status === statuses.STOPPED"
         mat-icon-button
         aria-label="Run"
-        matTooltip="Run"
+        matTooltip="{{ 'MODULES.CHECKERS.PAGE.RUN' | translate }}"
         matTooltipPosition="above"
         (click)="run(info.id)"
       >
         <mat-icon>play_arrow</mat-icon>
       </button>
       <button
-        *ngIf="info.status === statuses.REMOVED"
+        *ngIf="info.status === statuses.RUNNED"
         mat-icon-button
         aria-label="Pause"
-        matTooltip="Pause"
+        matTooltip="{{ 'MODULES.CHECKERS.PAGE.STOP' | translate }}"
         matTooltipPosition="above"
         (click)="stop(info.id)"
       >
@@ -26,7 +26,7 @@
         *ngIf="info.status !== statuses.REMOVED"
         mat-icon-button
         aria-label="Remove"
-        matTooltip="Remove"
+        matTooltip="{{ 'MODULES.CHECKERS.PAGE.REMOVE' | translate }}"
         matTooltipPosition="above"
         (click)="remove(info.id)"
       >
