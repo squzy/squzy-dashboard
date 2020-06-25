@@ -31,7 +31,8 @@
     "notValidUrl": "Not valid url",
     "minConcurrency": "Should be more than 0",
     "minStatusCode": "Should be more than 0",
-    "maxStatusCode": "Should be more less 503"
+    "maxStatusCode": "Should be more less 503",
+    "ruleNotValid": "Rule is not valid"
   },
   "MENU": {
     "AGENTS": "Agents",
@@ -123,6 +124,15 @@
   },
   "MODULES": {
     "MODALS": {
+      "ADD_RULE": {
+        "TITLE": "Add rule",
+        "SELECT_NAME": "Provide name",
+        "NAME_HINT": "Better provide uniq name",
+        "PROVIDE_RULE": "Provide rule",
+        "RULE_HINT": "Rules example you can find here",
+        "RULE_URL": "Rules examples",
+        "AUTOCLOSE": "Auto-close incident"
+      },
       "ADD_CHECKER": {
         "TITLE": "Add checker",
         "SELECT_TYPE": "Select type of checker",

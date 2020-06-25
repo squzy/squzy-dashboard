@@ -1,0 +1,60 @@
+<mat-card>
+  <form [formGroup]="form" (submit)="$event.preventDefault()">
+    <mat-card-header>
+      <mat-card-title>{{ 'MODULES.MODALS.ADD_RULE.TITLE' | translate }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="{{ 'MODULES.MODALS.ADD_RULE.SELECT_NAME' | translate }}"
+          formControlName="name"
+        >
+        <mat-hint>{{ 'MODULES.MODALS.ADD_RULE.NAME_HINT' | translate }}</mat-hint>
+        <mat-error *ngIf="form.get('name').hasError('required')">
+          {{
+          'ERRORS.REQUIRED' | translate
+          }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <textarea
+          matInput
+          placeholder="{{ 'MODULES.MODALS.ADD_RULE.PROVIDE_RULE' | translate }}"
+          formControlName="rule"
+        ></textarea>
+        <mat-hint>
+          {{ 'MODULES.MODALS.ADD_RULE.RULE_HINT' | translate }}:
+          <a href target="_blank">
+            {{
+            'MODULES.MODALS.ADD_RULE.RULE_URL' | translate
+            }}
+          </a>
+        </mat-hint>
+        <mat-error *ngIf="form.get('rule').hasError('required')">
+          {{
+          'ERRORS.REQUIRED' | translate
+          }}
+        </mat-error>
+        <mat-error *ngIf="form.get('rule').hasError('ruleNotValid')">
+          {{
+          'ERRORS.ruleNotValid' | translate
+          }}
+        </mat-error>
+      </mat-form-field>
+      <pre *ngIf="validationErrors$ | async as errorValidation">{{ errorValidation | json }}</pre>
+      <mat-checkbox formControlName="autoClose">
+        {{
+        'MODULES.MODALS.ADD_RULE.AUTOCLOSE' | translate
+        }}
+      </mat-checkbox>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button
+        mat-button
+        [disabled]="!form.valid"
+        (click)="onSubmit()"
+      >{{ 'MODULES.MODALS.ADD_CHECKER.ADD_BUTTON' | translate }}</button>
+    </mat-card-actions>
+  </form>
+</mat-card>
