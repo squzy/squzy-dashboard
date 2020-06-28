@@ -1,12 +1,9 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, OnInit } from '@angular/core';
 import { AppService } from './shared/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
-import { MatSelectChange } from '@angular/material/select';
 import { Subject, BehaviorSubject } from 'rxjs';
-import { takeUntil, startWith, tap } from 'rxjs/operators';
+import { takeUntil, tap } from 'rxjs/operators';
 import { StorageService } from './shared/services/storage.service';
-import { AddRuleService } from './shared/modules/modals/add-rule/add-rule.service';
-import { OwnerType } from './shared/enums/rules.type';
 
 @Component({
   selector: 'sqd-root',
@@ -46,7 +43,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private appService: AppService,
     private translateService: TranslateService,
     private storageService: StorageService,
-    private addRuleService: AddRuleService,
   ) {}
 
   ngOnInit() {
@@ -57,8 +53,6 @@ export class AppComponent implements OnInit, OnDestroy {
         takeUntil(this.destroyed$),
       )
       .subscribe();
-
-    this.addRuleService.open(OwnerType.INCIDENT_OWNER_TYPE_AGENT, 'asf');
   }
 
   ngOnDestroy() {

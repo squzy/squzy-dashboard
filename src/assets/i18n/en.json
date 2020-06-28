@@ -40,6 +40,14 @@
     "APPLICATIONS": "Applications"
   },
   "ENUMS": {
+    "RULES": {
+      "STATUS": {
+        "0": "Unspecified",
+        "1": "Active",
+        "2": "Inactive",
+        "3": "Removed"
+      }
+    },
     "AGENTS": {
       "STATUS": {
         "0": "Unspecified",
@@ -257,6 +265,13 @@
         "NAME": "Name",
         "HOST": "Host",
         "STATUS": "Status"
+      }
+    },
+    "RULES": {
+      "TABLE": {
+        "STATUS": "Status",
+        "REMOVE": "Remove",
+        "ADD": "Add"
       }
     },
     "CHECKERS": {

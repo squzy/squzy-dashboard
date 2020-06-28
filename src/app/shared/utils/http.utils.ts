@@ -5,7 +5,6 @@ export type queryFn = (params: HttpParams) => HttpParams;
 export function queryParam(
   name: string,
   value: string | number,
-  strictNumber: boolean = false,
 ): (params: HttpParams) => HttpParams {
   return (params: HttpParams) => {
     if (!value) {

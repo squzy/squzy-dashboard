@@ -112,6 +112,12 @@
 </div>
 
 <mat-card>
+  <mat-card-content>
+    <sqd-rule-list [ownerId]="currentId$ | async" [ownerType]="SCHDEDULER_TYPE"></sqd-rule-list>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
   <mat-card-content class="flex">
     <form [formGroup]="filterForm">
       <mat-form-field>
