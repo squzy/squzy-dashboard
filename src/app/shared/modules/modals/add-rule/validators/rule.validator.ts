@@ -18,22 +18,16 @@ export class RuleValidator implements AsyncValidator {
       map((value) => (value ? `${value}`.trim() : null)),
       filter((v) => !!v),
       tap(() => this.errors$.next(null)),
-      switchMap((trimmedValue) =>
-        this.rulesService.validateRule(this.ownerType, trimmedValue).pipe(
-          catchError((err) => {
-            this.errors$.next(err);
-            return of(false);
-          }),
-        ),
-      ),
-      tap((value) => (value ? this.errors$.next(null) : void 0)),
-      map((value) =>
-        !value
-          ? {
-              ruleNotValid: true,
-            }
-          : null,
-      ),
+      switchMap((trimmedValue) => this.rulesService.validateRule(this.ownerType, trimmedValue)),
+      map((response) => {
+        if (response.is_valid) {
+          return null;
+        }
+        this.errors$.next(response.error.message);
+        return {
+          ruleNotValid: true,
+        };
+      }),
       takeUntil(this.destoryed$),
     );
   }

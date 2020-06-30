@@ -3,22 +3,32 @@ import { HttpClient } from '@angular/common/http';
 import { OwnerType } from '../enums/rules.type';
 import { Rule } from '../interfaces/rules.interfaces';
 import { setQueryParams, queryParam } from '../utils/http.utils';
+import { map } from 'rxjs/operators';
+
+export interface RuleValidate {
+  is_valid: boolean;
+  error?: {
+    message: string;
+  };
+}
 
 @Injectable()
 export class RulesService {
   constructor(private httpClient: HttpClient) {}
 
   validateRule(ownerType: OwnerType, rule: string) {
-    return this.httpClient.post<boolean>('/api/rule/validate', {
+    return this.httpClient.post<RuleValidate>('/api/v1/rule/validate', {
       ownerType,
       rule,
     });
   }
 
   getRulesByOwnerId(ownerId: string, ownerType: OwnerType) {
-    return this.httpClient.get<Array<Rule>>(`/api/v1/rules`, {
-      params: setQueryParams(queryParam('ownerType', ownerType), queryParam('ownerId', ownerId)),
-    });
+    return this.httpClient
+      .get<{ rules: Array<Rule> }>(`/api/v1/rules`, {
+        params: setQueryParams(queryParam('ownerType', ownerType), queryParam('ownerId', ownerId)),
+      })
+      .pipe(map((response) => response.rules));
   }
 
   activate(ruleId: string) {

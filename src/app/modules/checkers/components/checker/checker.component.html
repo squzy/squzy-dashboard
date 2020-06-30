@@ -1,7 +1,7 @@
 <div class="flex">
   <mat-card class="flex flex-column width-50" *ngIf="checkInfo$ | async as info">
     <mat-card-header>
-      <mat-card-title>{{ 'MODULES.CHECKERS.PAGE.CONFIGURATION' | translate }}</mat-card-title>
+      <mat-card-title class="without-margin">{{ 'MODULES.CHECKERS.PAGE.CONFIGURATION' | translate }}</mat-card-title>
       <button
         *ngIf="info.status === statuses.STOPPED"
         mat-icon-button
@@ -83,7 +83,7 @@
   <mat-card class="flex flex-column width-50">
     <ng-container *ngIf="uptime$ | async as info; else loading">
       <mat-card-header>
-        <mat-card-title>{{ 'MODULES.CHECKERS.PAGE.STATISTICS' | translate }}</mat-card-title>
+        <mat-card-title class="without-margin">{{ 'MODULES.CHECKERS.PAGE.STATISTICS' | translate }}</mat-card-title>
       </mat-card-header>
       <mat-card-content class="flex">
         <div class="column width-100">
@@ -112,6 +112,9 @@
 </div>
 
 <mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ 'MODULES.CHECKERS.PAGE.INCIDENT_RULES' | translate }}</mat-card-title>
+  </mat-card-header>
   <mat-card-content>
     <sqd-rule-list [ownerId]="currentId$ | async" [ownerType]="SCHDEDULER_TYPE"></sqd-rule-list>
   </mat-card-content>

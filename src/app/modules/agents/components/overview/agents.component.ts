@@ -9,6 +9,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormBuilder } from '@angular/forms';
 import { minusMinute, FormRangeValue } from 'src/app/shared/date/date';
 import { dateFromToValidator } from 'src/app/shared/validators/date.validators';
+import { OwnerType } from 'src/app/shared/enums/rules.type';
 
 class CrossFieldErrorMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -96,6 +97,8 @@ export class AgentsComponent implements OnDestroy {
     [AgentsService.DISK]: 'storage',
     [AgentsService.CPU]: 'laptop',
   };
+
+  AGENT_TYPE = OwnerType.INCIDENT_OWNER_TYPE_AGENT;
 
   constructor(
     private agentService: AgentsService,

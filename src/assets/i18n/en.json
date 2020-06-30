@@ -37,7 +37,8 @@
   "MENU": {
     "AGENTS": "Agents",
     "CHECKERS": "Checkers",
-    "APPLICATIONS": "Applications"
+    "APPLICATIONS": "Applications",
+    "INCIDNETS": "Incidents"
   },
   "ENUMS": {
     "RULES": {
@@ -271,7 +272,10 @@
       "TABLE": {
         "STATUS": "Status",
         "REMOVE": "Remove",
-        "ADD": "Add"
+        "ADD": "Add",
+        "NAME": "Name",
+        "AUTO_CLOSE": "Auto-close",
+        "INCIDENTS_LIST": "Incident list"
       }
     },
     "CHECKERS": {
@@ -287,6 +291,7 @@
         "FILTER": "Filter"
       },
       "PAGE": {
+        "INCIDENT_RULES": "Incident rules list",
         "CONFIGURATION": "Configuration",
         "RUN": "Run",
         "STOP": "Stop",

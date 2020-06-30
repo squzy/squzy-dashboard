@@ -4,17 +4,33 @@
 
 <mat-list [disabled]="loading$ | async">
   <mat-list-item *ngFor="let rule of rulesList$ | async; trackBy: trackByFn">
-    <div mat-line>
+    <div class="rule-item" mat-line>
       <mat-slide-toggle
         [checked]="rule.status === ACTIVE_STATUS"
         [disabled]="rule.status === REMOVED || rule.status === UNCPECIFIED"
         (change)="toggleRule($event, rule.id)"
       >
-        {{ 'MODULES.RULES.TABLE.STATUS' | translate }}:
+        <strong>{{ 'MODULES.RULES.TABLE.STATUS' | translate }}</strong>
+        :
         {{ 'ENUMS.RULES.STATUS.' + rule.status | translate }}
       </mat-slide-toggle>
-      <span>{{ rule.name }}</span>
-      <mat-checkbox [checked]="rule.auto_close" [disabled]="true"></mat-checkbox>
+      <span class="name">
+        <strong>{{ 'MODULES.RULES.TABLE.NAME' | translate}}</strong>
+        : {{ rule.name }}
+      </span>
+      <mat-checkbox [checked]="rule.auto_close" [disabled]="true">
+        <strong>{{ 'MODULES.RULES.TABLE.AUTO_CLOSE' | translate}}</strong>
+      </mat-checkbox>
+      <span class="spacer"></span>
+      <button
+        mat-icon-button
+        aria-label="Incident"
+        matTooltip="{{ 'MODULES.RULES.TABLE.INCIDENTS_LIST' | translate }}"
+        matTooltipPosition="above"
+        (click)="goToInidentList(rule.id)"
+      >
+        <mat-icon>notification_important</mat-icon>
+      </button>
       <button
         *ngIf="rule.status !== REMOVED"
         mat-icon-button

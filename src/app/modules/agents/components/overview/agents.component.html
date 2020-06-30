@@ -15,10 +15,11 @@
 
 <div class="layout">
   <nav mat-tab-nav-bar class="agent-menu">
-    <mat-checkbox
-      [checked]="showDisabled$ | async"
-      (change)="changeVisibility($event)"
-    >{{ 'MODULES.AGENT.PAGE.SHOW_ALL' | translate }}</mat-checkbox>
+    <mat-checkbox [checked]="showDisabled$ | async" (change)="changeVisibility($event)">
+      {{
+      'MODULES.AGENT.PAGE.SHOW_ALL' | translate
+      }}
+    </mat-checkbox>
     <a
       mat-tab-link
       *ngFor="let agent of agents$ | async"
@@ -28,9 +29,8 @@
       [active]="agentLink.isActive"
     >{{ agent.agent_name ? agent.agent_name : agent.id }}</a>
   </nav>
-
-  <mat-card class="content">
-    <ng-container *ngIf="currentId$ | async as id; else selectAgent">
+  <ng-container *ngIf="currentId$ | async as id; else selectAgent">
+    <mat-card class="content">
       <ng-container *ngIf="currentType$ | async as currentType">
         <form class="date-form" *ngIf="currentType !== LIVE_TYPE" [formGroup]="rangeForm">
           <mat-form-field>
@@ -44,9 +44,11 @@
               [errorStateMatcher]="errorMatcher"
             >
             <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateFromComponent></owl-date-time>
-            <mat-error
-              *ngIf="rangeForm.hasError('dateToLessThenFrom')"
-            >{{ 'ERRORS.dateToLessThenFrom' | translate }}</mat-error>
+            <mat-error *ngIf="rangeForm.hasError('dateToLessThenFrom')">
+              {{
+              'ERRORS.dateToLessThenFrom' | translate
+              }}
+            </mat-error>
           </mat-form-field>
           <mat-form-field>
             <label for="dateTo">{{ 'LABELS.TO' | translate }}:</label>
@@ -59,9 +61,11 @@
               [errorStateMatcher]="errorMatcher"
             >
             <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateToComponent></owl-date-time>
-            <mat-error
-              *ngIf="rangeForm.hasError('dateToLessThenFrom')"
-            >{{ 'ERRORS.dateToLessThenFrom' | translate }}</mat-error>
+            <mat-error *ngIf="rangeForm.hasError('dateToLessThenFrom')">
+              {{
+              'ERRORS.dateToLessThenFrom' | translate
+              }}
+            </mat-error>
           </mat-form-field>
         </form>
 
@@ -73,7 +77,17 @@
           <sqd-net-stat [range]="range" [agentId]="id" *ngSwitchCase="NET_TYPE"></sqd-net-stat>
         </div>
       </ng-container>
-    </ng-container>
-    <ng-template #selectAgent>{{ 'MODULES.AGENT.PAGE.HOME_LABEL' | translate }}</ng-template>
-  </mat-card>
+    </mat-card>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ 'MODULES.CHECKERS.PAGE.INCIDENT_RULES' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <sqd-rule-list [ownerId]="id" [ownerType]="AGENT_TYPE"></sqd-rule-list>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+  <ng-template #selectAgent>
+    <mat-card class="content">{{ 'MODULES.AGENT.PAGE.HOME_LABEL' | translate }}</mat-card>
+  </ng-template>
 </div>

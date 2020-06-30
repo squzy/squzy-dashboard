@@ -27,6 +27,15 @@
 
 <mat-card>
   <mat-card-header>
+    <mat-card-title>{{ 'MODULES.CHECKERS.PAGE.INCIDENT_RULES' | translate }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <sqd-rule-list [ownerId]="currentId$ | async" [ownerType]="APPLICATION_TYPE"></sqd-rule-list>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-header>
     <mat-card-title>{{ 'MODULES.APPLICATIONS.PAGE.TRANSACTIONS' | translate }}</mat-card-title>
   </mat-card-header>
   <mat-card-content>

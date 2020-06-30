@@ -9,10 +9,11 @@ import {
 import { OwnerType, RuleStatus } from 'src/app/shared/enums/rules.type';
 import { BehaviorSubject, Subject, combineLatest, of } from 'rxjs';
 import { RulesService } from 'src/app/shared/services/rules.service';
-import { takeUntil, switchMap, tap, finalize, startWith } from 'rxjs/operators';
+import { takeUntil, switchMap, tap, finalize, startWith, delay, map } from 'rxjs/operators';
 import { Rule } from 'src/app/shared/interfaces/rules.interfaces';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { AddRuleService } from '../../../modals/add-rule/add-rule.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'sqd-rule-list',
@@ -28,7 +29,9 @@ export class RuleListComponent implements OnChanges, OnDestroy {
 
   private ownerID$ = new BehaviorSubject<string>(this.ownerId);
 
-  loading$ = new BehaviorSubject<boolean>(false);
+  private loadingSubject$ = new BehaviorSubject<boolean>(false);
+
+  loading$ = this.loadingSubject$.asObservable();
 
   private refresh$ = new Subject();
 
@@ -40,6 +43,7 @@ export class RuleListComponent implements OnChanges, OnDestroy {
     this.refresh$.pipe(startWith(null)),
   ).pipe(
     switchMap(([id, type]) => this.rulesService.getRulesByOwnerId(id, type)),
+    map((list) => (list || []).filter((rule) => rule.status !== RuleStatus.RULE_STATUS_REMOVED)),
     takeUntil(this.destroyed$),
   );
 
@@ -49,7 +53,11 @@ export class RuleListComponent implements OnChanges, OnDestroy {
 
   UNCPECIFIED = RuleStatus.RULE_STATUS_UNSPECIFIED;
 
-  constructor(private rulesService: RulesService, private addRulesService: AddRuleService) {}
+  constructor(
+    private rulesService: RulesService,
+    private addRulesService: AddRuleService,
+    private router: Router,
+  ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if ('ownerId' in changes) {
@@ -79,8 +87,8 @@ export class RuleListComponent implements OnChanges, OnDestroy {
   toggleRule(event: MatSlideToggleChange, ruleId: string) {
     of(event.checked)
       .pipe(
-        tap(() => this.loading$.next(true)),
-        finalize(() => this.loading$.next(false)),
+        tap(() => this.loadingSubject$.next(true)),
+        finalize(() => this.loadingSubject$.next(false)),
         switchMap((checked) =>
           checked ? this.rulesService.activate(ruleId) : this.rulesService.deactivate(ruleId),
         ),
@@ -95,13 +103,21 @@ export class RuleListComponent implements OnChanges, OnDestroy {
     this.rulesService
       .remove(ruleId)
       .pipe(
-        tap(() => this.loading$.next(true)),
-        finalize(() => this.loading$.next(false)),
+        tap(() => this.loadingSubject$.next(true)),
+        finalize(() => this.loadingSubject$.next(false)),
         takeUntil(this.destroyed$),
       )
       .subscribe(() => {
         this.refresh$.next();
       });
+  }
+
+  goToInidentList(ruleId: string) {
+    this.router.navigate(['incidents', 'list'], {
+      queryParams: {
+        ruleId,
+      },
+    });
   }
 
   ngOnDestroy() {

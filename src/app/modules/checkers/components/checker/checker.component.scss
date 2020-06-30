@@ -23,7 +23,9 @@ $padding: 40px;
   mat-card {
     mat-card-header::ng-deep {
       mat-card-title {
-        margin-bottom: 0px;
+        &.without-margin {
+          margin-bottom: 0px;
+        }
       }
       width: 100%;
       .mat-card-header-text {
