@@ -1,9 +1,15 @@
+$padding: 16px;
+
+.header {
+  margin-left: $padding;
+}
+
 mat-list {
   .rule-item {
     display: flex;
     align-items: center;
     > *:not(:first-child) {
-      margin-left: 10px;
+      margin-left: $padding;
     }
     .name {
       max-width: 50%;
