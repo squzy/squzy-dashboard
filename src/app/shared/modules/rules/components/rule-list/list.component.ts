@@ -5,11 +5,21 @@ import {
   OnChanges,
   SimpleChanges,
   OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { OwnerType, RuleStatus } from 'src/app/shared/enums/rules.type';
 import { BehaviorSubject, Subject, combineLatest, of } from 'rxjs';
 import { RulesService } from 'src/app/shared/services/rules.service';
-import { takeUntil, switchMap, tap, finalize, startWith, delay, map } from 'rxjs/operators';
+import {
+  takeUntil,
+  switchMap,
+  tap,
+  startWith,
+  map,
+  debounce,
+  debounceTime,
+  distinctUntilChanged,
+} from 'rxjs/operators';
 import { Rule } from 'src/app/shared/interfaces/rules.interfaces';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { AddRuleService } from '../../../modals/add-rule/add-rule.service';
@@ -21,7 +31,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RuleListComponent implements OnChanges, OnDestroy {
+export class RuleListComponent implements OnChanges, OnInit, OnDestroy {
   private destroyed$ = new Subject();
 
   @Input() ownerId: string;
@@ -33,17 +43,17 @@ export class RuleListComponent implements OnChanges, OnDestroy {
 
   loading$ = this.loadingSubject$.asObservable();
 
-  private refresh$ = new Subject();
+  private refresh$ = new BehaviorSubject<void>(null);
 
   private ownerType$ = new BehaviorSubject<OwnerType>(this.ownerType);
 
-  rulesList$ = combineLatest(
-    this.ownerID$,
-    this.ownerType$,
-    this.refresh$.pipe(startWith(null)),
-  ).pipe(
+  private toggleSubject$ = new Subject<{ id: string; state: boolean }>();
+
+  rulesList$ = combineLatest(this.ownerID$, this.ownerType$, this.refresh$).pipe(
+    tap(() => this.loadingSubject$.next(true)),
     switchMap(([id, type]) => this.rulesService.getRulesByOwnerId(id, type)),
     map((list) => (list || []).filter((rule) => rule.status !== RuleStatus.RULE_STATUS_REMOVED)),
+    tap(() => this.loadingSubject$.next(false)),
     takeUntil(this.destroyed$),
   );
 
@@ -58,6 +68,23 @@ export class RuleListComponent implements OnChanges, OnDestroy {
     private addRulesService: AddRuleService,
     private router: Router,
   ) {}
+
+  ngOnInit() {
+    this.toggleSubject$
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged((x, y) => {
+          return x.id === y.id && x.state === y.state;
+        }),
+        switchMap((item) =>
+          item.state ? this.rulesService.activate(item.id) : this.rulesService.deactivate(item.id),
+        ),
+        takeUntil(this.destroyed$),
+      )
+      .subscribe(() => {
+        this.refresh$.next();
+      });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if ('ownerId' in changes) {
@@ -85,28 +112,16 @@ export class RuleListComponent implements OnChanges, OnDestroy {
   }
 
   toggleRule(event: MatSlideToggleChange, ruleId: string) {
-    of(event.checked)
-      .pipe(
-        tap(() => this.loadingSubject$.next(true)),
-        finalize(() => this.loadingSubject$.next(false)),
-        switchMap((checked) =>
-          checked ? this.rulesService.activate(ruleId) : this.rulesService.deactivate(ruleId),
-        ),
-        takeUntil(this.destroyed$),
-      )
-      .subscribe(() => {
-        this.refresh$.next();
-      });
+    this.toggleSubject$.next({
+      id: ruleId,
+      state: event.checked,
+    });
   }
 
   remove(ruleId: string) {
     this.rulesService
       .remove(ruleId)
-      .pipe(
-        tap(() => this.loadingSubject$.next(true)),
-        finalize(() => this.loadingSubject$.next(false)),
-        takeUntil(this.destroyed$),
-      )
+      .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
         this.refresh$.next();
       });
