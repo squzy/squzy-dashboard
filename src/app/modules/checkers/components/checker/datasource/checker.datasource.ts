@@ -2,9 +2,9 @@ import { CheckersService, HistoryItem } from '../../../services/checkers.service
 import { DataSource } from '@angular/cdk/table';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { CollectionViewer } from '@angular/cdk/collections';
-import { SortSchedulerList, SortDirection } from 'src/app/shared/enums/sort.table';
+import { SortDirection } from 'src/app/shared/enums/sort.table';
 import { finalize, tap, catchError } from 'rxjs/operators';
-import { SchedulerResponseCode } from 'src/app/shared/enums/schedulers.type';
+import { SchedulerResponseCode, SortSchedulerList } from 'src/app/shared/enums/schedulers.type';
 
 export class CheckerDataSource implements DataSource<HistoryItem> {
   private checkersList$ = new BehaviorSubject<HistoryItem[]>([]);

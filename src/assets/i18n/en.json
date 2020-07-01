@@ -41,6 +41,15 @@
     "INCIDNETS": "Incidents"
   },
   "ENUMS": {
+    "INCIDENTS": {
+      "STATUS": {
+        "0": "Unspecified",
+        "1": "Opened",
+        "2": "Studied",
+        "3": "Can be closed",
+        "4": "Closed"
+      }
+    },
     "RULES": {
       "STATUS": {
         "0": "Unspecified",
@@ -276,6 +285,15 @@
         "NAME": "Name",
         "AUTO_CLOSE": "Auto-close",
         "INCIDENTS_LIST": "Incident list"
+      }
+    },
+    "INCIDENTS": {
+      "LIST": {
+        "TABLE_TITLE": "Table of incidents",
+        "ID": "Id",
+        "RULE_ID": "Rule Id",
+        "STATUS": "Status",
+        "DURATION": "Duration"
       }
     },
     "CHECKERS": {

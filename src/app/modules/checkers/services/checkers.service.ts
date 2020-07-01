@@ -8,8 +8,9 @@ import {
   SelectorTypes,
   SchedulerStatus,
   SchedulerResponseCode,
+  SortSchedulerList,
 } from 'src/app/shared/enums/schedulers.type';
-import { SortSchedulerList, SortDirection } from 'src/app/shared/enums/sort.table';
+import { SortDirection } from 'src/app/shared/enums/sort.table';
 import { setQueryParams, queryParam } from 'src/app/shared/utils/http.utils';
 
 export interface SchedulerUptime {

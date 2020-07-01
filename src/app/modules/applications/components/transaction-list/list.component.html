@@ -9,7 +9,7 @@
     </ng-container>
 
     <ng-container matColumnDef="StartTime">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      <th class="no-focused" mat-header-cell *matHeaderCellDef mat-sort-header>
         <mat-form-field>
           <mat-label>{{ 'LABELS.FROM' | translate }}:</mat-label>
           <input
@@ -29,7 +29,7 @@
     </ng-container>
 
     <ng-container matColumnDef="EndTime">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      <th class="no-focused" mat-header-cell *matHeaderCellDef mat-sort-header>
         <mat-form-field>
           <mat-label>{{ 'LABELS.TO' | translate }}:</mat-label>
           <input
@@ -80,7 +80,7 @@
       <th mat-header-cell *matHeaderCellDef>
         <mat-form-field>
           <mat-label>{{ 'MODULES.APPLICATIONS.TRANSACTION_LIST.STATUS' | translate}}</mat-label>
-          <mat-select (selectionChange)="onStatusChange($event)" [value]="type.value">
+          <mat-select (selectionChange)="onStatusChange($event)" [value]="status.value">
             <mat-option
               *ngFor="let trStatus of statuses"
               [value]="trStatus"

@@ -17,6 +17,13 @@ export enum SelectorTypes {
   RAW = 6,
 }
 
+export enum SortSchedulerList {
+  SORT_SCHEDULER_LIST_UNSPECIFIED = 0,
+  BY_START_TIME = 1,
+  BY_END_TIME = 2,
+  BY_LATENCY = 3,
+}
+
 export enum SchedulerStatus {
   SCHEDULER_STATUS_UNSPECIFIED = 0,
   RUNNED = 1,

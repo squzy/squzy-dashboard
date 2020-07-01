@@ -92,10 +92,6 @@ export class TransactionsListComponent implements AfterViewInit, OnInit, OnDestr
 
   types = TransactionTypes;
 
-  // private autoRefresh_$ = new BehaviorSubject(false);
-
-  // private readonly refresh$ = new BehaviorSubject(null);
-
   queryFilterGroup = this.qpb.group({
     [TransactionsListComponent.queryParam.dateFrom]: this.qpb.param(
       TransactionsListComponent.queryParam.dateFrom,

@@ -23,8 +23,12 @@ import { SchedulerConfigComponent } from './config/config.component';
 import { dateFromToValidator } from 'src/app/shared/validators/date.validators';
 import { SchedulerSnapshotComponent } from './snapshot/snapshot.component';
 import { CheckerDataSource } from './datasource/checker.datasource';
-import { SortSchedulerList, angularSortDirectionMap } from 'src/app/shared/enums/sort.table';
-import { SchedulerStatus, SchedulerResponseCode } from 'src/app/shared/enums/schedulers.type';
+import { angularSortDirectionMap } from 'src/app/shared/enums/sort.table';
+import {
+  SchedulerStatus,
+  SchedulerResponseCode,
+  SortSchedulerList,
+} from 'src/app/shared/enums/schedulers.type';
 import { OwnerType } from 'src/app/shared/enums/rules.type';
 
 class CrossFieldErrorMatcher implements ErrorStateMatcher {
