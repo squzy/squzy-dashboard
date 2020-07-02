@@ -48,6 +48,6 @@ const routes: Routes = [
     MatFormFieldModule,
     QueryParamModule,
   ],
-  declarations: [ListComponent],
+  declarations: [ListComponent, IncidentComponent],
 })
 export class IncidentsModule {}
