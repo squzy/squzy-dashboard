@@ -1,1 +1,53 @@
-
+<mat-card>
+  <ng-container *ngIf="currentIncident$ | async as incident; else loading">
+    <mat-card-header>
+      <mat-card-title>{{ 'MODULES.INCIDENT.PAGE.TITLE' | translate }} #{{ incident.id }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="info">
+        <p>
+          <strong>{{ 'MODULES.INCIDENT.PAGE.STATUS' | translate }}</strong>
+          : {{ 'ENUMS.INCIDENTS.STATUS.' + incident.status }}
+        </p>
+        <p>
+          <strong>{{ 'MODULES.INCIDENT.PAGE.RULE_ID' | translate }}</strong>
+          : {{ incident.rule_id
+          }}
+          <button
+            (click)="goToRulePage(incident.rule_id)"
+            mat-icon-button
+            matTooltipPosition="right"
+            matTooltip="View config"
+          >
+            <mat-icon>link</mat-icon>
+          </button>
+        </p>
+      </div>
+      <div class="history">
+        <p *ngFor="let item of incident.histories">
+          <strong>{{ 'MODULES.INCIDENT.PAGE.TIME_HISTORY_ITEM' | translate }}</strong>
+          : {{ toDate(item.timestamp) | date: 'd/M/yyyy HH:mm:ss' }},
+          <strong>{{ 'MODULES.INCIDENT.PAGE.STATUS' | translate }}</strong>
+          : {{ 'ENUMS.INCIDENTS.STATUS.' + item.status }}
+        </p>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button
+        mat-button
+        *ngIf="incident.status === OPENED"
+        (click)="study(incident.id)"
+      >{{ 'MODULES.INCIDENT.PAGE.BTN_STUDY' | translate }}</button>
+      <button
+        mat-button
+        *ngIf="incident.status !== CLOSED"
+        (click)="close(incident.id)"
+      >{{ 'MODULES.INCIDENT.PAGE.BTN_CLOSE' | translate }}</button>
+    </mat-card-actions>
+  </ng-container>
+  <ng-template #loading>
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
+</mat-card>

@@ -40,6 +40,14 @@ export class IncidentService {
     });
   }
 
+  close(incidentId: string) {
+    return this.httpClient.put<Incident>(`/api/v1/incidents/${incidentId}/close`, {});
+  }
+
+  study(incidentId: string) {
+    return this.httpClient.put<Incident>(`/api/v1/incidents/${incidentId}/study`, {});
+  }
+
   getById(incidentId: string) {
     return this.httpClient.get<Incident>(`/api/v1/incidents/${incidentId}`);
   }

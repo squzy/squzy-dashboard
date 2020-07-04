@@ -14,6 +14,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { QueryParamModule } from '@ngqp/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatSortModule } from '@angular/material/sort';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 const routes: Routes = [
   {
@@ -47,6 +50,9 @@ const routes: Routes = [
     MatPaginatorModule,
     MatFormFieldModule,
     QueryParamModule,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatIconModule,
   ],
   declarations: [ListComponent, IncidentComponent],
 })
