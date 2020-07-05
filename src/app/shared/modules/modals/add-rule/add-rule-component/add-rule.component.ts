@@ -12,6 +12,11 @@ export interface AddRuleData {
   ownerId: string;
 }
 
+interface Example {
+  description: string;
+  value: string;
+}
+
 @Component({
   selector: 'sqd-dialog-add-rule',
   templateUrl: './add-rule.component.html',
@@ -24,6 +29,19 @@ export class AddRuleFormComponent implements OnDestroy {
   private ruleValidationErrMsg = new Subject<string>();
 
   validationErrors$ = this.ruleValidationErrMsg.asObservable();
+
+  examples: { [key: string]: Array<Example> } = {
+    [`${OwnerType.INCIDENT_OWNER_TYPE_SCHEDULER}`]: [
+      {
+        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_SCHEDULER_LAST_TWO_OK',
+        value: 'all(map(Last(2), {.Code}), { # == Error })',
+      },
+      {
+        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_SCHEDULER_LAST_SIX_OK',
+        value: 'count(map(Last(6), {.Code}), { # == Error}) > 3',
+      },
+    ],
+  };
 
   form = this.fb.group({
     name: ['', Validators.compose([Validators.required])],
@@ -59,6 +77,12 @@ export class AddRuleFormComponent implements OnDestroy {
       .subscribe((res) => {
         this.dialogRef.close(res);
       });
+  }
+
+  applyRule(ruleValue: string) {
+    this.form.patchValue({
+      rule: ruleValue,
+    });
   }
 
   ngOnDestroy() {

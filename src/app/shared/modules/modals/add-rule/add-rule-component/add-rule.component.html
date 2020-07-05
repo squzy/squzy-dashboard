@@ -25,7 +25,10 @@
         ></textarea>
         <mat-hint>
           {{ 'MODULES.MODALS.ADD_RULE.RULE_HINT' | translate }}:
-          <a href target="_blank">
+          <a
+            href="https://github.com/antonmedv/expr/blob/master/docs/Language-Definition.md"
+            target="_blank"
+          >
             {{
             'MODULES.MODALS.ADD_RULE.RULE_URL' | translate
             }}
@@ -42,6 +45,22 @@
           }}
         </mat-error>
       </mat-form-field>
+      <mat-list>
+        <div mat-subheader>{{ 'MODULES.MODALS.ADD_RULE.EXAMPLES' | translate }}</div>
+        <mat-list-item
+          (click)="applyRule(example.value)"
+          class="example-item"
+          matRipple
+          *ngFor="let example of examples[data.ownerType]"
+        >
+          <mat-icon
+            mat-list-icon
+            [color]="example.value == form.get('rule').value ? 'accent' : 'black'"
+          >done</mat-icon>
+          <div class="example-value" mat-line>{{example.value}}</div>
+          <div class="example-description" mat-line>{{example.description | translate}}</div>
+        </mat-list-item>
+      </mat-list>
       <pre *ngIf="validationErrors$ | async as errorValidation">{{ errorValidation | json }}</pre>
       <mat-checkbox formControlName="autoClose">
         {{

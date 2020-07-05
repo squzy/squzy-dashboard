@@ -143,12 +143,15 @@
   "MODULES": {
     "MODALS": {
       "ADD_RULE": {
+        "EXAMPLES": "Examples",
+        "EXAMPLE_SCHEDULER_LAST_TWO_OK": "Last two schedulers(both) return success",
+        "EXAMPLE_SCHEDULER_LAST_SIX_OK": "Errors in last 6 schedulers record > 3",
         "TITLE": "Add rule",
         "SELECT_NAME": "Provide name",
         "NAME_HINT": "Better provide uniq name",
         "PROVIDE_RULE": "Provide rule",
-        "RULE_HINT": "Rules example you can find here",
-        "RULE_URL": "Rules examples",
+        "RULE_HINT": "Language Definition you can find by link",
+        "RULE_URL": "Here",
         "AUTOCLOSE": "Auto-close incident"
       },
       "ADD_CHECKER": {

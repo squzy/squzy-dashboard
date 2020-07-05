@@ -1,3 +1,5 @@
+@import 'src/theme/colors.scss';
+
 mat-card-content {
   display: flex;
   flex-direction: column;
@@ -18,5 +20,17 @@ mat-card {
   .selector-form {
     margin-top: 10px;
     display: flex;
+  }
+  .example-item {
+    &:hover {
+      background-color: mat-color($primary, 50);
+      cursor: pointer;
+    }
+    .example-value {
+      font-weight: bold;
+    }
+    .example-description {
+      color: mat-color($accent, 800);
+    }
   }
 }

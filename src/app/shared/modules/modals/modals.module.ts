@@ -16,6 +16,7 @@ import { AddRuleService } from './add-rule/add-rule.service';
 import { AddRuleFormComponent } from './add-rule/add-rule-component/add-rule.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { RuleValidator } from './add-rule/validators/rule.validator';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { RuleValidator } from './add-rule/validators/rule.validator';
     MatIconModule,
     MatCheckboxModule,
     TranslateModule.forChild({}),
+    MatListModule,
   ],
   exports: [],
   providers: [AddCheckerService, AddRuleService],
