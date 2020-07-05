@@ -7,7 +7,7 @@
       <div class="info">
         <p>
           <strong>{{ 'MODULES.INCIDENT.PAGE.STATUS' | translate }}</strong>
-          : {{ 'ENUMS.INCIDENTS.STATUS.' + incident.status }}
+          : {{ 'ENUMS.INCIDENTS.STATUS.' + (incident.status || 0) }}
         </p>
         <p>
           <strong>{{ 'MODULES.INCIDENT.PAGE.RULE_ID' | translate }}</strong>
@@ -28,7 +28,7 @@
           <strong>{{ 'MODULES.INCIDENT.PAGE.TIME_HISTORY_ITEM' | translate }}</strong>
           : {{ toDate(item.timestamp) | date: 'd/M/yyyy HH:mm:ss' }},
           <strong>{{ 'MODULES.INCIDENT.PAGE.STATUS' | translate }}</strong>
-          : {{ 'ENUMS.INCIDENTS.STATUS.' + item.status }}
+          : {{ 'ENUMS.INCIDENTS.STATUS.' + (item.status || 0) }}
         </p>
       </div>
     </mat-card-content>
