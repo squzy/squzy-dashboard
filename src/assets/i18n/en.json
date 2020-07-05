@@ -288,6 +288,14 @@
       }
     },
     "INCIDENTS": {
+      "PAGE": {
+        "TITLE": "Incident",
+        "STATUS": "Status",
+        "RULE_ID": "Rule Id",
+        "TIME_HISTORY_ITEM": "Timestamp",
+        "BTN_STUDY": "Study incident",
+        "BTN_CLOSE": "Close incident"
+      },
       "LIST": {
         "TABLE_TITLE": "Table of incidents",
         "ID": "Id",
