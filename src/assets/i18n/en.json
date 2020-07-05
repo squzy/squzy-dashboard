@@ -144,8 +144,8 @@
     "MODALS": {
       "ADD_RULE": {
         "EXAMPLES": "Examples",
-        "EXAMPLE_SCHEDULER_LAST_TWO_OK": "Last two schedulers(both) return success",
-        "EXAMPLE_SCHEDULER_LAST_SIX_OK": "Errors in last 6 schedulers record > 3",
+        "EXAMPLE_SCHEDULER_LAST_TWO": "Last two schedulers(both) return error",
+        "EXAMPLE_SCHEDULER_LAST_SIX": "Errors in last 6 schedulers record > 3",
         "TITLE": "Add rule",
         "SELECT_NAME": "Provide name",
         "NAME_HINT": "Better provide uniq name",

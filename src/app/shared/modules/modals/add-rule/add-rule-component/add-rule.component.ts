@@ -33,11 +33,11 @@ export class AddRuleFormComponent implements OnDestroy {
   examples: { [key: string]: Array<Example> } = {
     [`${OwnerType.INCIDENT_OWNER_TYPE_SCHEDULER}`]: [
       {
-        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_SCHEDULER_LAST_TWO_OK',
+        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_SCHEDULER_LAST_TWO',
         value: 'all(map(Last(2), {.Code}), { # == Error })',
       },
       {
-        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_SCHEDULER_LAST_SIX_OK',
+        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_SCHEDULER_LAST_SIX',
         value: 'count(map(Last(6), {.Code}), { # == Error}) > 3',
       },
     ],
