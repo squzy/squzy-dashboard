@@ -6,6 +6,6 @@ export interface Rule {
   name: string;
   auto_close: boolean;
   status: RuleStatus;
-  ownerType: OwnerType;
-  ownerId: string;
+  owner_type: OwnerType;
+  owner_id: string;
 }

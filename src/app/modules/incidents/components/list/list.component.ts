@@ -21,9 +21,10 @@ import { takeUntil, switchMap } from 'rxjs/operators';
 import { IncidentListDataSource } from './datasources/list.datasource';
 import { IncidentService } from '../../services/incident.service';
 import { MatSelectChange } from '@angular/material/select';
-import { timeToDate, Time, diffInSec } from 'src/app/shared/date/date';
+import { timeToDate, Time, diffInSec, SECOND } from 'src/app/shared/date/date';
 import { Incident } from 'src/app/shared/interfaces/incident.interfaces';
 import { TranslateService } from '@ngx-translate/core';
+import { roundNumber } from 'src/app/shared/numbers/numbers';
 
 @Component({
   selector: 'sqd-incident-list',
@@ -63,7 +64,7 @@ export class ListComponent implements AfterViewInit, OnInit, OnDestroy {
     IncidentStatus.INCIDENT_STATUS_STUDIED,
   ];
 
-  displayedColumns: string[] = ['Id', 'StartTime', 'EndTime', 'RuleId', 'Status', 'Duration'];
+  displayedColumns: string[] = ['Id', 'StartTime', 'EndTime', 'Status', 'Duration', 'RuleId'];
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -215,6 +216,20 @@ export class ListComponent implements AfterViewInit, OnInit, OnDestroy {
     return timeToDate(time);
   }
 
+  getStartTime(incident: Incident): Time | false {
+    return incident.histories && incident.histories[0] && incident.histories[0].timestamp;
+  }
+
+  getEndTime(incident: Incident): Time | false {
+    const index = (incident.histories || []).findIndex(
+      (item) => item.status === IncidentStatus.INCIDENT_STATUS_CLOSED,
+    );
+    if (index !== -1) {
+      return incident.histories[index].timestamp;
+    }
+    return false;
+  }
+
   getDuration(incident: Incident) {
     const index = (incident.histories || []).findIndex(
       (e) => e.status === IncidentStatus.INCIDENT_STATUS_CLOSED,
@@ -222,10 +237,10 @@ export class ListComponent implements AfterViewInit, OnInit, OnDestroy {
     if (index === -1) {
       return '-';
     }
-    return `${diffInSec(
-      incident.histories[index].timestamp,
-      incident.histories[0].timestamp,
-    )} ${this.translateService.instant('LABELS.SEC')}`;
+    return `${roundNumber(
+      diffInSec(incident.histories[index].timestamp, incident.histories[0].timestamp) / SECOND,
+      3,
+    )} ${this.translateService.instant('LABELS.SECOND')}`;
   }
 
   clickRow(incident: Incident) {

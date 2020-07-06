@@ -40,6 +40,36 @@ export class AddRuleFormComponent implements OnDestroy {
         description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_SCHEDULER_LAST_SIX',
         value: 'count(map(Last(6), {.Code}), { # == Error}) > 3',
       },
+      {
+        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_SCHEDULER_DURATION',
+        value: 'any(map(Last(2), { Duration(#)}), { # > 30 })',
+      },
+    ],
+    [`${OwnerType.INCIDENT_OWNER_TYPE_AGENT}`]: [
+      {
+        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_AGENT_CPU_LOAD',
+        value: 'any(map(Last(1, UseType(CPU)), {.CpuInfo.Cpus})[0], {.Load > 20})',
+      },
+      {
+        value: 'any(map(Last(1, UseType(Memory)), {.MemoryInfo.Mem.UsedPercent}), { # > 50})',
+        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_AGENT_MEMORY_LOAD',
+      },
+      {
+        value:
+          'any(map(Last(1, UseType(Disk)), {.DiskInfo.Disks["/System/Volumes/Data"].UsedPercent}), { # > 50})',
+        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_AGENT_DISK_LOAD',
+      },
+    ],
+    [`${OwnerType.INCIDENT_OWNER_TYPE_APPLICATION}`]: [
+      {
+        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_APPLICATION_FAILED_TRANSACTION',
+        value: 'all(map(Last(2, UseName(\'/times\')), {.Status}), { # == Failed})',
+      },
+      {
+        value:
+          'all(map(Last(2, UseMethod(\'GET\'), UseName(\'/times\')), { Duration(#)}), { # > 3000})',
+        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_APPLICATION_DURATION_TRANSACTION',
+      },
     ],
   };
 

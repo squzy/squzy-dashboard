@@ -61,15 +61,15 @@ export class IncidentComponent implements OnDestroy {
       .getById(ruleId)
       .pipe(takeUntil(this.destoryed$))
       .subscribe((rule) => {
-        switch (rule.ownerType) {
+        switch (rule.owner_type) {
           case OwnerType.INCIDENT_OWNER_TYPE_AGENT:
-            this.router.navigate(['agents', rule.ownerId]);
+            this.router.navigate(['agents', rule.owner_id]);
             break;
           case OwnerType.INCIDENT_OWNER_TYPE_SCHEDULER:
-            this.router.navigate(['checkers', rule.ownerId]);
+            this.router.navigate(['checkers', rule.owner_id]);
             break;
           case OwnerType.INCIDENT_OWNER_TYPE_APPLICATION:
-            this.router.navigate(['applications', rule.ownerId]);
+            this.router.navigate(['applications', rule.owner_id]);
             break;
         }
       });

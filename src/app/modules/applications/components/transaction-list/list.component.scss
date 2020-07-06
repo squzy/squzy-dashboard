@@ -1,5 +1,6 @@
 table {
   display: block;
+  overflow-x: scroll;
   .mat-row {
     &:hover {
       cursor: pointer;
