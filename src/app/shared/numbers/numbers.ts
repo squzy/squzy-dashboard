@@ -5,7 +5,7 @@ export const roundNumber = (value: number, countNumber = 2) => {
 
 export const getRoundedPercent = (value: number, count = 2) => {
   if (isNaN(value)) {
-    return `NaN`;
+    return `0 %`;
   }
   return `${roundNumber(value, count) * 100} %`;
 };
