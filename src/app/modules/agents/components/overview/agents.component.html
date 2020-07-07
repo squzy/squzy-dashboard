@@ -28,52 +28,68 @@
       [active]="agentLink.isActive"
     >{{ agent.agent_name ? agent.agent_name : agent.id }}</a>
   </nav>
+  <ng-container *ngIf="currentId$ | async as id; else selectAgent">
+    <div class="agent-content">
+      <mat-card class="content">
+        <ng-container *ngIf="currentType$ | async as currentType">
+          <form class="date-form" *ngIf="currentType !== LIVE_TYPE" [formGroup]="rangeForm">
+            <mat-form-field>
+              <label for="dateFrom">{{ 'LABELS.FROM' | translate }}:</label>
+              <input
+                matInput
+                [owlDateTimeTrigger]="dateFromComponent"
+                [owlDateTime]="dateFromComponent"
+                formControlName="dateFrom"
+                autocomplete="off"
+                [errorStateMatcher]="errorMatcher"
+              >
+              <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateFromComponent></owl-date-time>
+              <mat-error
+                *ngIf="rangeForm.hasError('dateToLessThenFrom')"
+              >{{ 'ERRORS.dateToLessThenFrom' | translate }}</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <label for="dateTo">{{ 'LABELS.TO' | translate }}:</label>
+              <input
+                matInput
+                [owlDateTimeTrigger]="dateToComponent"
+                [owlDateTime]="dateToComponent"
+                formControlName="dateTo"
+                autocomplete="off"
+                [errorStateMatcher]="errorMatcher"
+              >
+              <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateToComponent></owl-date-time>
+              <mat-error
+                *ngIf="rangeForm.hasError('dateToLessThenFrom')"
+              >{{ 'ERRORS.dateToLessThenFrom' | translate }}</mat-error>
+            </mat-form-field>
+          </form>
 
-  <mat-card class="content">
-    <ng-container *ngIf="currentId$ | async as id; else selectAgent">
-      <ng-container *ngIf="currentType$ | async as currentType">
-        <form class="date-form" *ngIf="currentType !== LIVE_TYPE" [formGroup]="rangeForm">
-          <mat-form-field>
-            <label for="dateFrom">{{ 'LABELS.FROM' | translate }}:</label>
-            <input
-              matInput
-              [owlDateTimeTrigger]="dateFromComponent"
-              [owlDateTime]="dateFromComponent"
-              formControlName="dateFrom"
-              autocomplete="off"
-              [errorStateMatcher]="errorMatcher"
-            >
-            <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateFromComponent></owl-date-time>
-            <mat-error
-              *ngIf="rangeForm.hasError('dateToLessThenFrom')"
-            >{{ 'ERRORS.dateToLessThenFrom' | translate }}</mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <label for="dateTo">{{ 'LABELS.TO' | translate }}:</label>
-            <input
-              matInput
-              [owlDateTimeTrigger]="dateToComponent"
-              [owlDateTime]="dateToComponent"
-              formControlName="dateTo"
-              autocomplete="off"
-              [errorStateMatcher]="errorMatcher"
-            >
-            <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateToComponent></owl-date-time>
-            <mat-error
-              *ngIf="rangeForm.hasError('dateToLessThenFrom')"
-            >{{ 'ERRORS.dateToLessThenFrom' | translate }}</mat-error>
-          </mat-form-field>
-        </form>
+          <div
+            class="checkers-layout"
+            *ngIf="rangeValues$ | async as range"
+            [ngSwitch]="currentType"
+          >
+            <sqd-live-stat [agentId]="id" *ngSwitchCase="LIVE_TYPE"></sqd-live-stat>
+            <sqd-cpu-stats [range]="range" [agentId]="id" *ngSwitchCase="CPU_TYPE"></sqd-cpu-stats>
+            <sqd-memory-stat [range]="range" [agentId]="id" *ngSwitchCase="MEMORY_TYPE"></sqd-memory-stat>
+            <sqd-disks-stat [range]="range" [agentId]="id" *ngSwitchCase="DISK_TYPE"></sqd-disks-stat>
+            <sqd-net-stat [range]="range" [agentId]="id" *ngSwitchCase="NET_TYPE"></sqd-net-stat>
+          </div>
+        </ng-container>
+      </mat-card>
+      <mat-card class="content">
+        <mat-card-header>
+          <mat-card-title>{{ 'MODULES.CHECKERS.PAGE.INCIDENT_RULES' | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <sqd-rule-list [ownerId]="id" [ownerType]="AGENT_TYPE"></sqd-rule-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-container>
 
-        <div class="checkers-layout" *ngIf="rangeValues$ | async as range" [ngSwitch]="currentType">
-          <sqd-live-stat [agentId]="id" *ngSwitchCase="LIVE_TYPE"></sqd-live-stat>
-          <sqd-cpu-stats [range]="range" [agentId]="id" *ngSwitchCase="CPU_TYPE"></sqd-cpu-stats>
-          <sqd-memory-stat [range]="range" [agentId]="id" *ngSwitchCase="MEMORY_TYPE"></sqd-memory-stat>
-          <sqd-disks-stat [range]="range" [agentId]="id" *ngSwitchCase="DISK_TYPE"></sqd-disks-stat>
-          <sqd-net-stat [range]="range" [agentId]="id" *ngSwitchCase="NET_TYPE"></sqd-net-stat>
-        </div>
-      </ng-container>
-    </ng-container>
-    <ng-template #selectAgent>{{ 'MODULES.AGENT.PAGE.HOME_LABEL' | translate }}</ng-template>
-  </mat-card>
+  <ng-template #selectAgent>
+    <mat-card class="content">{{ 'MODULES.AGENT.PAGE.HOME_LABEL' | translate }}</mat-card>
+  </ng-template>
 </div>

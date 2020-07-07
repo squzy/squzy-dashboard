@@ -24,6 +24,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { QueryParamModule } from '@ngqp/core';
 import { ApplicationsService } from './services/applications.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { RulesModule } from 'src/app/shared/modules/rules/rules.module';
 
 const routes: Routes = [
   {
@@ -83,6 +84,7 @@ const routes: Routes = [
     MatIconModule,
     MatSidenavModule,
     QueryParamModule,
+    RulesModule,
     TranslateModule.forChild({}),
   ],
   entryComponents: [],

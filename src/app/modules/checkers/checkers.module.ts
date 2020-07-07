@@ -22,6 +22,7 @@ import { SchedulerConfigComponent } from './components/checker/config/config.com
 import { SchedulerSnapshotComponent } from './components/checker/snapshot/snapshot.component';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
+import { RulesModule } from 'src/app/shared/modules/rules/rules.module';
 
 const routes: Routes = [
   {
@@ -59,6 +60,7 @@ const routes: Routes = [
     MatIconModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
+    RulesModule,
     TranslateModule.forChild({}),
   ],
   providers: [CheckersService],

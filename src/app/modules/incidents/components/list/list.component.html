@@ -1,0 +1,94 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ 'MODULES.INCIDENTS.LIST.TABLE_TITLE' | translate}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-container [queryParamGroup]="queryFilterGroup">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="Id">
+          <th mat-header-cell *matHeaderCellDef>{{ 'MODULES.INCIDENTS.LIST.ID' | translate}}</th>
+          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="StartTime">
+          <th class="no-focused" mat-header-cell *matHeaderCellDef mat-sort-header>
+            <mat-form-field>
+              <mat-label>{{ 'LABELS.FROM' | translate }}:</mat-label>
+              <input
+                matInput
+                [owlDateTimeTrigger]="dateFromComponent"
+                [owlDateTime]="dateFromComponent"
+                queryParamName="dateFrom"
+                autocomplete="off"
+              >
+              <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateFromComponent></owl-date-time>
+            </mat-form-field>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <ng-container
+              *ngIf="getStartTime(element) as startTime"
+            >{{ toDate(startTime) | date: 'd/M/yyyy HH:mm:ss' }}</ng-container>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="EndTime">
+          <th class="no-focused" mat-header-cell *matHeaderCellDef mat-sort-header>
+            <mat-form-field>
+              <mat-label>{{ 'LABELS.TO' | translate }}:</mat-label>
+              <input
+                matInput
+                [owlDateTimeTrigger]="dateToComponent"
+                [owlDateTime]="dateToComponent"
+                queryParamName="dateTo"
+                autocomplete="off"
+              >
+              <owl-date-time [pickerMode]="'dialog'" [showSecondsTimer]="true" #dateToComponent></owl-date-time>
+            </mat-form-field>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <ng-container
+              *ngIf="getEndTime(element) as endTime"
+            >{{ toDate(endTime) | date: 'd/M/yyyy HH:mm:ss' }}</ng-container>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Status">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-form-field>
+              <mat-label>{{ 'MODULES.INCIDENTS.LIST.STATUS' | translate}}</mat-label>
+              <mat-select (selectionChange)="onStatusChange($event)" [value]="status.value">
+                <mat-option
+                  *ngFor="let incStatus of statuses"
+                  [value]="incStatus"
+                >{{ 'ENUMS.INCIDENTS.STATUS.' + incStatus | translate }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+          >{{ 'ENUMS.INCIDENTS.STATUS.' + element.status | translate }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Duration">
+          <th mat-header-cell *matHeaderCellDef>{{ 'MODULES.INCIDENTS.LIST.DURATION' | translate}}</th>
+          <td mat-cell *matCellDef="let element">{{ getDuration(element) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="RuleId">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-form-field>
+              <mat-label>{{ 'MODULES.INCIDENTS.LIST.RULE_ID' | translate}}</mat-label>
+              <input matInput queryParamName="ruleId" type="text">
+            </mat-form-field>
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.rule_id }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="clickRow(row)"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="pageSizes" showFirstLastButtons></mat-paginator>
+    </ng-container>
+  </mat-card-content>
+</mat-card>

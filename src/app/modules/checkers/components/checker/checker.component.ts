@@ -23,8 +23,13 @@ import { SchedulerConfigComponent } from './config/config.component';
 import { dateFromToValidator } from 'src/app/shared/validators/date.validators';
 import { SchedulerSnapshotComponent } from './snapshot/snapshot.component';
 import { CheckerDataSource } from './datasource/checker.datasource';
-import { SortSchedulerList, angularSortDirectionMap } from 'src/app/shared/enums/sort.table';
-import { SchedulerStatus, SchedulerResponseCode } from 'src/app/shared/enums/schedulers.type';
+import { angularSortDirectionMap } from 'src/app/shared/enums/sort.table';
+import {
+  SchedulerStatus,
+  SchedulerResponseCode,
+  SortSchedulerList,
+} from 'src/app/shared/enums/schedulers.type';
+import { OwnerType } from 'src/app/shared/enums/rules.type';
 
 class CrossFieldErrorMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -89,6 +94,8 @@ export class CheckerComponent implements OnInit, OnDestroy {
   formValue$ = new BehaviorSubject<FormRangeValue>(this.filterForm.value);
 
   currentId$ = this.route.params.pipe(map((p) => p.id as string));
+
+  SCHDEDULER_TYPE = OwnerType.INCIDENT_OWNER_TYPE_SCHEDULER;
 
   dataSource = new CheckerDataSource(this.checkersService);
 

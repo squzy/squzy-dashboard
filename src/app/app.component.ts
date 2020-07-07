@@ -1,9 +1,8 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, OnInit } from '@angular/core';
 import { AppService } from './shared/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
-import { MatSelectChange } from '@angular/material/select';
 import { Subject, BehaviorSubject } from 'rxjs';
-import { takeUntil, startWith, tap } from 'rxjs/operators';
+import { takeUntil, tap } from 'rxjs/operators';
 import { StorageService } from './shared/services/storage.service';
 
 @Component({
@@ -31,6 +30,10 @@ export class AppComponent implements OnInit, OnDestroy {
     {
       path: 'applications',
       text: 'MENU.APPLICATIONS',
+    },
+    {
+      path: 'incidents',
+      text: 'MENU.INCIDNETS',
     },
   ];
 

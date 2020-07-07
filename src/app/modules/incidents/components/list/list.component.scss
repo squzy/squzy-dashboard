@@ -1,0 +1,20 @@
+$padding: 40px;
+
+:host {
+  padding: $padding;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  mat-form-field {
+    width: 100%;
+  }
+  table {
+    display: block;
+    .mat-row {
+      &:hover {
+        cursor: pointer;
+        background: #b4b4b433;
+      }
+    }
+  }
+}

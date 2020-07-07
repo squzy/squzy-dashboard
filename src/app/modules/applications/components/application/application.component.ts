@@ -5,6 +5,7 @@ import { ApplicationsService } from '../../services/applications.service';
 import { ApplicationStatus } from 'src/app/shared/enums/application.type';
 import { Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { OwnerType } from 'src/app/shared/enums/rules.type';
 
 @Component({
   selector: 'sqd-application',
@@ -35,6 +36,8 @@ export class ApplicationComponent implements OnDestroy {
       label: 'MODULES.APPLICATIONS.MENU.OVERVIEW',
     },
   ];
+
+  APPLICATION_TYPE = OwnerType.INCIDENT_OWNER_TYPE_APPLICATION;
 
   constructor(private route: ActivatedRoute, private applicationService: ApplicationsService) {}
 

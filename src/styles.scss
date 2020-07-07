@@ -10,3 +10,22 @@ body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
+
+// Hack for table with timepicker (add class 'no-focused' on th)
+th {
+  &.no-focused {
+    &.cdk-program-focused {
+      button {
+        border-bottom: none !important;
+      }
+    }
+  }
+}
+
+mat-card,
+mat-card-content {
+  > table {
+    width: 100%;
+    overflow-x: scroll;
+  }
+}
