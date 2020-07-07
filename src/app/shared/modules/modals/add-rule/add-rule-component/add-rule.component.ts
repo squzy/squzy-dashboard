@@ -37,6 +37,10 @@ export class AddRuleFormComponent implements OnDestroy {
         value: 'all(map(Last(2), {.Code}), { # == Error })',
       },
       {
+        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_SCHEDULER_LAST_TWO_STRICT',
+        value: 'len(filter(map(Last(2), {.Code}), { # == Error })) == 2',
+      },
+      {
         description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_SCHEDULER_LAST_SIX',
         value: 'count(map(Last(6), {.Code}), { # == Error}) > 3',
       },
@@ -48,7 +52,12 @@ export class AddRuleFormComponent implements OnDestroy {
     [`${OwnerType.INCIDENT_OWNER_TYPE_AGENT}`]: [
       {
         description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_AGENT_CPU_LOAD',
-        value: 'any(map(Last(1, UseType(CPU)), {.CpuInfo.Cpus})[0], {.Load > 20})',
+        value: 'any(Last(3, UseType(CPU)), {any(.CpuInfo.Cpus, {.Load > 10})})',
+      },
+      {
+        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_AGENT_CPU_LOAD_STRICT',
+        value:
+          'len(filter(map(Last(3, UseType(CPU)), {all(.CpuInfo.Cpus, {.Load > 10})}), { # == true })) == 3',
       },
       {
         value: 'any(map(Last(1, UseType(Memory)), {.MemoryInfo.Mem.UsedPercent}), { # > 50})',
@@ -56,7 +65,12 @@ export class AddRuleFormComponent implements OnDestroy {
       },
       {
         value:
-          'any(map(Last(1, UseType(Disk)), {.DiskInfo.Disks["/System/Volumes/Data"].UsedPercent}), { # > 50})',
+          'any(Last(1, UseType(Disk)), {.DiskInfo.Disks["/System/Volumes/Data"].UsedPercent}), { # > 50})',
+        description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_AGENT_DISK_LOAD',
+      },
+      {
+        value:
+          'any(Last(1, UseType(Disk)), {.DiskInfo.Disks["/System/Volumes/Data"].UsedPercent > 50})',
         description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_AGENT_DISK_LOAD',
       },
     ],
