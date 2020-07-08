@@ -24,6 +24,10 @@ $padding: 40px;
           }
         }
       }
+      pre {
+        word-break: break-word;
+        white-space: pre-wrap;
+      }
     }
   }
   .spinner-container {

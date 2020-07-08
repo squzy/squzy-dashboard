@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { map, takeUntil, switchMap, startWith } from 'rxjs/operators';
+import { map, takeUntil, switchMap, startWith, share, refCount, shareReplay } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IncidentService } from '../../services/incident.service';
 import { Subject, combineLatest } from 'rxjs';
@@ -25,6 +25,12 @@ export class IncidentComponent implements OnDestroy {
 
   currentIncident$ = combineLatest(this.currentId$, this.refresh$.pipe(startWith(null))).pipe(
     switchMap(([id, _]) => this.incidentService.getById(id)),
+    shareReplay(),
+    takeUntil(this.destoryed$),
+  );
+
+  currentRule$ = this.currentIncident$.pipe(
+    switchMap((incident) => this.rulesService.getById(incident.rule_id)),
     takeUntil(this.destoryed$),
   );
 
@@ -56,23 +62,18 @@ export class IncidentComponent implements OnDestroy {
       });
   }
 
-  goToRulePage(ruleId: string) {
-    this.rulesService
-      .getById(ruleId)
-      .pipe(takeUntil(this.destoryed$))
-      .subscribe((rule) => {
-        switch (rule.owner_type) {
-          case OwnerType.INCIDENT_OWNER_TYPE_AGENT:
-            this.router.navigate(['agents', rule.owner_id]);
-            break;
-          case OwnerType.INCIDENT_OWNER_TYPE_SCHEDULER:
-            this.router.navigate(['checkers', rule.owner_id]);
-            break;
-          case OwnerType.INCIDENT_OWNER_TYPE_APPLICATION:
-            this.router.navigate(['applications', rule.owner_id]);
-            break;
-        }
-      });
+  goToRulePage(ownerType: OwnerType, ownerId: string) {
+    switch (ownerType) {
+      case OwnerType.INCIDENT_OWNER_TYPE_AGENT:
+        this.router.navigate(['agents', ownerId]);
+        break;
+      case OwnerType.INCIDENT_OWNER_TYPE_SCHEDULER:
+        this.router.navigate(['checkers', ownerId]);
+        break;
+      case OwnerType.INCIDENT_OWNER_TYPE_APPLICATION:
+        this.router.navigate(['applications', ownerId]);
+        break;
+    }
   }
   toDate(time: Time) {
     return timeToDate(time);

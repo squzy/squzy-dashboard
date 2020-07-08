@@ -306,7 +306,10 @@
         "RULE_ID": "Rule Id",
         "TIME_HISTORY_ITEM": "Timestamp",
         "BTN_STUDY": "Study incident",
-        "BTN_CLOSE": "Close incident"
+        "BTN_CLOSE": "Close incident",
+        "RULE_NAME": "Rule name",
+        "RULE": "Rule",
+        "RULE_STATUS": "Rule status"
       },
       "LIST": {
         "TABLE_TITLE": "Table of incidents",
