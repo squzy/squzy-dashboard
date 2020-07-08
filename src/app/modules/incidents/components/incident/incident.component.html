@@ -1,7 +1,7 @@
 <mat-card>
   <ng-container *ngIf="currentIncident$ | async as incident; else loading">
     <mat-card-header>
-      <mat-card-title>{{ 'MODULES.INCIDENTS.PAGE.TITLE' | translate }} #{{ incident.id }}</mat-card-title>
+      <mat-card-title>{{ 'MODULES.INCIDENTS.PAGE.TITLE' | translate }} # {{ incident.id }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="info">
@@ -9,19 +9,33 @@
           <strong>{{ 'MODULES.INCIDENTS.PAGE.STATUS' | translate }}</strong>
           : {{ 'ENUMS.INCIDENTS.STATUS.' + (incident.status || 0) | translate}}
         </p>
-        <p>
-          <strong>{{ 'MODULES.INCIDENTS.PAGE.RULE_ID' | translate }}</strong>
-          : {{ incident.rule_id
-          }}
-          <button
-            (click)="goToRulePage(incident.rule_id)"
-            mat-icon-button
-            matTooltipPosition="right"
-            matTooltip="View config"
-          >
-            <mat-icon>link</mat-icon>
-          </button>
-        </p>
+        <ng-container *ngIf="currentRule$ | async as rule">
+          <p>
+            <strong>{{ 'MODULES.INCIDENTS.PAGE.RULE_ID' | translate }}</strong>
+            : {{ rule.id
+            }}
+            <button
+              (click)="goToRulePage(rule.owner_type, rule.owner_id)"
+              mat-icon-button
+              matTooltipPosition="right"
+              matTooltip="View config"
+            >
+              <mat-icon>link</mat-icon>
+            </button>
+          </p>
+          <p>
+            <strong>{{ 'MODULES.INCIDENTS.PAGE.RULE_NAME' | translate }}</strong>
+            : {{ rule.name }}
+          </p>
+          <p>
+            <strong>{{ 'MODULES.INCIDENTS.PAGE.RULE' | translate }}</strong>:
+          </p>
+          <pre>{{ rule.rule }}</pre>
+          <p>
+            <strong>{{ 'MODULES.INCIDENTS.PAGE.RULE_STATUS' | translate }}</strong>
+            : {{ 'ENUMS.RULES.STATUS.' + rule.status | translate }}
+          </p>
+        </ng-container>
       </div>
       <div class="history">
         <p *ngFor="let item of incident.histories">

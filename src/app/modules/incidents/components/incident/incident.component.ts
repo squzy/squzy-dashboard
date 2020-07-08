@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { map, takeUntil, switchMap, startWith } from 'rxjs/operators';
+import { map, takeUntil, switchMap, startWith, share, refCount, shareReplay } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IncidentService } from '../../services/incident.service';
 import { Subject, combineLatest } from 'rxjs';
@@ -25,6 +25,7 @@ export class IncidentComponent implements OnDestroy {
 
   currentIncident$ = combineLatest(this.currentId$, this.refresh$.pipe(startWith(null))).pipe(
     switchMap(([id, _]) => this.incidentService.getById(id)),
+    shareReplay(),
     takeUntil(this.destoryed$),
   );
 
