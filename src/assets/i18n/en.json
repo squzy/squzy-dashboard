@@ -38,9 +38,23 @@
     "AGENTS": "Agents",
     "CHECKERS": "Checkers",
     "APPLICATIONS": "Applications",
-    "INCIDNETS": "Incidents"
+    "INCIDNETS": "Incidents",
+    "NOTIFICATION_METHODS": "Notifications methods"
   },
   "ENUMS": {
+    "NOTIFICATION_METHODS": {
+      "STATUS": {
+        "0": "Unspecified",
+        "1": "Active",
+        "2": "Inactive",
+        "3": "Removed"
+      },
+      "TYPE": {
+        "0": "Unspecified",
+        "1": "Webhook",
+        "2": "Slack"
+      }
+    },
     "INCIDENTS": {
       "STATUS": {
         "0": "Unspecified",
@@ -141,7 +155,28 @@
     }
   },
   "MODULES": {
+    "NOTIFICATION_METHODS": {
+      "TABLE": {
+        "ADD": "Add",
+        "ACTIVATE": "Activate",
+        "DEACTIVATE": "Deactivate",
+        "REMOVE": "Remove",
+        "FILTER": "Filter",
+        "ID": "Id",
+        "NAME": "Name",
+        "TYPE": "Type",
+        "STATUS": "Status"
+      }
+    },
     "MODALS": {
+      "ADD_NOTIFICATION_METHODS": {
+        "TITLE": "Add notification method",
+        "SELECT_TYPE": "Select type of notification method",
+        "SELECT_NAME": "Provide name",
+        "NAME_HINT": "Better provide uniq name",
+        "SELECT_URL": "Provide url",
+        "ADD_BUTTON": "Add"
+      },
       "ADD_RULE": {
         "EXAMPLES": "Examples",
         "EXAMPLE_SCHEDULER_LAST_TWO": "Last two schedulers(both) return error",

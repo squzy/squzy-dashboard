@@ -1,0 +1,29 @@
+$padding: 40px;
+
+:host {
+  padding: $padding;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  mat-card {
+    mat-card-header::ng-deep {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      .mat-card-header-text {
+        display: none;
+      }
+    }
+  }
+  mat-form-field {
+    width: 100%;
+  }
+  table {
+    .mat-row {
+      &:hover {
+        cursor: pointer;
+        background: #b4b4b433;
+      }
+    }
+  }
+}

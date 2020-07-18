@@ -17,6 +17,8 @@ import { AddRuleFormComponent } from './add-rule/add-rule-component/add-rule.com
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { RuleValidator } from './add-rule/validators/rule.validator';
 import { MatListModule } from '@angular/material/list';
+import { AddNotificationMethodService } from './add-notification-method/add-notification-method.service';
+import { AddNotificationMethodFormComponent } from './add-notification-method/add-notification-method-component/form.component';
 
 @NgModule({
   imports: [
@@ -35,8 +37,12 @@ import { MatListModule } from '@angular/material/list';
     MatListModule,
   ],
   exports: [],
-  providers: [AddCheckerService, AddRuleService],
-  declarations: [AddCheckerFormComponent, AddRuleFormComponent],
-  entryComponents: [AddCheckerFormComponent, AddRuleFormComponent],
+  providers: [AddCheckerService, AddRuleService, AddNotificationMethodService],
+  declarations: [AddCheckerFormComponent, AddRuleFormComponent, AddNotificationMethodFormComponent],
+  entryComponents: [
+    AddCheckerFormComponent,
+    AddRuleFormComponent,
+    AddNotificationMethodFormComponent,
+  ],
 })
 export class ModalsModule {}

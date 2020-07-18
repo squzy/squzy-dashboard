@@ -35,6 +35,10 @@ export class AppComponent implements OnInit, OnDestroy {
       path: 'incidents',
       text: 'MENU.INCIDNETS',
     },
+    {
+      path: 'notification-methods',
+      text: 'MENU.NOTIFICATION_METHODS',
+    },
   ];
 
   private readonly STORAGE_KEY = 'LANG';

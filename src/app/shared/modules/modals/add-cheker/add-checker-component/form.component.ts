@@ -140,6 +140,7 @@ export class AddCheckerFormComponent implements OnDestroy {
 
   ngOnDestroy() {
     this.destoryed$.next();
+    this.destoryed$.complete();
   }
 
   onSubmit() {

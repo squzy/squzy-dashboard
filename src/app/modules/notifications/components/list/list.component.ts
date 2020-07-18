@@ -1,31 +1,27 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  ViewChild,
   OnInit,
   OnDestroy,
+  ViewChild,
   ElementRef,
 } from '@angular/core';
-import { CheckersService, Scheduler } from '../../services/checkers.service';
-import { BehaviorSubject, Subject, combineLatest, fromEvent } from 'rxjs';
-import {
-  switchMap,
-  takeUntil,
-  debounceTime,
-  distinctUntilChanged,
-  mapTo,
-  map,
-} from 'rxjs/operators';
-import { PageEvent, MatPaginator } from '@angular/material/paginator';
-import { Router } from '@angular/router';
+import { NotificationMethod } from 'src/app/shared/interfaces/notifications.interface';
+import { Subject, BehaviorSubject, fromEvent, combineLatest } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { SelectionModel } from '@angular/cdk/collections';
-import { AddCheckerService } from 'src/app/shared/modules/modals/add-cheker/add-checker.service';
+import { NotificationsService } from 'src/app/shared/services/notifications.service';
 import { TranslateService } from '@ngx-translate/core';
+import { takeUntil, debounceTime, map, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { SelectionModel } from '@angular/cdk/collections';
+import { NotificationMethodStatuses } from 'src/app/shared/enums/notifications.type';
+import { AddNotificationMethodService } from 'src/app/shared/modules/modals/add-notification-method/add-notification-method.service';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { SchedulerConfigComponent } from './config/config.component';
 
 @Component({
-  selector: 'sqd-list',
+  selector: 'sqd-notification-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,30 +29,35 @@ import { TranslateService } from '@ngx-translate/core';
 export class ListComponent implements OnInit, OnDestroy {
   private readonly refresh$ = new BehaviorSubject(null);
   private destroyed$ = new Subject();
-  dataSource = new MatTableDataSource<Scheduler>();
+  dataSource = new MatTableDataSource<NotificationMethod>();
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('filterInput', { static: true }) filterInput: ElementRef;
 
-  selection = new SelectionModel<Scheduler>(true, []);
+  selection = new SelectionModel<NotificationMethod>(true, []);
+  displayedColumns: string[] = ['select', 'ID', 'name', 'status', 'type'];
 
-  private obs$ = this.refresh$.pipe(switchMap(() => this.checkersService.getList()));
-
-  displayedColumns: string[] = ['select', 'ID', 'name', 'type', 'status'];
-
+  private obs$ = this.refresh$.pipe(
+    switchMap(() => this.notificationsService.getList()),
+    map((items) =>
+      (items || []).filter(
+        (e) => e.status !== NotificationMethodStatuses.NOTIFICATION_STATUS_REMOVED,
+      ),
+    ),
+  );
   constructor(
-    private checkersService: CheckersService,
-    private router: Router,
-    private addCheckerService: AddCheckerService,
     private translateService: TranslateService,
+    private notificationsService: NotificationsService,
+    private addNotificationMethodService: AddNotificationMethodService,
+    private _bottomSheet: MatBottomSheet,
   ) {}
 
   ngOnInit() {
-    this.dataSource.filterPredicate = (data: Scheduler, filter: string) => {
+    this.dataSource.filterPredicate = (data: NotificationMethod, filter: string) => {
       return `${data.name ? data.name : ''}_${data.id}_${this.translateService.instant(
-        'ENUMS.CHECKERS.STATUS.' + data.status,
-      )}_${this.translateService.instant('ENUMS.CHECKERS.TYPE.' + data.type)}`
+        'ENUMS.NOTIFICATION_METHODS.STATUS.' + data.status,
+      )}_${this.translateService.instant('ENUMS.NOTIFICATION_METHODS.TYPE.' + data.type)}`
         .toLocaleLowerCase()
         .includes(filter);
     };
@@ -93,12 +94,10 @@ export class ListComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
-  clickRow(row) {
-    this.router.navigate(['checkers', row.id]);
-  }
-
-  runSelected() {
-    combineLatest(...this.selection.selected.map((e) => this.checkersService.runById(e.id)))
+  activateSelected() {
+    combineLatest(
+      ...this.selection.selected.map((e) => this.notificationsService.activateById(e.id)),
+    )
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
         this.selection.clear();
@@ -106,8 +105,10 @@ export class ListComponent implements OnInit, OnDestroy {
       });
   }
 
-  stopSelected() {
-    combineLatest(...this.selection.selected.map((e) => this.checkersService.stopById(e.id)))
+  deactivateSelected() {
+    combineLatest(
+      ...this.selection.selected.map((e) => this.notificationsService.deactivateById(e.id)),
+    )
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
         this.selection.clear();
@@ -116,7 +117,7 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   removeSelected() {
-    combineLatest(...this.selection.selected.map((e) => this.checkersService.removeById(e.id)))
+    combineLatest(...this.selection.selected.map((e) => this.notificationsService.deleteById(e.id)))
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
         this.selection.clear();
@@ -124,15 +125,21 @@ export class ListComponent implements OnInit, OnDestroy {
       });
   }
 
-  addChecker() {
-    this.addCheckerService
+  addMethod() {
+    this.addNotificationMethodService
       .open()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((res) => {
         if (res && res.id) {
-          this.router.navigate(['checkers', res.id]);
+          this.refresh$.next(null);
         }
       });
+  }
+
+  clickRow(method: NotificationMethod) {
+    this._bottomSheet.open(SchedulerConfigComponent, {
+      data: method,
+    });
   }
 
   private applyFilter(text: string) {
