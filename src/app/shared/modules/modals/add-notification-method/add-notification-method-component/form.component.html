@@ -1,0 +1,68 @@
+<mat-card>
+  <form [formGroup]="form" (submit)="$event.preventDefault()">
+    <mat-card-header>
+      <mat-card-title>{{ 'MODULES.MODALS.ADD_NOTIFICATION_METHODS.TITLE' | translate}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field>
+        <mat-label>{{ 'MODULES.MODALS.ADD_NOTIFICATION_METHODS.SELECT_TYPE' | translate}}</mat-label>
+        <mat-select formControlName="type" (selectionChange)="changeType($event)">
+          <mat-option
+            *ngFor="let type of notificationMethodsType"
+            [value]="type"
+          >{{ 'ENUMS.NOTIFICATION_METHODS.TYPE.' + type | translate}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('type').hasError('required')">{{ 'ERRORS.REQUIRED' | translate }}</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="{{ 'MODULES.MODALS.ADD_NOTIFICATION_METHODS.SELECT_NAME' | translate}}"
+          formControlName="name"
+        >
+        <mat-error *ngIf="form.get('name').hasError('required')">{{ 'ERRORS.REQUIRED' | translate }}</mat-error>
+        <mat-hint>{{ 'MODULES.MODALS.ADD_NOTIFICATION_METHODS.NAME_HINT' | translate}}</mat-hint>
+      </mat-form-field>
+      <ng-container [ngSwitch]="form.get('type').value">
+        <ng-container formGroupName="config">
+          <ng-container *ngSwitchCase="WebhookType" formGroupName="webhookConfig">
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="{{ 'MODULES.MODALS.ADD_NOTIFICATION_METHODS.SELECT_URL' | translate}}"
+                formControlName="url"
+              >
+              <mat-error
+                *ngIf="webhookConfig.get('url').hasError('required')"
+              >{{ 'ERRORS.REQUIRED' | translate }}</mat-error>
+              <mat-error
+                *ngIf="webhookConfig.get('url').hasError('pattern')"
+              >{{ 'ERRORS.notValidHost' | translate }}</mat-error>
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngSwitchCase="SlackType" formGroupName="slackConfig">
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="{{ 'MODULES.MODALS.ADD_NOTIFICATION_METHODS.SELECT_URL' | translate}}"
+                formControlName="url"
+              >
+              <mat-error
+                *ngIf="slackConfig.get('url').hasError('required')"
+              >{{ 'ERRORS.REQUIRED' | translate }}</mat-error>
+              <mat-error
+                *ngIf="slackConfig.get('url').hasError('pattern')"
+              >{{ 'ERRORS.notValidHost' | translate }}</mat-error>
+            </mat-form-field>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button
+        mat-button
+        (click)="onSubmit()"
+      >{{ 'MODULES.MODALS.ADD_NOTIFICATION_METHODS.ADD_BUTTON' | translate}}</button>
+    </mat-card-actions>
+  </form>
+</mat-card>

@@ -121,6 +121,15 @@
 </mat-card>
 
 <mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ 'MODULES.CHECKERS.PAGE.NOTIFICATION_METHODS_LIST' | translate }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <sqd-notifcation-list [ownerId]="currentId$ | async" [ownerType]="SCHDEDULER_TYPE"></sqd-notifcation-list>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
   <mat-card-content class="flex">
     <form [formGroup]="filterForm">
       <mat-form-field>

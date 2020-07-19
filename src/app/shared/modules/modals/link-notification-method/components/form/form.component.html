@@ -1,0 +1,33 @@
+<mat-card>
+  <form [formGroup]="form" (submit)="$event.preventDefault()">
+    <mat-card-header>
+      <mat-card-title>{{ 'MODULES.MODALS.LINK_NOTIFICATION_METHOD.TITLE' | translate }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field>
+        <mat-label>{{ 'MODULES.MODALS.LINK_NOTIFICATION_METHOD.SELECT_METHOD' | translate}}</mat-label>
+        <mat-select formControlName="id">
+          <mat-option
+            *ngFor="let method of listOfMethods$|async; trackBy: trackByFn"
+            [value]="method.id"
+          >
+            <span>
+              {{ 'MODULES.MODALS.LINK_NOTIFICATION_METHOD.NAME' | translate }}:
+              <strong>{{ method.name }}</strong>
+            </span>
+            {{ 'MODULES.MODALS.LINK_NOTIFICATION_METHOD.STATUS' | translate }}:
+            <strong>{{ 'ENUMS.NOTIFICATION_METHODS.STATUS.' + method.status | translate}}</strong>
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('id').hasError('required')">{{ 'ERRORS.REQUIRED' | translate }}</mat-error>
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button
+        mat-button
+        [disabled]="!form.valid"
+        (click)="onSubmit()"
+      >{{ 'MODULES.MODALS.LINK_NOTIFICATION_METHOD.ADD_BUTTON' | translate }}</button>
+    </mat-card-actions>
+  </form>
+</mat-card>

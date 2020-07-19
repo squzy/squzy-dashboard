@@ -38,9 +38,23 @@
     "AGENTS": "Агенты",
     "CHECKERS": "Чекеры",
     "APPLICATIONS": "Приложения",
-    "INCIDNETS": "Инциденты"
+    "INCIDNETS": "Инциденты",
+    "NOTIFICATION_METHODS": "Методы уведомлений"
   },
   "ENUMS": {
+    "NOTIFICATION_METHODS": {
+      "STATUS": {
+        "0": "Неопределенный",
+        "1": "Активный",
+        "2": "Инактивный",
+        "3": "Удаленный"
+      },
+      "TYPE": {
+        "0": "Неопределенный",
+        "1": "Webhook",
+        "2": "Slack"
+      }
+    },
     "INCIDENTS": {
       "STATUS": {
         "0": "Неопределенный",
@@ -141,7 +155,43 @@
     }
   },
   "MODULES": {
+    "NOTIFICATION_LIST": {
+      "TABLE": {
+        "LINK": "Слинковать",
+        "STATUS": "Статус",
+        "NAME": "Имя",
+        "UNLINK": "Отлинковать"
+      }
+    },
+    "NOTIFICATION_METHODS": {
+      "TABLE": {
+        "ADD": "Добавить",
+        "ACTIVATE": "Активировать",
+        "DEACTIVATE": "Деактивировать",
+        "REMOVE": "Удалить",
+        "FILTER": "Фильтр",
+        "ID": "Идентификатор",
+        "NAME": "Имя",
+        "TYPE": "Тип",
+        "STATUS": "Статус"
+      }
+    },
     "MODALS": {
+      "LINK_NOTIFICATION_METHOD": {
+        "TITLE": "Слинковать метод уведомления",
+        "SELECT_METHOD": "Выберите метод",
+        "ADD_BUTTON": "Слинковать",
+        "NAME": "Имя",
+        "STATUS": "Статус"
+      },
+      "ADD_NOTIFICATION_METHODS": {
+        "TITLE": "Добавить метод уведомления",
+        "SELECT_TYPE": "Выбрать тип",
+        "SELECT_NAME": "Добавьте имя",
+        "NAME_HINT": "Лучше выбирать уникальное имя",
+        "SELECT_URL": "Укажите URL",
+        "ADD_BUTTON": "Добавить"
+      },
       "ADD_CHECKER": {
         "TITLE": "Добавить чекер",
         "SELECT_TYPE": "Выберите тип",
@@ -337,6 +387,7 @@
         "STOP": "Остановить",
         "REMOVE": "Удалить",
         "ID": "Идентификатор",
+        "NOTIFICATION_METHODS_LIST": "Методы уведомления",
         "INCIDENT_RULES": "Правила для инцидентов",
         "NAME": "Имя",
         "TYPE": "Тип",

@@ -1,0 +1,32 @@
+<div class="header">
+  <button
+    mat-stroked-button
+    (click)="link()"
+  >{{ 'MODULES.NOTIFICATION_LIST.TABLE.LINK' | translate }}</button>
+</div>
+
+<mat-list [disabled]="loading$ | async">
+  <mat-list-item *ngFor="let method of notificationList$ | async; trackBy: trackByFn">
+    <div class="rule-item" mat-line>
+      <span>
+        <strong>{{ 'MODULES.NOTIFICATION_LIST.TABLE.STATUS' | translate }}</strong>
+        :
+        {{ 'ENUMS.NOTIFICATION_METHODS.STATUS.' + method.status | translate }}
+      </span>
+      <span class="name">
+        <strong>{{ 'MODULES.NOTIFICATION_LIST.TABLE.NAME' | translate}}</strong>
+        : {{ method.name }}
+      </span>
+      <span class="spacer"></span>
+      <button
+        mat-icon-button
+        aria-label="Remove"
+        matTooltip="{{ 'MODULES.NOTIFICATION_LIST.TABLE.UNLINK' | translate }}"
+        matTooltipPosition="above"
+        (click)="unlink(method.id)"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+    </div>
+  </mat-list-item>
+</mat-list>

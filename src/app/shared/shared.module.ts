@@ -14,6 +14,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { TranslateService } from '@ngx-translate/core';
 import { PaginatorI18n } from './services/paginatorIntl.service';
 import { RulesService } from './services/rules.service';
+import { NotificationsService } from './services/notifications.service';
 
 const sharedModules = [
   CommonModule,
@@ -39,6 +40,7 @@ const sharedModules = [
       useClass: PaginatorI18n,
     },
     RulesService,
+    NotificationsService,
   ],
 })
 export class SharedModule {}

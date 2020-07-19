@@ -19,7 +19,7 @@ import { URL_REGEXP, HOST_REGEXP } from 'src/app/shared/validators/urls.validato
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddCheckerFormComponent implements OnDestroy {
-  private destoryed$ = new Subject();
+  private destroyed$ = new Subject();
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
@@ -139,7 +139,8 @@ export class AddCheckerFormComponent implements OnDestroy {
   ) {}
 
   ngOnDestroy() {
-    this.destoryed$.next();
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   onSubmit() {
@@ -158,7 +159,7 @@ export class AddCheckerFormComponent implements OnDestroy {
 
     this.checkerService
       .addChecker(rq)
-      .pipe(takeUntil(this.destoryed$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((res) => {
         this.dialogRef.close(res);
       });

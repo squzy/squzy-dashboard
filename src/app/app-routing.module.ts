@@ -25,6 +25,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/incidents/incidents.module').then((m) => m.IncidentsModule),
   },
+  {
+    path: 'notification-methods',
+    loadChildren: () =>
+      import('./modules/notifications/notification.module').then(
+        (m) => m.NotificationMethodsModule,
+      ),
+  },
 ];
 
 @NgModule({
