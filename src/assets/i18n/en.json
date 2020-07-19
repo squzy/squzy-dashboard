@@ -155,6 +155,20 @@
     }
   },
   "MODULES": {
+    "HOME": {
+      "PAGE": {
+        "AGENTS_TITLE": "Squzy Agents",
+        "AGENTS_DESCRIPTION": "Monitroing of host. Get CPU/MEMORY/DISK/NET metric and visualize them.",
+        "CHECKERS_TITLE": "Squzy Checkers",
+        "CHECKERS_DESCRIPTION": "Periodical monitoring of the external/internal resources. Supports TCP/HTTP/HTTPS/GRPC/SITEMAP/VALUE types",
+        "APPLICATION_TITLE": "Squzy Application Monitoring",
+        "APPLICATION_DESCRIPTION": "Collect metrict from application transactions + custom metrics",
+        "INCIDENTS_TITLE": "Squzy Incidents Manager",
+        "INCIDENTS_DESCRIPTION": "List of created incidents and actions on them",
+        "NOTIFICATIONS_TITLE": "Squzy Notification Manager",
+        "NOTIFICATIONS_DESCRIPTION": "Manage of the notification method, support WehHook(POST) + Slack"
+      }
+    },
     "NOTIFICATION_LIST": {
       "TABLE": {
         "LINK": "Link",

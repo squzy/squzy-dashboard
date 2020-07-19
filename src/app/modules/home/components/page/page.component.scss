@@ -1,0 +1,30 @@
+$padding: 40px;
+
+:host {
+  padding: $padding;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  mat-card {
+    width: 300px;
+    height: 140px;
+    margin: $padding / 4;
+    mat-card-header {
+      display: flex;
+      justify-content: center;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+    mat-card-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      p {
+        text-align: center;
+      }
+    }
+  }
+}

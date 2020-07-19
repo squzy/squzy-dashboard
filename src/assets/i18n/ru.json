@@ -155,6 +155,20 @@
     }
   },
   "MODULES": {
+    "HOME": {
+      "PAGE": {
+        "AGENTS_TITLE": "Squzy Agents",
+        "AGENTS_DESCRIPTION": "Мониторинг хоста. Получает CPU/MEMORY/DISK/NET метрики и визуализирует их",
+        "CHECKERS_TITLE": "Squzy Checkers",
+        "CHECKERS_DESCRIPTION": "Переодический мониторинг внутренних/внешних ресурсов. Поддерживает TCP/HTTP/HTTPS/GRPC/SITEMAP/VALUE типы",
+        "APPLICATION_TITLE": "Squzy Application Monitoring",
+        "APPLICATION_DESCRIPTION": "Собирает метрики,транзакции и custom с приложений",
+        "INCIDENTS_TITLE": "Squzy Incidents Manager",
+        "INCIDENTS_DESCRIPTION": "Список инцидентов и действия с ними",
+        "NOTIFICATIONS_TITLE": "Squzy Notification Manager",
+        "NOTIFICATIONS_DESCRIPTION": "Управление методами уведомления, поддерживает WebHook(POST) + Slack"
+      }
+    },
     "NOTIFICATION_LIST": {
       "TABLE": {
         "LINK": "Слинковать",

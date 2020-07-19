@@ -1,0 +1,12 @@
+<mat-card *ngFor="let item of menu" (click)="goToLink(item.path)">
+  <mat-card-header>
+    <mat-card-title>{{ item.title | translate }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-icon>{{ item.icon }}</mat-icon>
+    <p>{{ item.description | translate}}</p>
+  </mat-card-content>
+  <mat-card-actions *ngIf="item.faqLink">
+    <a mat-button href="item.faqLink" target="_blank">Link</a>
+  </mat-card-actions>
+</mat-card>
