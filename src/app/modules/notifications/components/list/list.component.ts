@@ -45,6 +45,7 @@ export class ListComponent implements OnInit, OnDestroy {
         (e) => e.status !== NotificationMethodStatuses.NOTIFICATION_STATUS_REMOVED,
       ),
     ),
+    takeUntil(this.destroyed$),
   );
   constructor(
     private translateService: TranslateService,

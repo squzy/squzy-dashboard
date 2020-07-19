@@ -86,6 +86,14 @@
           <sqd-rule-list [ownerId]="id" [ownerType]="AGENT_TYPE"></sqd-rule-list>
         </mat-card-content>
       </mat-card>
+      <mat-card class="content">
+        <mat-card-header>
+          <mat-card-title>{{ 'MODULES.CHECKERS.PAGE.NOTIFICATION_METHODS_LIST' | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <sqd-notifcation-list [ownerId]="id" [ownerType]="AGENT_TYPE"></sqd-notifcation-list>
+        </mat-card-content>
+      </mat-card>
     </div>
   </ng-container>
 

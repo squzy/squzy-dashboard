@@ -1,0 +1,24 @@
+$padding: 16px;
+
+.header {
+  margin-left: $padding;
+}
+
+mat-list {
+  .method-item {
+    display: flex;
+    align-items: center;
+    > *:not(:first-child) {
+      margin-left: $padding;
+    }
+    .name {
+      max-width: 50%;
+      white-space: nowrap;
+      overflow: hidden !important;
+      text-overflow: ellipsis;
+    }
+  }
+  .spacer {
+    flex: 1 1 auto;
+  }
+}

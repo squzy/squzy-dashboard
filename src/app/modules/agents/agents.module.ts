@@ -14,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
 import { RulesModule } from 'src/app/shared/modules/rules/rules.module';
+import { NotificationListModule } from 'src/app/shared/modules/notifications/notifications-list.module';
 
 const routes: Routes = [
   {
@@ -51,6 +52,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     MatInputModule,
     RulesModule,
+    NotificationListModule,
     TranslateModule.forChild({}),
   ],
   declarations: [AgentsComponent],

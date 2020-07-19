@@ -19,6 +19,8 @@ import { RuleValidator } from './add-rule/validators/rule.validator';
 import { MatListModule } from '@angular/material/list';
 import { AddNotificationMethodService } from './add-notification-method/add-notification-method.service';
 import { AddNotificationMethodFormComponent } from './add-notification-method/add-notification-method-component/form.component';
+import { LinkNotificationMethodModalService } from './link-notification-method/link-notification-method.service';
+import { LinkNotificationMethodFormComponent } from './link-notification-method/components/form/form.component';
 
 @NgModule({
   imports: [
@@ -37,12 +39,23 @@ import { AddNotificationMethodFormComponent } from './add-notification-method/ad
     MatListModule,
   ],
   exports: [],
-  providers: [AddCheckerService, AddRuleService, AddNotificationMethodService],
-  declarations: [AddCheckerFormComponent, AddRuleFormComponent, AddNotificationMethodFormComponent],
+  providers: [
+    AddCheckerService,
+    AddRuleService,
+    AddNotificationMethodService,
+    LinkNotificationMethodModalService,
+  ],
+  declarations: [
+    AddCheckerFormComponent,
+    AddRuleFormComponent,
+    AddNotificationMethodFormComponent,
+    LinkNotificationMethodFormComponent,
+  ],
   entryComponents: [
     AddCheckerFormComponent,
     AddRuleFormComponent,
     AddNotificationMethodFormComponent,
+    LinkNotificationMethodFormComponent,
   ],
 })
 export class ModalsModule {}

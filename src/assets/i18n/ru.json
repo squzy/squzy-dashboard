@@ -155,6 +155,14 @@
     }
   },
   "MODULES": {
+    "NOTIFICATION_LIST": {
+      "TABLE": {
+        "LINK": "Слинковать",
+        "STATUS": "Статус",
+        "NAME": "Имя",
+        "UNLINK": "Отлинковать"
+      }
+    },
     "NOTIFICATION_METHODS": {
       "TABLE": {
         "ADD": "Добавить",
@@ -169,6 +177,13 @@
       }
     },
     "MODALS": {
+      "LINK_NOTIFICATION_METHOD": {
+        "TITLE": "Слинковать метод уведомления",
+        "SELECT_METHOD": "Выберите метод",
+        "ADD_BUTTON": "Слинковать",
+        "NAME": "Имя",
+        "STATUS": "Статус"
+      },
       "ADD_NOTIFICATION_METHODS": {
         "TITLE": "Добавить метод уведомления",
         "SELECT_TYPE": "Выбрать тип",
@@ -372,6 +387,7 @@
         "STOP": "Остановить",
         "REMOVE": "Удалить",
         "ID": "Идентификатор",
+        "NOTIFICATION_METHODS_LIST": "Методы уведомления",
         "INCIDENT_RULES": "Правила для инцидентов",
         "NAME": "Имя",
         "TYPE": "Тип",
