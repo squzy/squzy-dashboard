@@ -65,7 +65,7 @@ export class AddRuleFormComponent implements OnDestroy {
       },
       {
         value:
-          'any(Last(1, UseType(Disk)), {.DiskInfo.Disks["/System/Volumes/Data"].UsedPercent}), { # > 50})',
+          'any(map(Last(1, UseType(Disk)), {.DiskInfo.Disks["/System/Volumes/Data"].UsedPercent}), { # > 50})',
         description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_AGENT_DISK_LOAD',
       },
       {
