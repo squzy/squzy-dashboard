@@ -119,6 +119,6 @@ export class ApplicationsService {
   }
 
   archived(id: string) {
-    return this.httpClient.put<Application>(`/api/v1/applications/${id}/archived`, null);
+    return this.httpClient.delete<Application>(`/api/v1/applications/${id}/archived`, null);
   }
 }
