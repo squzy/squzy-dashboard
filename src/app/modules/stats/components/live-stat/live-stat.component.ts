@@ -139,6 +139,7 @@ export class LiveStatComponent implements OnChanges, OnDestroy {
           {
             ticks: {
               max: 1,
+              min: 0,
             },
           },
         ],
@@ -227,6 +228,12 @@ export class LiveStatComponent implements OnChanges, OnDestroy {
           const memory = stats.memory_info[AgentsService.SWAP_MEMORY];
           return Object.keys(memory).reduce(
             (prev, cur) => {
+              if (cur === AgentsService.SHARED_MEMORY) {
+                return prev;
+              }
+              if (cur === AgentsService.USED_PERSENT) {
+                return prev;
+              }
               if (cur === AgentsService.TOTAL_MEMORY) {
                 return prev;
               }
@@ -248,6 +255,12 @@ export class LiveStatComponent implements OnChanges, OnDestroy {
           const memory = stats.memory_info[AgentsService.VIRTUAL_MEMORY];
           return Object.keys(memory).reduce(
             (prev, cur) => {
+              if (cur === AgentsService.SHARED_MEMORY) {
+                return prev;
+              }
+              if (cur === AgentsService.USED_PERSENT) {
+                return prev;
+              }
               if (cur === AgentsService.TOTAL_MEMORY) {
                 return prev;
               }
