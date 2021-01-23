@@ -5,6 +5,7 @@ export enum Types {
   HTTP = 3,
   SITE_MAP = 4,
   HTTP_JSON_VALUE = 5,
+  SSL_EXPIRATION = 6,
 }
 
 export enum SelectorTypes {

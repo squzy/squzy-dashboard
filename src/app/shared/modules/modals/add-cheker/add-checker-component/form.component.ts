@@ -33,12 +33,15 @@ export class AddCheckerFormComponent implements OnDestroy {
 
   HttpJsonValueType = Types.HTTP_JSON_VALUE;
 
+  SslExpirationType = Types.SSL_EXPIRATION;
+
   schdedulerTypes = [
     this.HttpType,
     this.TcpType,
     this.GrpcType,
     this.SiteMapType,
     this.HttpJsonValueType,
+    this.SslExpirationType,
   ];
 
   methods = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE'];
@@ -87,6 +90,19 @@ export class AddCheckerFormComponent implements OnDestroy {
     ],
   });
 
+  sslExpirationConfig = this.fb.group({
+    host: ['', Validators.compose([Validators.required, Validators.pattern(HOST_REGEXP)])],
+    port: [
+      null,
+      Validators.compose([
+        Validators.required,
+        Validators.min(1),
+        Validators.max(65535),
+        integerValidator,
+      ]),
+    ],
+  });
+
   grpcConfig = this.fb.group({
     service: [''],
     host: ['', Validators.compose([Validators.required, Validators.pattern(HOST_REGEXP)])],
@@ -121,6 +137,9 @@ export class AddCheckerFormComponent implements OnDestroy {
     }),
     [Types.HTTP_JSON_VALUE]: this.fb.group({
       httpValueConfig: this.httpValueConfig,
+    }),
+    [Types.SSL_EXPIRATION]: this.fb.group({
+      sslExpirationConfig: this.sslExpirationConfig,
     }),
   };
 

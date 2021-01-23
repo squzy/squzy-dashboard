@@ -139,7 +139,8 @@
         "2": "Grpc",
         "3": "Http",
         "4": "SiteMap",
-        "5": "Json value"
+        "5": "Json value",
+        "6": "SSL expiration"
       },
       "STATUS": {
         "0": "Unspecified",
@@ -160,7 +161,7 @@
         "AGENTS_TITLE": "Squzy Agents",
         "AGENTS_DESCRIPTION": "Monitroing of host. Get CPU/MEMORY/DISK/NET metric and visualize them.",
         "CHECKERS_TITLE": "Squzy Checkers",
-        "CHECKERS_DESCRIPTION": "Periodical monitoring of the external/internal resources. Supports TCP/HTTP/HTTPS/GRPC/SITEMAP/VALUE types",
+        "CHECKERS_DESCRIPTION": "Periodical monitoring of the external/internal resources. Supports TCP/HTTP/HTTPS/GRPC/SITEMAP/VALUE/SSL types",
         "APPLICATION_TITLE": "Squzy Application Monitoring",
         "APPLICATION_DESCRIPTION": "Collect metrict from application transactions + custom metrics",
         "INCIDENTS_TITLE": "Squzy Incidents Manager",
@@ -218,6 +219,7 @@
         "EXAMPLE_AGENT_DISK_LOAD": "In last 1 check disk '/System/Volumes/Data' used percent more than 50%",
         "EXAMPLE_APPLICATION_FAILED_TRANSACTION": "Last two transaction with name '/times' was failed",
         "EXAMPLE_APPLICATION_DURATION_TRANSACTION": "Last two transation with name '/times' and method 'GET' was more than 3000msec",
+        "EXAMPLE_SCHEDULER_SSL_EXPIRATION": "SSL check return error, or certificate expire in less than 4 weeks",
         "TITLE": "Add rule",
         "SELECT_NAME": "Provide name",
         "NAME_HINT": "Better provide uniq name",
