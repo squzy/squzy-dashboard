@@ -139,7 +139,8 @@
         "2": "Grpc",
         "3": "Http",
         "4": "SiteMap",
-        "5": "Json value"
+        "5": "Json value",
+        "6": "SSL expiration"
       },
       "STATUS": {
         "0": "Неопределенный",
