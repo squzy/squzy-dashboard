@@ -21,6 +21,9 @@ mat-card {
     margin-top: 10px;
     display: flex;
   }
+  textarea {
+    min-height: 100px;
+  }
   .example-item {
     &:hover {
       background-color: mat-color($primary, 50);

@@ -50,14 +50,13 @@ export class AddRuleFormComponent implements OnDestroy {
       },
       {
         description: 'MODULES.MODALS.ADD_RULE.EXAMPLE_SCHEDULER_SSL_EXPIRATION',
-        value: `Index(-1).Code == Error
-                || (
-                Index(-1).Code == Ok &&
-                  durationLess(
-                    timeDiff(NowTime(), unixNanoToTime(float64ToInt64(getValue(Index(-1)).GetNumberValue()))),
-                    mulDuration(4,Week)
-                    )
-                  )`,
+        value: `Index(-1).Code == Error || (
+          Index(-1).Code == Ok &&
+            durationLess(
+              timeDiff(unixNanoToTime(float64ToInt64(getValue(Index(-1)).GetNumberValue())), NowTime()),
+              mulDuration(4,Week)
+             )
+        )`,
       },
     ],
     [`${OwnerType.INCIDENT_OWNER_TYPE_AGENT}`]: [

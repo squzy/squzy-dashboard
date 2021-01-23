@@ -56,6 +56,41 @@
       </mat-form-field>
       <ng-container [ngSwitch]="form.get('type').value">
         <ng-container formGroupName="config">
+          <ng-container *ngSwitchCase="SslExpirationType" formGroupName="sslExpirationConfig">
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="{{ 'MODULES.MODALS.ADD_CHECKER.SELECT_HOST' | translate}}"
+                formControlName="host"
+              >
+              <mat-error
+                *ngIf="sslExpirationConfig.get('host').hasError('required')"
+              >{{ 'ERRORS.REQUIRED' | translate }}</mat-error>
+              <mat-error
+                *ngIf="sslExpirationConfig.get('host').hasError('pattern')"
+              >{{ 'ERRORS.notValidHost' | translate }}</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                type="number"
+                placeholder="{{ 'MODULES.MODALS.ADD_CHECKER.SELECT_PORT' | translate}}"
+                formControlName="port"
+              >
+              <mat-error
+                *ngIf="sslExpirationConfig.get('port').hasError('required')"
+              >{{ 'ERRORS.REQUIRED' | translate }}</mat-error>
+              <mat-error
+                *ngIf="sslExpirationConfig.get('port').hasError('min')"
+              >{{ 'ERRORS.minInterval' | translate }}</mat-error>
+              <mat-error
+                *ngIf="sslExpirationConfig.get('port').hasError('notInteger')"
+              >{{ 'ERRORS.integer' | translate }}</mat-error>
+              <mat-error
+                *ngIf="sslExpirationConfig.get('port').hasError('max')"
+              >{{ 'ERRORS.maxPort' | translate }}</mat-error>
+            </mat-form-field>
+          </ng-container>
           <ng-container *ngSwitchCase="TcpType" formGroupName="tcpConfig">
             <mat-form-field>
               <input
