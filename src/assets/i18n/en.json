@@ -219,6 +219,7 @@
         "EXAMPLE_AGENT_DISK_LOAD": "In last 1 check disk '/System/Volumes/Data' used percent more than 50%",
         "EXAMPLE_APPLICATION_FAILED_TRANSACTION": "Last two transaction with name '/times' was failed",
         "EXAMPLE_APPLICATION_DURATION_TRANSACTION": "Last two transation with name '/times' and method 'GET' was more than 3000msec",
+        "EXAMPLE_SCHEDULER_SSL_EXPIRATION": "SSL check return error, or certificate expire in less than 4 weeks",
         "TITLE": "Add rule",
         "SELECT_NAME": "Provide name",
         "NAME_HINT": "Better provide uniq name",

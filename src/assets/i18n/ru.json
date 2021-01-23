@@ -240,6 +240,7 @@
         "EXAMPLE_AGENT_DISK_LOAD": "В последней проверке диск '/System/Volumes/Data' заполнен больше чем на 50%",
         "EXAMPLE_APPLICATION_FAILED_TRANSACTION": "Две последнии транзакции с именем '/times' были с ошибкой",
         "EXAMPLE_APPLICATION_DURATION_TRANSACTION": "Две последнии транзакции с именем '/times' и методов 'GET' были дольше чем 3000мсек",
+        "EXAMPLE_SCHEDULER_SSL_EXPIRATION": "SSL проверка вернула ошибку, или сертификат истекает в течении 4 недель",
         "AUTOCLOSE": "Закрывать автоматически инцидент",
         "NAME_HINT": "Лучше выбирать уникальное имя",
         "PROVIDE_RULE": "Укажите правило инцидента",
