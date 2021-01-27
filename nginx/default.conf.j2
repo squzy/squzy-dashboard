@@ -19,6 +19,9 @@ server {
     }
 
     location /api {
+        if ($DNS_RESOLVER) {
+          resolver $DNS_RESOLVER;
+        }
         rewrite  ^/api/(.*)  /$1 break;
         proxy_pass http://$API_HOST;
         proxy_buffering off;
