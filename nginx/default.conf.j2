@@ -1,3 +1,7 @@
+upstream backend {
+    server $API_HOST;
+}
+
 server {
 
     listen 80;
@@ -20,7 +24,7 @@ server {
 
     location /api {
         rewrite  ^/api/(.*)  /$1 break;
-        proxy_pass http://$API_HOST;
+        proxy_pass http://backend;
         proxy_buffering off;
         proxy_redirect off;
         proxy_set_header Accept-Encoding "";
