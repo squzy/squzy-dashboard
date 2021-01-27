@@ -38,8 +38,8 @@ jobs:
         if: ${{ github.ref == 'refs/heads/develop'}}
         uses: cuchi/jinja2-action@v1.1.0
         with:
-          template: nginx/default.conf.j2
-          output_file: nginx/default.conf
+          template: nginx/default.template.j2
+          output_file: nginx/default.template
           strict: true
           variables: |
             version=latest
