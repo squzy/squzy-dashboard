@@ -13,15 +13,16 @@ server {
     gzip_proxied expired no-cache no-store private auth;
     gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
 
+    if ($DNS_RESOLVER) {
+      resolver $DNS_RESOLVER;
+    }
+
     location /app/version {
       default_type application/json;
       return 200 '{"data": {"version":"{{ version }}"}}';
     }
 
     location /api {
-        if ($DNS_RESOLVER) {
-          resolver $DNS_RESOLVER;
-        }
         rewrite  ^/api/(.*)  /$1 break;
         proxy_pass http://$API_HOST;
         proxy_buffering off;
