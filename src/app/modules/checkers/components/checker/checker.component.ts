@@ -1,8 +1,7 @@
 import { Component, ViewChild, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, tap, switchMap, takeUntil, share, mapTo, startWith } from 'rxjs/operators';
-import { FormBuilder, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
-import { Validators } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import {
   minusMinute,
   SECOND,
@@ -12,15 +11,14 @@ import {
   FormRangeValue,
   MS_TO_NANOS,
 } from 'src/app/shared/date/date';
-import { ErrorStateMatcher } from '@angular/material/core';
 import { BehaviorSubject, combineLatest, Subject, timer, of } from 'rxjs';
 import { CheckersService, Scheduler, HistoryItem } from '../../services/checkers.service';
 import { roundNumber, getRoundedPercent } from 'src/app/shared/numbers/numbers';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { QueryParamBuilder } from '@ngqp/core';
 import { SchedulerConfigComponent } from './config/config.component';
-import { dateFromToValidator } from 'src/app/shared/validators/date.validators';
 import { SchedulerSnapshotComponent } from './snapshot/snapshot.component';
 import { CheckerDataSource } from './datasource/checker.datasource';
 import { angularSortDirectionMap } from 'src/app/shared/enums/sort.table';
@@ -31,20 +29,6 @@ import {
 } from 'src/app/shared/enums/schedulers.type';
 import { OwnerType } from 'src/app/shared/enums/rules.type';
 
-class CrossFieldErrorMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    return control.dirty && form.invalid;
-  }
-}
-
-function getFilterValue() {
-  const now = new Date(Date.now());
-  return {
-    dateFrom: minusMinute(+now, 10),
-    dateTo: now,
-  };
-}
-
 @Component({
   selector: 'sqd-checker',
   templateUrl: './checker.component.html',
@@ -52,6 +36,11 @@ function getFilterValue() {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckerComponent implements OnInit, OnDestroy {
+  static queryParam = {
+    dateTo: 'dateTo',
+    dateFrom: 'dateFrom',
+  };
+
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -63,9 +52,7 @@ export class CheckerComponent implements OnInit, OnDestroy {
 
   private readonly refresh$ = new BehaviorSubject(null);
 
-  initailValue = getFilterValue();
-
-  dateNow = this.initailValue.dateTo;
+  private readonly refresh_table$ = new Subject();
 
   displayedColumns: string[] = ['status', 'startTime', 'endTime', 'latency'];
 
@@ -75,23 +62,20 @@ export class CheckerComponent implements OnInit, OnDestroy {
     latency: SortSchedulerList.BY_LATENCY,
   };
 
-  errorMatcher = new CrossFieldErrorMatcher();
-
-  filterForm = this.fb.group(
-    {
-      dateFrom: [this.initailValue.dateFrom, Validators.required],
-      dateTo: [this.dateNow, Validators.required],
-    },
-    {
-      validators: [dateFromToValidator],
-    },
-  );
+  filterForm = this.qpb.group({
+    [CheckerComponent.queryParam.dateFrom]: this.qpb.param(CheckerComponent.queryParam.dateFrom, {
+      serialize: (value: Date) => (value && value.toISOString()) || null,
+      deserialize: (value) => (value ? new Date(value) : null),
+    }),
+    [CheckerComponent.queryParam.dateTo]: this.qpb.param(CheckerComponent.queryParam.dateTo, {
+      serialize: (value: Date) => (value && value.toISOString()) || null,
+      deserialize: (value) => (value ? new Date(value) : null),
+    }),
+  });
 
   statuses = SchedulerStatus;
 
   responseStatuses = SchedulerResponseCode;
-
-  formValue$ = new BehaviorSubject<FormRangeValue>(this.filterForm.value);
 
   currentId$ = this.route.params.pipe(map((p) => p.id as string));
 
@@ -112,16 +96,19 @@ export class CheckerComponent implements OnInit, OnDestroy {
       if (!value) {
         return;
       }
-      const newValue = getFilterValue();
-      this.filterForm.setValue({
-        dateFrom: newValue.dateFrom,
-        dateTo: newValue.dateTo,
-      });
-      this.onSubmit();
+      this.refresh_table$.next();
     }),
   );
 
-  uptime$ = combineLatest(this.currentId$, this.formValue$).pipe(
+  currentValue$ = this.filterForm.valueChanges.pipe(
+    tap((value) => {
+      if (value.dateTo) {
+        this.autoRefresh_$.next(false);
+      }
+    }),
+  );
+
+  uptime$ = combineLatest(this.currentId$, this.currentValue$).pipe(
     switchMap(([id, value]) =>
       this.checkersService.getUptimeById(id, value.dateFrom, value.dateTo),
     ),
@@ -143,31 +130,29 @@ export class CheckerComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private qpb: QueryParamBuilder,
     private checkersService: CheckersService,
     private _bottomSheet: MatBottomSheet,
   ) {}
 
-  onSubmit() {
-    this.formValue$.next(this.filterForm.value);
-  }
-
   ngOnInit() {
     combineLatest(
       this.currentId$,
-      this.formValue$,
+      this.currentValue$,
       this.sort.sortChange,
       this.paginator.page,
       this.statusControl.valueChanges.pipe(startWith(this.statusControl.value)),
+      this.refresh_table$.pipe(startWith(null)),
     )
       .pipe(
         switchMap(
-          ([id, formValue, sort, page, status]: [
+          ([id, formValue, sort, page, status, _]: [
             string,
             FormRangeValue,
             Sort,
             PageEvent,
             SchedulerResponseCode,
+            undefined,
           ]) =>
             this.dataSource.load(
               id,
@@ -244,6 +229,12 @@ export class CheckerComponent implements OnInit, OnDestroy {
   clickRow(snapshot: HistoryItem) {
     this._bottomSheet.open(SchedulerSnapshotComponent, {
       data: snapshot,
+    });
+  }
+
+  clearControl(key: string) {
+    this.filterForm.patchValue({
+      [key]: null,
     });
   }
 

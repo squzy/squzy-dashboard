@@ -10,6 +10,9 @@
     "TO": "До",
     "APPLY": "Применить",
     "THROUGHPUT": "кол-во/мин",
+    "TIME_BEGINNING": "Начало",
+    "TIME_END": "Сейчас",
+    "CLEAR": "Очистить",
     "PAGINATOR": {
       "ITEM_PER_PAGE": "Элементов на страницу:",
       "NEXT_PAGE": "Следующая страница",
