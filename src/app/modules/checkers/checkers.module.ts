@@ -24,6 +24,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
 import { RulesModule } from 'src/app/shared/modules/rules/rules.module';
 import { NotificationListModule } from 'src/app/shared/modules/notifications/notifications-list.module';
+import { QueryParamModule } from '@ngqp/core';
 
 const routes: Routes = [
   {
@@ -62,6 +63,7 @@ const routes: Routes = [
     MatCheckboxModule,
     MatProgressSpinnerModule,
     RulesModule,
+    QueryParamModule,
     NotificationListModule,
     TranslateModule.forChild({}),
   ],

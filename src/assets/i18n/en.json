@@ -10,6 +10,9 @@
     "TO": "To",
     "APPLY": "Apply",
     "THROUGHPUT": "Count/Min",
+    "TIME_BEGINNING": "Begining",
+    "TIME_END": "Now",
+    "CLEAR": "Clear",
     "PAGINATOR": {
       "ITEM_PER_PAGE": "Item per page:",
       "NEXT_PAGE": "Next page",

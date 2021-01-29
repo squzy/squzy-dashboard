@@ -6,7 +6,9 @@ import { Subject, combineLatest } from 'rxjs';
 import { IncidentStatus } from 'src/app/shared/enums/incident.type';
 import { RulesService } from 'src/app/shared/services/rules.service';
 import { OwnerType } from 'src/app/shared/enums/rules.type';
-import { Time, timeToDate } from 'src/app/shared/date/date';
+import { SECOND, Time, timeToDate } from 'src/app/shared/date/date';
+import { Incident } from 'src/app/shared/interfaces/incident.interfaces';
+import { dateFromToValidator } from 'src/app/shared/validators/date.validators';
 
 @Component({
   selector: 'sqd-incident',
@@ -62,13 +64,22 @@ export class IncidentComponent implements OnDestroy {
       });
   }
 
-  goToRulePage(ownerType: OwnerType, ownerId: string) {
+  goToRulePage(ownerType: OwnerType, ownerId: string, incident: Incident) {
+    const time = timeToDate(incident.histories[0].timestamp).getTime();
+    const dateFrom = new Date(time - SECOND).toISOString();
+    const dateTo = new Date(time + SECOND).toISOString();
+
     switch (ownerType) {
       case OwnerType.INCIDENT_OWNER_TYPE_AGENT:
         this.router.navigate(['agents', ownerId]);
         break;
       case OwnerType.INCIDENT_OWNER_TYPE_SCHEDULER:
-        this.router.navigate(['checkers', ownerId]);
+        this.router.navigate(['checkers', ownerId], {
+          queryParams: {
+            dateTo,
+            dateFrom,
+          },
+        });
         break;
       case OwnerType.INCIDENT_OWNER_TYPE_APPLICATION:
         this.router.navigate(['applications', ownerId]);
