@@ -107,7 +107,15 @@ export class ApplicationsService {
   }
 
   getList() {
-    return this.httpClient.get<Array<Application>>(`/api/v1/applications`);
+    return this.httpClient
+      .get<Array<Application>>(`/api/v1/applications`)
+      .pipe(
+        map((list) =>
+          (list || []).filter(
+            (item) => item.status !== ApplicationStatus.APPLICATION_STATUS_ARCHIVED,
+          ),
+        ),
+      );
   }
 
   enabled(id: string) {
@@ -119,6 +127,6 @@ export class ApplicationsService {
   }
 
   archived(id: string) {
-    return this.httpClient.delete<Application>(`/api/v1/applications/${id}/archived`, null);
+    return this.httpClient.delete<Application>(`/api/v1/applications/${id}/archived`);
   }
 }
