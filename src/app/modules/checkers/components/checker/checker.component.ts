@@ -1,8 +1,7 @@
 import { Component, ViewChild, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, tap, switchMap, takeUntil, share, mapTo, startWith } from 'rxjs/operators';
-import { FormBuilder, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
-import { Validators } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import {
   minusMinute,
   SECOND,
@@ -12,16 +11,14 @@ import {
   FormRangeValue,
   MS_TO_NANOS,
 } from 'src/app/shared/date/date';
-import { ErrorStateMatcher } from '@angular/material/core';
 import { BehaviorSubject, combineLatest, Subject, timer, of } from 'rxjs';
 import { CheckersService, Scheduler, HistoryItem } from '../../services/checkers.service';
 import { roundNumber, getRoundedPercent } from 'src/app/shared/numbers/numbers';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { QueryParam, QueryParamBuilder } from '@ngqp/core';
+import { QueryParamBuilder } from '@ngqp/core';
 import { SchedulerConfigComponent } from './config/config.component';
-import { dateFromToValidator } from 'src/app/shared/validators/date.validators';
 import { SchedulerSnapshotComponent } from './snapshot/snapshot.component';
 import { CheckerDataSource } from './datasource/checker.datasource';
 import { angularSortDirectionMap } from 'src/app/shared/enums/sort.table';
@@ -31,14 +28,6 @@ import {
   SortSchedulerList,
 } from 'src/app/shared/enums/schedulers.type';
 import { OwnerType } from 'src/app/shared/enums/rules.type';
-
-function getFilterValue() {
-  const now = new Date(Date.now());
-  return {
-    dateFrom: minusMinute(+now, 10),
-    dateTo: now,
-  };
-}
 
 @Component({
   selector: 'sqd-checker',
@@ -64,10 +53,6 @@ export class CheckerComponent implements OnInit, OnDestroy {
   private readonly refresh$ = new BehaviorSubject(null);
 
   private readonly refresh_table$ = new Subject();
-
-  initailValue = getFilterValue();
-
-  dateNow = this.initailValue.dateTo;
 
   displayedColumns: string[] = ['status', 'startTime', 'endTime', 'latency'];
 

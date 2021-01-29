@@ -8,7 +8,6 @@ import { RulesService } from 'src/app/shared/services/rules.service';
 import { OwnerType } from 'src/app/shared/enums/rules.type';
 import { SECOND, Time, timeToDate } from 'src/app/shared/date/date';
 import { Incident } from 'src/app/shared/interfaces/incident.interfaces';
-import { dateFromToValidator } from 'src/app/shared/validators/date.validators';
 
 @Component({
   selector: 'sqd-incident',
