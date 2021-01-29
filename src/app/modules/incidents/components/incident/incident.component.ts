@@ -6,7 +6,7 @@ import { Subject, combineLatest } from 'rxjs';
 import { IncidentStatus } from 'src/app/shared/enums/incident.type';
 import { RulesService } from 'src/app/shared/services/rules.service';
 import { OwnerType } from 'src/app/shared/enums/rules.type';
-import { SECOND, Time, timeToDate } from 'src/app/shared/date/date';
+import { MINUTE, Time, timeToDate } from 'src/app/shared/date/date';
 import { Incident } from 'src/app/shared/interfaces/incident.interfaces';
 
 @Component({
@@ -65,8 +65,8 @@ export class IncidentComponent implements OnDestroy {
 
   goToRulePage(ownerType: OwnerType, ownerId: string, incident: Incident) {
     const time = timeToDate(incident.histories[0].timestamp).getTime();
-    const dateFrom = new Date(time - SECOND).toISOString();
-    const dateTo = new Date(time + SECOND).toISOString();
+    const dateFrom = new Date(time - MINUTE).toISOString();
+    const dateTo = new Date(time + MINUTE).toISOString();
 
     switch (ownerType) {
       case OwnerType.INCIDENT_OWNER_TYPE_AGENT:
