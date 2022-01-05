@@ -75,6 +75,9 @@ export class NetStatComponent implements OnChanges, OnDestroy {
             return;
           }
           Object.keys(item.net_info.interfaces[iface]).forEach((key) => {
+            if (!datasets[iface] && datasets[iface][[key]) {
+              return;
+            }
             datasets[iface][key].push(item.net_info.interfaces[iface][key] || 0);
           });
         });
